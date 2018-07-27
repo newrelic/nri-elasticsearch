@@ -1,0 +1,16 @@
+integration_name: com.newrelic.elasticsearch
+
+instances:
+  - name: <INSTANCE IDENTIFIER>
+    command: metrics
+    arguments:
+      arg1: <ARG_VALUE>
+    labels:
+      key1: <LABEL_VALUE>
+
+  - name: <OTHER INSTANCE IDENTIFIER>
+    command: inventory
+    arguments:
+      arg1: <ARG_VALUE>
+    labels:
+      key1: <LABEL_VALUE>
