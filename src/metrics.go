@@ -9,30 +9,36 @@ import (
 )
 
 func collectNodesMetrics(integration *integration.Integration, response *objx.Map) {
-	// notFoundMetrics := make([]string, 0)
-	for _, metric := range nodeMetricDefs.MetricDefs {
-		nodes := response.Get("nodes")
-		for node := range nodes.Data().(objx.Map) {
+	notFoundMetrics := make([]string, 0)
+	for _, metricInfo := range nodeMetricDefs.MetricDefs {
+		nodesResponse := response.Get("nodes")
+		nodes := nodesResponse.Data().(objx.Map)
+		for node := range nodes {
+
 			entity, err := integration.Entity(node, "node")
+			if err != nil {
+				logger.Errorf("there was an error creating new entity: %v", err)
+			}
+
 			metricSet, err := entity.NewMetricSet("nodesMetricSet")
 			if err != nil {
 				logger.Errorf("there was an error creating new metric set: %v", err)
 			}
-			nodesData := nodes.Data().(objx.Map).Get(node).Data().(objx.Map)
-			metricInfoValue, err := parseJSON(nodesData, metric.APIKey)
+
+			nodeData := nodes.Get(node).Data().(objx.Map)
+
+			metricInfoValue, err := parseJSON(nodeData, metricInfo.APIKey)
 			if err != nil {
-				logger.Errorf("there was an error parsing the json:")
+				notFoundMetrics = append(notFoundMetrics, metricInfo.APIKey)
 			}
+			if metricInfoValue != nil {
+				setMetric(metricSet, node, metricInfoValue, metricInfo.SourceType)
+			}
+
 		}
 	}
+	fmt.Printf("%v", notFoundMetrics)
 }
-
-// func populateMetrics(metricSet *metric.Set, entityType string, response *objx.Map, metricDefs *metricSet) {
-// 	// notFoundMetrics := make([]string, 0)
-// 	for metricKey := range metricDefs.MetricDefs {
-// 		println(metricKey)
-// 	}
-// }
 
 func setMetric(metricSet *metric.Set, metricName string, metricValue interface{}, metricType metric.SourceType) {
 	if err := metricSet.SetMetric(metricName, metricValue, metricType); err != nil {
@@ -48,9 +54,11 @@ func parseJSON(jsonData objx.Map, key string) (interface{}, error) {
 		return convertBoolToInt(value.Bool()), nil
 	} else if value.IsFloat64() {
 		return value.Float64(), nil
+	} else if value.IsInt() {
+		return value.Int(), nil
+	} else {
+		return nil, fmt.Errorf("could not parse json for value for key: [%v]: ", key)
 	}
-
-	return nil, fmt.Errorf("could not parse json for value for key: [%v]: ", key)
 }
 
 func convertBoolToInt(val bool) (returnval int) {
