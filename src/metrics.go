@@ -37,7 +37,14 @@ func collectNodesMetrics(integration *integration.Integration, response *objx.Ma
 
 		}
 	}
-	fmt.Printf("%v", notFoundMetrics)
+}
+
+func collectClusterMetrics(integration *integration.Integration, response *objx.Map) {
+	println("collect cluster metrics here")
+}
+
+func collectCommonMetrics(integration *integration.Integration, response *objx.Map) {
+	println("collect common metrics here")
 }
 
 func setMetric(metricSet *metric.Set, metricName string, metricValue interface{}, metricType metric.SourceType) {
