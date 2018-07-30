@@ -14,7 +14,7 @@ type metricSet struct {
 }
 
 var nodeMetricDefs = &metricSet{
-	Endpoint: "/_nodes/stats",
+	Endpoint: nodeStatsEndpoint,
 	MetricDefs: []*metricDefinition{
 		{
 			Name:       "breakers.estimatedSizeFieldDataCircuitBreakerInBytes",
@@ -50,14 +50,14 @@ var nodeMetricDefs = &metricSet{
 }
 
 var clusterMetricDefs = &metricSet{
-	Endpoint: "/_cluster/health",
+	Endpoint: clusterEndpoint,
 	MetricDefs: []*metricDefinition{
 		{},
 	},
 }
 
 var commonStatsMetricDefs = &metricSet{
-	Endpoint: "/_stats",
+	Endpoint: statsEndpoint,
 	MetricDefs: []*metricDefinition{
 		{},
 	},

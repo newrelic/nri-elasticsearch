@@ -9,22 +9,21 @@ import (
 )
 
 func collectNodesMetrics(integration *integration.Integration, response *objx.Map) {
-	notFoundMetrics := make([]string, 0)
-	for _, metricInfo := range nodeMetricDefs.MetricDefs {
-		nodesResponse := response.Get("nodes")
-		nodes := nodesResponse.Data().(objx.Map)
-		for node := range nodes {
+	nodesResponse := response.Get("nodes")
+	nodes := nodesResponse.Data().(objx.Map)
+	for node := range nodes {
+		notFoundMetrics := make([]string, 0)
+		entity, err := integration.Entity(node, "node")
+		if err != nil {
+			logger.Errorf("there was an error creating new entity: %v", err)
+		}
 
-			entity, err := integration.Entity(node, "node")
-			if err != nil {
-				logger.Errorf("there was an error creating new entity: %v", err)
-			}
+		metricSet, err := entity.NewMetricSet("nodesMetricSet")
+		if err != nil {
+			logger.Errorf("there was an error creating new metric set: %v", err)
+		}
 
-			metricSet, err := entity.NewMetricSet("nodesMetricSet")
-			if err != nil {
-				logger.Errorf("there was an error creating new metric set: %v", err)
-			}
-
+		for _, metricInfo := range nodeMetricDefs.MetricDefs {
 			nodeData := nodes.Get(node).Data().(objx.Map)
 
 			metricInfoValue, err := parseJSON(nodeData, metricInfo.APIKey)
@@ -35,6 +34,8 @@ func collectNodesMetrics(integration *integration.Integration, response *objx.Ma
 				setMetric(metricSet, node, metricInfoValue, metricInfo.SourceType)
 			}
 		}
+
+		logger.Debugf("metrics not found %v", notFoundMetrics)
 	}
 }
 
