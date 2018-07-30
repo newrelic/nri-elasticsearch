@@ -25,7 +25,6 @@ func collectNodesMetrics(integration *integration.Integration, response *objx.Ma
 
 		for _, metricInfo := range nodeMetricDefs.MetricDefs {
 			nodeData := nodes.Get(node).Data().(objx.Map)
-
 			metricInfoValue, err := parseJSON(nodeData, metricInfo.APIKey)
 			if err != nil {
 				notFoundMetrics = append(notFoundMetrics, metricInfo.APIKey)
@@ -44,7 +43,7 @@ func collectClusterMetrics(integration *integration.Integration, response *objx.
 	clusterName := response.Get("cluster_name").Data().(string)
 	entity, err := integration.Entity(clusterName, "cluster")
 	if err != nil {
-		logger.Errorf("there was an error creating new entity for nodes: %v", err)
+		logger.Errorf("there was an error creating new entity for clusters: %v", err)
 	}
 
 	metricSet, err := entity.NewMetricSet("clusterMetricSet")
@@ -61,12 +60,35 @@ func collectClusterMetrics(integration *integration.Integration, response *objx.
 			setMetric(metricSet, clusterName, metricInfoValue, metricInfo.SourceType)
 		}
 	}
-	println("metrics not found for clusters %v", notFoundMetrics)
+	fmt.Printf("%v", notFoundMetrics)
 	logger.Debugf("metrics not found for clusters %v", notFoundMetrics)
 }
 
 func collectCommonMetrics(integration *integration.Integration, response *objx.Map) {
-	println("collect common metrics here")
+	notFoundMetrics := make([]string, 0)
+
+	entity, err := integration.Entity("commonMetrics", "common")
+	if err != nil {
+		logger.Errorf("there was an error creating new entity for common metrics: %v", err)
+	}
+
+	metricSet, err := entity.NewMetricSet("clusterMetricSet")
+	if err != nil {
+		logger.Errorf("there was an error creating new metric set for commmon metrics: %v", err)
+	}
+
+	for _, metricInfo := range commonStatsMetricDefs.MetricDefs {
+		metricInfoValue, err := parseJSON(*response, metricInfo.APIKey)
+		if err != nil {
+			notFoundMetrics = append(notFoundMetrics, metricInfo.APIKey)
+		}
+		if metricInfoValue != nil {
+			setMetric(metricSet, "commonMetrics", metricInfoValue, metricInfo.SourceType)
+		}
+	}
+
+	fmt.Printf("%v", notFoundMetrics)
+	logger.Debugf("metrics not found for common metrics %v", notFoundMetrics)
 }
 
 func setMetric(metricSet *metric.Set, metricName string, metricValue interface{}, metricType metric.SourceType) {

@@ -48,15 +48,19 @@ func main() {
 	// panicOnErr(err)
 	// collectNodesMetrics(i, &responseObject)
 
-	logger.Infof("Collecting cluster metrics.")
-	stringResponse, err := getDataFromEndpoint(client, clusterEndpoint)
+	// logger.Infof("Collecting cluster metrics.")
+	// stringResponse, err := getDataFromEndpoint(client, clusterEndpoint)
+	// panicOnErr(err)
+	// responseObject, err := objx.FromJSON(stringResponse)
+	// panicOnErr(err)
+	// collectClusterMetrics(i, &responseObject)
+
+	logger.Infof("Collecting common metrics.")
+	stringResponse, err := getDataFromEndpoint(client, commonStatsEndpoint)
 	panicOnErr(err)
 	responseObject, err := objx.FromJSON(stringResponse)
 	panicOnErr(err)
-	collectClusterMetrics(i, &responseObject)
-
-	// logger.Infof("Collecting common metrics.")
-	// collectCommonMetrics(i, &responseObject)
+	collectCommonMetrics(i, &responseObject)
 }
 
 func getDataFromEndpoint(client *Client, endpoint string) (string, error) {

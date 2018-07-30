@@ -71,8 +71,22 @@ var clusterMetricDefs = &metricSet{
 }
 
 var commonStatsMetricDefs = &metricSet{
-	Endpoint: statsEndpoint,
+	Endpoint: commonStatsEndpoint,
 	MetricDefs: []*metricDefinition{
-		{},
+		{
+			Name:       "primaries.docsnumber",
+			SourceType: metric.GAUGE,
+			APIKey:     "_all.primaries.docs.count",
+		},
+		{
+			Name:       "primaries.docsDeleted",
+			SourceType: metric.GAUGE,
+			APIKey:     "_all.primaries.docs.deleted",
+		},
+		{
+			Name:       "primaries.flushesTotal",
+			SourceType: metric.GAUGE,
+			APIKey:     "_all.primaries.flush.total",
+		},
 	},
 }
