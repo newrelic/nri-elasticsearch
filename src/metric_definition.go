@@ -52,7 +52,21 @@ var nodeMetricDefs = &metricSet{
 var clusterMetricDefs = &metricSet{
 	Endpoint: clusterEndpoint,
 	MetricDefs: []*metricDefinition{
-		{},
+		{
+			Name:       "activePrimaryShardsCluster",
+			SourceType: metric.GAUGE,
+			APIKey:     "active_primary_shards",
+		},
+		{
+			Name:       "activeShardsCluster",
+			SourceType: metric.GAUGE,
+			APIKey:     "active_shards",
+		},
+		{
+			Name:       "health",
+			SourceType: metric.GAUGE,
+			APIKey:     "index.health",
+		},
 	},
 }
 

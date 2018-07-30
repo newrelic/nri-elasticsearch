@@ -41,33 +41,39 @@ func main() {
 	client, err := NewClient(nil)
 	panicOnErr(err)
 
-	client.BaseURL = args.Hostname
-	endpoint := nodeMetricDefs.Endpoint
+	// logger.Infof("Collecting node metrics.")
+	// stringResponse, err := getDataFromEndpoint(client, nodeMetricDefs.Endpoint)
+	// panicOnErr(err)
+	// responseObject, err := objx.FromJSON(stringResponse)
+	// panicOnErr(err)
+	// collectNodesMetrics(i, &responseObject)
 
-	stringResponse, err := getDataFromEndpoint(client, endpoint)
+	logger.Infof("Collecting cluster metrics.")
+	stringResponse, err := getDataFromEndpoint(client, clusterEndpoint)
 	panicOnErr(err)
-
 	responseObject, err := objx.FromJSON(stringResponse)
 	panicOnErr(err)
-
-	logger.Infof("Collecting metrics.")
-	collectNodesMetrics(i, &responseObject)
 	collectClusterMetrics(i, &responseObject)
-	collectCommonMetrics(i, &responseObject)
+
+	// logger.Infof("Collecting common metrics.")
+	// collectCommonMetrics(i, &responseObject)
 }
 
 func getDataFromEndpoint(client *Client, endpoint string) (string, error) {
 	url := client.BaseURL + endpoint
+
 	response, err := client.client.Get(url)
 	if err != nil {
 		logger.Errorf("there was an error when getting response from endpoint %v: %v", url, err)
 		return "", err
 	}
+
 	jsonData, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		logger.Errorf("there was an error when reading the response body: %v", err)
 		return "", err
 	}
+
 	err = response.Body.Close()
 	//ask hullah about the workaround for this
 	if err != nil {

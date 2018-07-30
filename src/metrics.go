@@ -15,12 +15,12 @@ func collectNodesMetrics(integration *integration.Integration, response *objx.Ma
 		notFoundMetrics := make([]string, 0)
 		entity, err := integration.Entity(node, "node")
 		if err != nil {
-			logger.Errorf("there was an error creating new entity: %v", err)
+			logger.Errorf("there was an error creating new entity for nodes: %v", err)
 		}
 
 		metricSet, err := entity.NewMetricSet("nodesMetricSet")
 		if err != nil {
-			logger.Errorf("there was an error creating new metric set: %v", err)
+			logger.Errorf("there was an error creating new metric set for nodes: %v", err)
 		}
 
 		for _, metricInfo := range nodeMetricDefs.MetricDefs {
@@ -35,12 +35,34 @@ func collectNodesMetrics(integration *integration.Integration, response *objx.Ma
 			}
 		}
 
-		logger.Debugf("metrics not found %v", notFoundMetrics)
+		logger.Debugf("metrics not found for nodes %v", notFoundMetrics)
 	}
 }
 
 func collectClusterMetrics(integration *integration.Integration, response *objx.Map) {
-	println("collect cluster metrics here")
+	notFoundMetrics := make([]string, 0)
+	clusterName := response.Get("cluster_name").Data().(string)
+	entity, err := integration.Entity(clusterName, "cluster")
+	if err != nil {
+		logger.Errorf("there was an error creating new entity for nodes: %v", err)
+	}
+
+	metricSet, err := entity.NewMetricSet("clusterMetricSet")
+	if err != nil {
+		logger.Errorf("there was an error creating new metric set for clusters: %v", err)
+	}
+
+	for _, metricInfo := range clusterMetricDefs.MetricDefs {
+		metricInfoValue, err := parseJSON(*response, metricInfo.APIKey)
+		if err != nil {
+			notFoundMetrics = append(notFoundMetrics, metricInfo.APIKey)
+		}
+		if metricInfoValue != nil {
+			setMetric(metricSet, clusterName, metricInfoValue, metricInfo.SourceType)
+		}
+	}
+	println("metrics not found for clusters %v", notFoundMetrics)
+	logger.Debugf("metrics not found for clusters %v", notFoundMetrics)
 }
 
 func collectCommonMetrics(integration *integration.Integration, response *objx.Map) {
