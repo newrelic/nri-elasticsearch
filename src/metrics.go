@@ -34,7 +34,6 @@ func collectNodesMetrics(integration *integration.Integration, response *objx.Ma
 			if metricInfoValue != nil {
 				setMetric(metricSet, node, metricInfoValue, metricInfo.SourceType)
 			}
-
 		}
 	}
 }
