@@ -16,27 +16,25 @@ func collectNodesMetrics(integration *integration.Integration, response *objx.Ma
 		entity, err := integration.Entity(node, "node")
 		if err != nil {
 			logger.Errorf("there was an error creating new entity for nodes: %v", err)
-			panicOnErr(err)
 		}
 
 		metricSet, err := entity.NewMetricSet("nodesMetricSet")
 		if err != nil {
 			logger.Errorf("there was an error creating new metric set for nodes: %v", err)
-			panicOnErr(err)
 		}
 
-		nodesData := nodes.Get(node).Data().(objx.Map)
+		nodesData := nodes.Get(node).ObjxMap()
 		collectMetrics(nodesData, node, metricSet, nodeMetricDefs)
 	}
 }
 
 func collectClusterMetrics(integration *integration.Integration, response *objx.Map) {
-	clusterName := response.Get("cluster_name").Data().(string)
+	clusterName := response.Get("cluster_name").Str()
 	entity, err := integration.Entity(clusterName, "cluster")
 	if err != nil {
 		logger.Errorf("there was an error creating new entity for clusters: %v", err)
+		return
 	}
-
 	metricSet, err := entity.NewMetricSet("clusterMetricSet")
 	if err != nil {
 		logger.Errorf("there was an error creating new metric set for clusters: %v", err)
@@ -49,6 +47,7 @@ func collectCommonMetrics(integration *integration.Integration, response *objx.M
 	entity, err := integration.Entity("commonMetrics", "common")
 	if err != nil {
 		logger.Errorf("there was an error creating new entity for common metrics: %v", err)
+		return
 	}
 
 	metricSet, err := entity.NewMetricSet("clusterMetricSet")
