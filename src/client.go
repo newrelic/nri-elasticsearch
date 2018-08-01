@@ -13,7 +13,8 @@ const (
 	nodeProcessEndpoint = "/_nodes/process"
 	nodePluginsEndpoint = "/_nodes/plugins"
 	nodeStatsEndpoint   = "/_nodes/stats"
-	statsEndpoint       = "/_stats"
+	commonStatsEndpoint = "/_stats"
+	clusterEndpoint     = "/_cluster/health"
 )
 
 // Client represents a single connection to an Elasticsearch host
