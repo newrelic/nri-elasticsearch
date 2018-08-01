@@ -37,7 +37,6 @@ func main() {
 	panicOnErr(err)
 	logger = i.Logger()
 
-	panicOnErr(i.Publish())
 	client, err := NewClient(nil)
 	panicOnErr(err)
 
@@ -61,6 +60,8 @@ func main() {
 	responseObjectCommon, err := objx.FromJSON(stringResponseCommon)
 	panicOnErr(err)
 	collectCommonMetrics(i, &responseObjectCommon)
+
+	panicOnErr(i.Publish())
 }
 
 func getDataFromEndpoint(client *Client, endpoint string) (string, error) {
