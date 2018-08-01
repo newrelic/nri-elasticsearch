@@ -3,9 +3,8 @@ package main
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-
 	"github.com/stretchr/objx"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestParseJSONString(t *testing.T) {
