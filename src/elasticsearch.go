@@ -41,26 +41,26 @@ func main() {
 	client, err := NewClient(nil)
 	panicOnErr(err)
 
-	// logger.Infof("Collecting node metrics.")
-	// stringResponse, err := getDataFromEndpoint(client, nodeMetricDefs.Endpoint)
-	// panicOnErr(err)
-	// responseObject, err := objx.FromJSON(stringResponse)
-	// panicOnErr(err)
-	// collectNodesMetrics(i, &responseObject)
+	logger.Infof("Collecting node metrics.")
+	stringResponseNode, err := getDataFromEndpoint(client, nodeMetricDefs.Endpoint)
+	panicOnErr(err)
+	responseObjectNode, err := objx.FromJSON(stringResponseNode)
+	panicOnErr(err)
+	collectNodesMetrics(i, &responseObjectNode)
 
-	// logger.Infof("Collecting cluster metrics.")
-	// stringResponse, err := getDataFromEndpoint(client, clusterEndpoint)
-	// panicOnErr(err)
-	// responseObject, err := objx.FromJSON(stringResponse)
-	// panicOnErr(err)
-	// collectClusterMetrics(i, &responseObject)
+	logger.Infof("Collecting cluster metrics.")
+	stringResponseCluster, err := getDataFromEndpoint(client, clusterEndpoint)
+	panicOnErr(err)
+	responseObjectCluster, err := objx.FromJSON(stringResponseCluster)
+	panicOnErr(err)
+	collectClusterMetrics(i, &responseObjectCluster)
 
 	logger.Infof("Collecting common metrics.")
-	stringResponse, err := getDataFromEndpoint(client, commonStatsEndpoint)
+	stringResponseCommon, err := getDataFromEndpoint(client, commonStatsEndpoint)
 	panicOnErr(err)
-	responseObject, err := objx.FromJSON(stringResponse)
+	responseObjectCommon, err := objx.FromJSON(stringResponseCommon)
 	panicOnErr(err)
-	collectCommonMetrics(i, &responseObject)
+	collectCommonMetrics(i, &responseObjectCommon)
 }
 
 func getDataFromEndpoint(client *Client, endpoint string) (string, error) {
@@ -72,19 +72,22 @@ func getDataFromEndpoint(client *Client, endpoint string) (string, error) {
 		return "", err
 	}
 
+	defer checkErr(response.Body.Close)
+
 	jsonData, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		logger.Errorf("there was an error when reading the response body: %v", err)
 		return "", err
 	}
 
-	err = response.Body.Close()
-	//ask hullah about the workaround for this
-	if err != nil {
-		logger.Errorf("there was an error when closing the response body")
-	}
 	jsonString := string(jsonData)
 	return jsonString, err
+}
+
+func checkErr(f func() error) {
+	if err := f(); err != nil {
+		logger.Errorf("%v", err)
+	}
 }
 
 func panicOnErr(err error) {

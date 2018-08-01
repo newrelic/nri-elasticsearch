@@ -11,8 +11,8 @@ import (
 func collectNodesMetrics(integration *integration.Integration, response *objx.Map) {
 	nodesResponse := response.Get("nodes")
 	nodes := nodesResponse.Data().(objx.Map)
+	// endpoint has multiple nodes so we need to collect for all of them
 	for node := range nodes {
-
 		entity, err := integration.Entity(node, "node")
 		if err != nil {
 			logger.Errorf("there was an error creating new entity for nodes: %v", err)
@@ -24,6 +24,7 @@ func collectNodesMetrics(integration *integration.Integration, response *objx.Ma
 			logger.Errorf("there was an error creating new metric set for nodes: %v", err)
 			panicOnErr(err)
 		}
+
 		nodesData := nodes.Get(node).Data().(objx.Map)
 		collectMetrics(nodesData, node, metricSet, nodeMetricDefs)
 	}
@@ -58,8 +59,10 @@ func collectCommonMetrics(integration *integration.Integration, response *objx.M
 	collectMetrics(*response, "commonMetrics", metricSet, commonStatsMetricDefs)
 }
 
+// generic function that sets metrics in SDK
 func collectMetrics(data objx.Map, metricKey string, metricSet *metric.Set, metricDefs *metricSet) {
 	notFoundMetrics := make([]string, 0)
+	foundMetrics := make([]string, 0)
 	for _, metricInfo := range metricDefs.MetricDefs {
 		metricInfoValue, err := parseJSON(data, metricInfo.APIKey)
 		if err != nil {
@@ -67,6 +70,7 @@ func collectMetrics(data objx.Map, metricKey string, metricSet *metric.Set, metr
 		}
 		if metricInfoValue != nil {
 			setMetric(metricSet, metricKey, metricInfoValue, metricInfo.SourceType)
+			foundMetrics = append(foundMetrics, metricInfo.APIKey)
 		}
 	}
 }
@@ -97,5 +101,6 @@ func convertBoolToInt(val bool) (returnval int) {
 	if val {
 		returnval = 1
 	}
+
 	return
 }

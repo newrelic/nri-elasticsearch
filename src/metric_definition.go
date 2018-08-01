@@ -47,31 +47,6 @@ var nodeMetricDefs = &metricSet{
 			APIKey:     "breakers.request.tripped",
 		},
 		{
-			Name:       "indices.fielddata.evictions ",
-			SourceType: metric.GAUGE,
-			APIKey:     "cache.fieldCacheEvictions",
-		},
-		{
-			Name:       "indices.fielddata.memory_size_in_byts",
-			SourceType: metric.GAUGE,
-			APIKey:     "cache.fieldCacheSizeInBytes",
-		},
-		{
-			Name:       "indices.cache.filter_count ",
-			SourceType: metric.GAUGE,
-			APIKey:     "cache.filterCachenumber",
-		},
-		{
-			Name:       "indices.indices.filter_cache.evictions ",
-			SourceType: metric.GAUGE,
-			APIKey:     "cache.filterCacheEvictions",
-		},
-		{
-			Name:       "indices.indices.filter.id_cache.memory_size_in_bytes ",
-			SourceType: metric.GAUGE,
-			APIKey:     "cache.filterCacheSizeInBytes",
-		},
-		{
 			Name:       "flush.indexFlushDisk",
 			SourceType: metric.GAUGE,
 			APIKey:     "indices.indexing.index_total",
@@ -893,9 +868,91 @@ var clusterMetricDefs = &metricSet{
 			APIKey:     "active_shards",
 		},
 		{
-			Name:       "health",
+			Name:       "index.health",
 			SourceType: metric.GAUGE,
-			APIKey:     "index.health",
+			APIKey:     "health",
+		},
+		{
+			Name:       "index.docs",
+			SourceType: metric.GAUGE,
+			APIKey:     "docs_count",
+		},
+		{
+			Name:       "index.docsDeleted",
+			SourceType: metric.GAUGE,
+			APIKey:     "docs_deleted",
+		},
+		{
+			Name:       "index.primaryShards",
+			SourceType: metric.GAUGE,
+			APIKey:     "primary_shards",
+		},
+		{
+			Name:       "index.replicaShards",
+			SourceType: metric.GAUGE,
+			APIKey:     "replica_shards",
+		},
+		{
+			Name:       "index.primaryStoreSizeInBytes",
+			SourceType: metric.GAUGE,
+			APIKey:     "primary_store_size",
+		},
+		{
+			Name:       "index.storeSizeInBytes",
+			SourceType: metric.GAUGE,
+			APIKey:     "store_size",
+		},
+		{
+			Name:       "index.primaryShards",
+			SourceType: metric.GAUGE,
+			APIKey:     "primary_shards",
+		},
+		{
+			Name:       "dex.replicaShards",
+			SourceType: metric.GAUGE,
+			APIKey:     "replica_shards",
+		},
+		{
+			Name:       "dex.primaryStoreSizeInBytes",
+			SourceType: metric.GAUGE,
+			APIKey:     "primary_store_size",
+		},
+		{
+			Name:       "dex.storeSizeInBytes",
+			SourceType: metric.GAUGE,
+			APIKey:     "store_size",
+		},
+
+		{
+			Name:       "shards.relocating",
+			SourceType: metric.GAUGE,
+			APIKey:     "relocating_shards",
+		},
+		{
+			Name:       "shards.Initializing",
+			SourceType: metric.GAUGE,
+			APIKey:     "initializing_shards",
+		},
+		{
+			Name:       "shards.unassigned",
+			SourceType: metric.GAUGE,
+			APIKey:     "unassigned_shards",
+		},
+
+		{
+			Name:       "cluster.dataNodes",
+			SourceType: metric.GAUGE,
+			APIKey:     "number_of_data_nodes",
+		},
+		{
+			Name:       "cluster.nodes",
+			SourceType: metric.GAUGE,
+			APIKey:     "number_of_nodes",
+		},
+		{
+			Name:       "cluster.status",
+			SourceType: metric.GAUGE,
+			APIKey:     "status",
 		},
 	},
 }
@@ -917,6 +974,157 @@ var commonStatsMetricDefs = &metricSet{
 			Name:       "primaries.flushesTotal",
 			SourceType: metric.GAUGE,
 			APIKey:     "_all.primaries.flush.total",
+		},
+
+		{
+			Name:       "primaries.flushTotalTimeInMiliseconds",
+			SourceType: metric.GAUGE,
+			APIKey:     "_all.primaries.flush.total_time_in_millis",
+		},
+		{
+			Name:       "primaries.get.requestsCurrent",
+			SourceType: metric.GAUGE,
+			APIKey:     "_all.primaries.get.current",
+		},
+		{
+			Name:       "primaries.get.documentsExistInMiliseconds",
+			SourceType: metric.GAUGE,
+			APIKey:     "_all.primaries.get.exists_time_in_millis",
+		},
+		{
+			Name:       "primaries.get.documentsExist",
+			SourceType: metric.GAUGE,
+			APIKey:     "_all.primaries.get.exists_total",
+		},
+		{
+			Name:       "primaries.get.documentsMissingInMiliseconds",
+			SourceType: metric.GAUGE,
+			APIKey:     "_all.primaries.get.missing_time_in_millis",
+		},
+		{
+			Name:       "primaries.get.documentsMissing",
+			SourceType: metric.GAUGE,
+			APIKey:     "_all.primaries.get.missing_total",
+		},
+		{
+			Name:       "primaries.get.requestsInMiliseconds",
+			SourceType: metric.GAUGE,
+			APIKey:     "_all.primaries.get.time_in_millis",
+		},
+		{
+			Name:       "primaries.get.requests",
+			SourceType: metric.GAUGE,
+			APIKey:     "_all.primaries.get.total",
+		},
+		{
+			Name:       "primaries.index.docsCurrentlyDeleted",
+			SourceType: metric.GAUGE,
+			APIKey:     "_all.primaries.indexing.delete_current",
+		},
+		{
+			Name:       "primaries.index.docsCurrentlyDeletedInMiliseconds",
+			SourceType: metric.GAUGE,
+			APIKey:     "_all.primaries.indexing.delete_time_in_millis",
+		},
+		{
+			Name:       "primaries.index.docsDeleted",
+			SourceType: metric.GAUGE,
+			APIKey:     "_all.primaries.indexing.delete_total",
+		},
+		{
+			Name:       "primaries.index.docsCurrentlyIndexing",
+			SourceType: metric.GAUGE,
+			APIKey:     "_all.primaries.indexing.index_current",
+		},
+		{
+			Name:       "primaries.index.docsCurrentlyIndexingInMiliseconds",
+			SourceType: metric.GAUGE,
+			APIKey:     "_all.primaries.indexing.index_time_in_millis",
+		},
+		{
+			Name:       "primaries.index.docsTotal",
+			SourceType: metric.GAUGE,
+			APIKey:     "_all.primaries.indexing.index_total",
+		},
+		{
+			Name:       "primaries.merges.current",
+			SourceType: metric.GAUGE,
+			APIKey:     "_all.primaries.merges.current",
+		},
+		{
+			Name:       "primaries.merges.docsSegementsCurrentlyMerged",
+			SourceType: metric.GAUGE,
+			APIKey:     "_all.primaries.merges.current_docs",
+		},
+		{
+			Name:       "primaries.merges.segementsCurrentlyMergedInBytes",
+			SourceType: metric.GAUGE,
+			APIKey:     "_all.primaries.merges.current_size_in_bytes",
+		},
+		{
+			Name:       "primaries.merges.segementsTotal",
+			SourceType: metric.GAUGE,
+			APIKey:     "_all.primaries.merges.total",
+		},
+		{
+			Name:       "primaries.merges.docsTotal",
+			SourceType: metric.GAUGE,
+			APIKey:     "_all.primaries.merges.total_docs",
+		},
+		{
+			Name:       "primaries.merges.segmentsTotalInBytes",
+			SourceType: metric.GAUGE,
+			APIKey:     "_all.primaries.merges.total_size_in_bytes",
+		},
+		{
+			Name:       "primaries.merges.segmentsTotalInMiliseconds",
+			SourceType: metric.GAUGE,
+			APIKey:     "_all.primaries.merges.total_time_in_millis",
+		},
+		{
+			Name:       "primaries.indexRefreshesTotal",
+			SourceType: metric.GAUGE,
+			APIKey:     "_all.primaries.refresh.total",
+		},
+		{
+			Name:       "primaries.indexRefreshesTotalInMiliseconds",
+			SourceType: metric.GAUGE,
+			APIKey:     "_all.primaries.refresh.total_time_in_millis",
+		},
+		{
+			Name:       "primaries.queryFetches",
+			SourceType: metric.GAUGE,
+			APIKey:     "all.primaries.search.fetch_current",
+		},
+		{
+			Name:       "primaries.queryFetchesInMiliseconds",
+			SourceType: metric.GAUGE,
+			APIKey:     "_all.primaries.search.fetch_time_in_millis",
+		},
+		{
+			Name:       "primaries.queryFetchesTotal",
+			SourceType: metric.GAUGE,
+			APIKey:     "_all.primaries.search.fetch_total",
+		},
+		{
+			Name:       "primaries.queryActive",
+			SourceType: metric.GAUGE,
+			APIKey:     "_all.primaries.search.query_current",
+		},
+		{
+			Name:       "primaries.queriesInMiliseconds",
+			SourceType: metric.GAUGE,
+			APIKey:     "_all.primaries.search.query_time_in_millis",
+		},
+		{
+			Name:       "primaries.queriesTotal",
+			SourceType: metric.GAUGE,
+			APIKey:     "elasticsearch.primaries.search.query.time",
+		},
+		{
+			Name:       "primaries.sizeInBytes",
+			SourceType: metric.GAUGE,
+			APIKey:     "_all.primaries.store.size_in_bytes",
 		},
 	},
 }
