@@ -41,8 +41,7 @@ func main() {
 
 	// Add Inventory item
 	if args.All() || args.Inventory {
-		err = populateInventory(e1)
-		panicOnErr(err)
+		populateInventory(e1)
 	}
 
 	panicOnErr(i.Publish())

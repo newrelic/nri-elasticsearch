@@ -4,16 +4,20 @@ import (
 	"fmt"
 	"net/http"
 	"time"
+	"encoding/json"
+	"io/ioutil"
 
 	nrHttp "github.com/newrelic/infra-integrations-sdk/http"
+	"github.com/stretchr/objx"
 )
 
 const (
-	nodeIngestEndpoint  = "/_nodes/ingest"
-	nodeProcessEndpoint = "/_nodes/process"
-	nodePluginsEndpoint = "/_nodes/plugins"
-	nodeStatsEndpoint   = "/_nodes/stats"
-	statsEndpoint       = "/_stats"
+	nodeIngestEndpoint         = "/_nodes/ingest"
+	nodeProcessEndpoint        = "/_nodes/process"
+	nodePluginsEndpoint        = "/_nodes/plugins"
+	nodeStatsEndpoint          = "/_nodes/stats"
+	localNodeInventoryEndpoint = "/_nodes/_local"
+	statsEndpoint              = "/_stats"
 )
 
 // Client represents a single connection to an Elasticsearch host
@@ -44,4 +48,27 @@ func NewClient(httpClient *http.Client) (*Client, error) {
 			return fmt.Sprintf("http://%s:%d", args.Hostname, args.Port)
 		}(),
 	}, nil
+}
+
+// Request takes an endpoint, makes a GET request to that endpoint,
+// and parses the response JSON into a map, which it returns.
+func (c *Client) Request(endpoint string) (objx.Map, error) {
+	response, err := c.client.Get(c.BaseURL + endpoint)
+	if err != nil {
+		return nil, err
+	}
+
+	responseBody, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var resultMap objx.Map
+
+	err = json.Unmarshal(responseBody, &resultMap)
+	if err != nil {
+		return nil, err
+	}
+
+	return resultMap, nil
 }
