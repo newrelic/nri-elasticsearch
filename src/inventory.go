@@ -15,10 +15,14 @@ func populateInventory(entity *integration.Entity) {
 	if err != nil {
 		logger.Errorf("couldn't populate config inventory: %v", err)
 	}
-	err = populateNodeStatInventory(entity)
+
+	localNode, err := getLocalNode()
 	if err != nil {
-		logger.Errorf("couldn't populate node stat inventory: %v", err)
+		logger.Errorf("couldn't get local node stats: %v", err)
+		return
 	}
+
+	populateNodeStatInventory(entity, localNode)
 }
 
 func readConfigFile(filePath string) (map[string]interface{}, error) {
@@ -54,39 +58,33 @@ func populateConfigInventory(entity *integration.Entity) error {
 	return nil
 }
 
-func populateNodeStatInventory(entity *integration.Entity) error {
-	
-	// we'll get the stats back as part of metrics so this will change
+func populateNodeStatInventory(entity *integration.Entity, localNode objx.Map) {
+	parseProcessStats(entity, localNode)
+	parsePluginsAndModules(entity, localNode)
+	parseNodeIngests(entity, localNode)
+}
+
+func getLocalNode() (objx.Map, error) {
 	client, err := NewClient(nil)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	localNodeStats, err := client.Request(localNodeInventoryEndpoint)
 	if err != nil {
-		return err
-	}
-	//
-
-	localNode, err := getLocalNode(localNodeStats)
-	if err != nil {
-		return err
+		return nil, err
 	}
 
-	parseProcessStats(entity, localNode)
-	parsePluginsAndModules(entity, localNode)
-	parseNodeIngests(entity, localNode)
-	return nil
+	return parseLocalNode(localNodeStats)
 }
 
-func getLocalNode(localNodeStats objx.Map) (objx.Map, error) {
-	nodes := localNodeStats.Get("nodes").ObjxMap()
+func parseLocalNode(nodeStats objx.Map) (objx.Map, error) {
+	nodes := nodeStats.Get("nodes").ObjxMap()
 	if len(nodes) == 1 {
 		for _, v := range nodes {
 			return objx.New(v), nil
 		}
 	}
-
 	return nil, fmt.Errorf("could not identify local node")
 }
 
