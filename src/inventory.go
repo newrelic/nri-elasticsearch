@@ -11,8 +11,15 @@ import (
 	"github.com/stretchr/objx"
 )
 
-func populateInventory(entity *integration.Entity) {
-	err := populateConfigInventory(entity)
+func populateInventory(i *integration.Integration) {
+	// TODO lookup local node to append inventory to
+	entity, err := i.Entity("local", "local")
+	if err != nil {
+		logger.Errorf("couldn't create local entity: %v", err)
+		return
+	}
+
+	err = populateConfigInventory(entity)
 	if err != nil {
 		logger.Errorf("couldn't populate config inventory: %v", err)
 	}
