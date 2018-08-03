@@ -1,11 +1,11 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"time"
-	"encoding/json"
-	"io/ioutil"
 
 	nrHttp "github.com/newrelic/infra-integrations-sdk/http"
 	"github.com/stretchr/objx"

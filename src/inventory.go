@@ -1,10 +1,11 @@
 package main
 
 import (
-	"io/ioutil"
-	"gopkg.in/yaml.v2"
 	"fmt"
+	"io/ioutil"
 	"strings"
+
+	"gopkg.in/yaml.v2"
 
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/stretchr/objx"
@@ -31,7 +32,7 @@ func readConfigFile(filePath string) (map[string]interface{}, error) {
 		logger.Errorf("could not open specified config file: %v", err)
 		return nil, err
 	}
-	
+
 	parsedYaml := make(map[string]interface{})
 
 	err = yaml.Unmarshal(rawYaml, parsedYaml)
@@ -48,7 +49,7 @@ func populateConfigInventory(entity *integration.Entity) error {
 	if err != nil {
 		return err
 	}
-	
+
 	for key, value := range configYaml {
 		err = entity.SetInventoryItem("config", key, value)
 		if err != nil {
@@ -110,7 +111,7 @@ func parseProcessStats(entity *integration.Entity, stats objx.Map) {
 	processStats := stats.Get("process").ObjxMap()
 
 	for k, v := range processStats {
-		err := entity.SetInventoryItem("config", "process." + k, v)
+		err := entity.SetInventoryItem("config", "process."+k, v)
 		if err != nil {
 			logger.Errorf("error setting inventory item [%v -> %v]: %v", k, v, err)
 		}

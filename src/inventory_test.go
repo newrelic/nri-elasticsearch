@@ -1,25 +1,25 @@
 package main
 
 import (
+	"bytes"
+	"io/ioutil"
 	"reflect"
 	"testing"
-	"io/ioutil"
-	"bytes"
-	
+
 	"github.com/stretchr/objx"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestReadConfigFile(t *testing.T) {
-	testCases := []struct{
+	testCases := []struct {
 		filePath    string
 		expectedMap map[string]interface{}
 	}{
 		{
 			"testdata/elasticsearch_sample.yml",
 			map[string]interface{}{
-				"path.data": "/var/lib/elasticsearch",
-				"path.logs": "/var/log/elasticsearch",
+				"path.data":    "/var/lib/elasticsearch",
+				"path.logs":    "/var/log/elasticsearch",
 				"network.host": "0.0.0.0",
 			},
 		},
@@ -39,8 +39,8 @@ func TestReadConfigFile(t *testing.T) {
 }
 
 func TestConfigErrors(t *testing.T) {
-	testCases := []struct{
-		filePath    string
+	testCases := []struct {
+		filePath string
 	}{
 		{
 			"testdata/elasticsearch_doesntexist.yml",
@@ -55,7 +55,7 @@ func TestConfigErrors(t *testing.T) {
 		_, err := readConfigFile(tc.filePath)
 		if err == nil {
 			t.Errorf("was not expecting a result")
-		}	
+		}
 	}
 }
 
@@ -120,7 +120,7 @@ func TestParseLocalNode(t *testing.T) {
 
 	statsData, err := ioutil.ReadFile(dataPath)
 	assert.NoError(t, err)
-	
+
 	statsJSON, err := objx.FromJSON(string(statsData))
 	assert.NoError(t, err)
 
@@ -139,6 +139,5 @@ func TestParseLocalNode(t *testing.T) {
 	if !bytes.Equal(expectedJSON, []byte(actualString)) {
 		t.Errorf("Actual JSON results do not match expected .golden file")
 	}
-
 
 }
