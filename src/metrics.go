@@ -2,11 +2,56 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 
 	"github.com/newrelic/infra-integrations-sdk/data/metric"
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/stretchr/objx"
 )
+
+func populateMetrics(i *integration.Integration, client *Client) {
+	logger.Infof("Collecting node metrics.")
+	stringResponseNode, err := getDataFromEndpoint(client, nodeMetricDefs.Endpoint)
+	panicOnErr(err)
+	responseObjectNode, err := objx.FromJSON(stringResponseNode)
+	panicOnErr(err)
+	collectNodesMetrics(i, &responseObjectNode)
+
+	logger.Infof("Collecting cluster metrics.")
+	stringResponseCluster, err := getDataFromEndpoint(client, clusterEndpoint)
+	panicOnErr(err)
+	responseObjectCluster, err := objx.FromJSON(stringResponseCluster)
+	panicOnErr(err)
+	collectClusterMetrics(i, &responseObjectCluster)
+
+	logger.Infof("Collecting common metrics.")
+	stringResponseCommon, err := getDataFromEndpoint(client, commonStatsEndpoint)
+	panicOnErr(err)
+	responseObjectCommon, err := objx.FromJSON(stringResponseCommon)
+	panicOnErr(err)
+	collectCommonMetrics(i, &responseObjectCommon)
+}
+
+func getDataFromEndpoint(client *Client, endpoint string) (string, error) {
+	url := client.BaseURL + endpoint
+
+	response, err := client.client.Get(url)
+	if err != nil {
+		logger.Errorf("there was an error when getting response from endpoint %v: %v", url, err)
+		return "", err
+	}
+
+	defer checkErr(response.Body.Close)
+
+	jsonData, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		logger.Errorf("there was an error when reading the response body: %v", err)
+		return "", err
+	}
+
+	jsonString := string(jsonData)
+	return jsonString, err
+}
 
 func collectNodesMetrics(integration *integration.Integration, response *objx.Map) {
 	nodesResponse := response.Get("nodes")
