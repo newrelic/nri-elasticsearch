@@ -1,8 +1,9 @@
 package main
 
 import (
-	"bytes"
+	"encoding/json"
 	"io/ioutil"
+	"path/filepath"
 	"reflect"
 	"testing"
 
@@ -16,7 +17,7 @@ func TestReadConfigFile(t *testing.T) {
 		expectedMap map[string]interface{}
 	}{
 		{
-			"testdata/elasticsearch_sample.yml",
+			filepath.Join("testdata", "elasticsearch_sample.yml"),
 			map[string]interface{}{
 				"path.data":    "/var/lib/elasticsearch",
 				"path.logs":    "/var/log/elasticsearch",
@@ -43,10 +44,10 @@ func TestConfigErrors(t *testing.T) {
 		filePath string
 	}{
 		{
-			"testdata/elasticsearch_doesntexist.yml",
+			filepath.Join("testdata", "elasticsearch_doesntexist.yml"),
 		},
 		{
-			"testdata/elasticsearch_bad.yml",
+			filepath.Join("testdata", "elasticsearch_bad.yml"),
 		},
 	}
 
@@ -62,7 +63,7 @@ func TestConfigErrors(t *testing.T) {
 func TestPopulateConfigInventory(t *testing.T) {
 	i, e := getTestingEntity(t)
 
-	dataPath := "testdata/elasticsearch_sample.yml"
+	dataPath := filepath.Join("testdata", "elasticsearch_sample.yml")
 	goldenPath := dataPath + ".golden"
 
 	args.ConfigPath = dataPath
@@ -79,22 +80,16 @@ func TestPopulateConfigInventory(t *testing.T) {
 
 	expected, _ := ioutil.ReadFile(goldenPath)
 
-	if !bytes.Equal(expected, actual) {
-		t.Errorf("Actual JSON results do not match expected .golden file")
-	}
+	assert.Equal(t, string(expected), actual)
 }
 
 func TestParsePluginsAndModules(t *testing.T) {
 	i, e := getTestingEntity(t)
 
-	dataPath := "testdata/good-node.json"
+	dataPath := filepath.Join("testdata", "good-node.json")
 	goldenPath := dataPath + ".golden"
 
-	statsData, err := ioutil.ReadFile(dataPath)
-	assert.NoError(t, err)
-
-	statsJSON, err := objx.FromJSON(string(statsData))
-	assert.NoError(t, err)
+	statsJSON := getObjxMapFromFile(dataPath)
 
 	populateNodeStatInventory(e, statsJSON)
 
@@ -109,27 +104,19 @@ func TestParsePluginsAndModules(t *testing.T) {
 
 	expectedJSON, _ := ioutil.ReadFile(goldenPath)
 
-	if !bytes.Equal(expectedJSON, actualJSON) {
-		t.Errorf("Actual JSON results do not match expected .golden file")
-	}
+	assert.Equal(t, string(expectedJSON), actualJSON)
 }
 
-
-/* TODO - invalidated by refactoring
 func TestParseLocalNode(t *testing.T) {
-	dataPath := "testdata/good-nodes-local.json"
+	dataPath := filepath.Join("testdata", "good-nodes-local.json")
 	goldenPath := dataPath + ".golden"
 
-	statsData, err := ioutil.ReadFile(dataPath)
+	statsJSON := getObjxMapFromFile(dataPath)
+
+	_, actualStats, err := parseLocalNode(statsJSON)
 	assert.NoError(t, err)
 
-	statsJSON, err := objx.FromJSON(string(statsData))
-	assert.NoError(t, err)
-
-	actual, err := parseLocalNodeName(statsJSON)
-	assert.NoError(t, err)
-
-	actualString, _ := actual.JSON()
+	actualString, _ := actualStats.JSON()
 	if *update {
 		t.Log("Writing .golden file")
 		err := ioutil.WriteFile(goldenPath, []byte(actualString), 0644)
@@ -138,9 +125,15 @@ func TestParseLocalNode(t *testing.T) {
 
 	expectedJSON, _ := ioutil.ReadFile(goldenPath)
 
-	if !bytes.Equal(expectedJSON, []byte(actualString)) {
-		t.Errorf("Actual JSON results do not match expected .golden file")
-	}
-
+	assert.Equal(t, string(expectedJSON), actualString)
 }
-*/
+
+func getObjxMapFromFile(fileName string) objx.Map {
+	fileBytes, _ := ioutil.ReadFile(fileName)
+
+	var resultMap map[string]interface{}
+
+	_ = json.Unmarshal(fileBytes, &resultMap)
+
+	return objx.New(resultMap)
+}

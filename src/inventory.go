@@ -19,9 +19,9 @@ func populateInventory(i *integration.Integration, client *Client) {
 		return
 	}
 
-	localNodeEntity, err := lookupLocalNode(i, localNodeName)
+	localNodeEntity, err := i.Entity(localNodeName, "node")
 	if err != nil {
-		logger.Errorf("couldn't look up local node entity: %v", err)
+		logger.Errorf("couldn't get local node entity: %v", err)
 	}
 
 	err = populateConfigInventory(localNodeEntity)
@@ -57,7 +57,7 @@ func populateConfigInventory(entity *integration.Entity) error {
 	}
 
 	for key, value := range configYaml {
-		err = entity.SetInventoryItem("config", key, value)
+		err = entity.SetInventoryItem("config."+key, "value", value)
 		if err != nil {
 			logger.Errorf("could not set inventory item: %v", err)
 		}
@@ -118,7 +118,7 @@ func parseProcessStats(entity *integration.Entity, stats objx.Map) {
 	for k, v := range processStats {
 		err := entity.SetInventoryItem("config", "process."+k, v)
 		if err != nil {
-			logger.Errorf("error setting inventory item [%v -> %v]: %v", k, v, err)
+			logger.Errorf("error setting inventory item [%s -> %s]: %v", k, v, err)
 		}
 	}
 }
@@ -138,27 +138,13 @@ func parsePluginsAndModules(entity *integration.Entity, stats objx.Map) {
 		for _, addon := range addonStats {
 			addonName := addon.Get("name").Str()
 			for _, field := range fieldNames {
-				inventoryKey := fmt.Sprintf("%v.%v.%v", addonType, addonName, field)
+				inventoryKey := fmt.Sprintf("%s.%s.%s", addonType, addonName, field)
 				inventoryValue := addon.Get(field).Str()
 				err := entity.SetInventoryItem("config", inventoryKey, inventoryValue)
 				if err != nil {
-					logger.Errorf("error setting inventory item [%v -> %v]: %v", inventoryKey, inventoryValue, err)
+					logger.Errorf("error setting inventory item [%s -> %s]: %v", inventoryKey, inventoryValue, err)
 				}
 			}
 		}
 	}
-}
-
-func lookupLocalNode(i *integration.Integration, nodeName string) (*integration.Entity, error) {
-	for _, e := range i.Entities {
-		if e.Metadata.Name == nodeName {
-			return e, nil
-		}
-	}
-	logger.Infof("entity for local node did not exist after parsing metrics; creating entity")
-	localEntity, err := i.Entity(nodeName, "node")
-	if err != nil {
-		return nil, err
-	}
-	return localEntity, err
 }

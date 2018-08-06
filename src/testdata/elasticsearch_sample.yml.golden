@@ -1,1 +1,1 @@
-{"name":"Test","protocol_version":"2","integration_version":"0.0.1","data":[{"metrics":[],"inventory":{"config":{"network.host":"0.0.0.0","path.data":"/var/lib/elasticsearch","path.logs":"/var/log/elasticsearch"}},"events":[]}]}
+{"name":"Test","protocol_version":"2","integration_version":"0.0.1","data":[{"metrics":[],"inventory":{"config.network.host":{"value":"0.0.0.0"},"config.path.data":{"value":"/var/lib/elasticsearch"},"config.path.logs":{"value":"/var/log/elasticsearch"}},"events":[]}]}

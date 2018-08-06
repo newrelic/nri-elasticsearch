@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"time"
 
@@ -58,18 +57,14 @@ func (c *Client) Request(endpoint string) (objx.Map, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer checkErr(response.Body.Close)
 
-	responseBody, err := ioutil.ReadAll(response.Body)
+	var resultMap map[string]interface{}
+
+	err = json.NewDecoder(response.Body).Decode(&resultMap)
 	if err != nil {
 		return nil, err
 	}
 
-	var resultMap objx.Map
-
-	err = json.Unmarshal(responseBody, &resultMap)
-	if err != nil {
-		return nil, err
-	}
-
-	return resultMap, nil
+	return objx.New(resultMap), nil
 }
