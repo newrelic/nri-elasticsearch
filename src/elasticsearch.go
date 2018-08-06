@@ -1,12 +1,9 @@
 package main
 
 import (
-	"io/ioutil"
-
 	sdkArgs "github.com/newrelic/infra-integrations-sdk/args"
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
-	"github.com/stretchr/objx"
 )
 
 type argumentList struct {
@@ -19,6 +16,7 @@ type argumentList struct {
 	CABundleFile string `default:"" help:"Alternative Certificate Authority bundle file"`
 	CABundleDir  string `default:"" help:"Alternative Certificate Authority bundle directory"`
 	Timeout      int    `default:"30" help:"Timeout for an API call"`
+	ConfigPath   string `default:"/etc/elasticsearch/elasticsearch.yml" help:"Path to the ElasticSearch configuration .yml file."`
 }
 
 const (
@@ -40,49 +38,15 @@ func main() {
 	client, err := NewClient(nil)
 	panicOnErr(err)
 
-	logger.Infof("Collecting node metrics.")
-	stringResponseNode, err := getDataFromEndpoint(client, nodeMetricDefs.Endpoint)
-	panicOnErr(err)
-	responseObjectNode, err := objx.FromJSON(stringResponseNode)
-	panicOnErr(err)
-	collectNodesMetrics(i, &responseObjectNode)
+	if args.All() || args.Metrics {
+		populateMetrics(i, client)
+	}
 
-	logger.Infof("Collecting cluster metrics.")
-	stringResponseCluster, err := getDataFromEndpoint(client, clusterEndpoint)
-	panicOnErr(err)
-	responseObjectCluster, err := objx.FromJSON(stringResponseCluster)
-	panicOnErr(err)
-	collectClusterMetrics(i, &responseObjectCluster)
-
-	logger.Infof("Collecting common metrics.")
-	stringResponseCommon, err := getDataFromEndpoint(client, commonStatsEndpoint)
-	panicOnErr(err)
-	responseObjectCommon, err := objx.FromJSON(stringResponseCommon)
-	panicOnErr(err)
-	collectCommonMetrics(i, &responseObjectCommon)
+	if args.All() || args.Inventory {
+		populateInventory(i, client)
+	}
 
 	panicOnErr(i.Publish())
-}
-
-func getDataFromEndpoint(client *Client, endpoint string) (string, error) {
-	url := client.BaseURL + endpoint
-
-	response, err := client.client.Get(url)
-	if err != nil {
-		logger.Errorf("there was an error when getting response from endpoint %v: %v", url, err)
-		return "", err
-	}
-
-	defer checkErr(response.Body.Close)
-
-	jsonData, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		logger.Errorf("there was an error when reading the response body: %v", err)
-		return "", err
-	}
-
-	jsonString := string(jsonData)
-	return jsonString, err
 }
 
 func checkErr(f func() error) {

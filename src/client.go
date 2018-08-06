@@ -1,20 +1,23 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"time"
 
 	nrHttp "github.com/newrelic/infra-integrations-sdk/http"
+	"github.com/stretchr/objx"
 )
 
 const (
-	nodeIngestEndpoint  = "/_nodes/ingest"
-	nodeProcessEndpoint = "/_nodes/process"
-	nodePluginsEndpoint = "/_nodes/plugins"
-	nodeStatsEndpoint   = "/_nodes/stats"
-	commonStatsEndpoint = "/_stats"
-	clusterEndpoint     = "/_cluster/health"
+	nodeIngestEndpoint         = "/_nodes/ingest"
+	nodeProcessEndpoint        = "/_nodes/process"
+	nodePluginsEndpoint        = "/_nodes/plugins"
+	nodeStatsEndpoint          = "/_nodes/stats"
+	localNodeInventoryEndpoint = "/_nodes/_local"
+	commonStatsEndpoint        = "/_stats"
+	clusterEndpoint            = "/_cluster/health"
 )
 
 // Client represents a single connection to an Elasticsearch host
@@ -45,4 +48,23 @@ func NewClient(httpClient *http.Client) (*Client, error) {
 			return fmt.Sprintf("http://%s:%d", args.Hostname, args.Port)
 		}(),
 	}, nil
+}
+
+// Request takes an endpoint, makes a GET request to that endpoint,
+// and parses the response JSON into a map, which it returns.
+func (c *Client) Request(endpoint string) (objx.Map, error) {
+	response, err := c.client.Get(c.BaseURL + endpoint)
+	if err != nil {
+		return nil, err
+	}
+	defer checkErr(response.Body.Close)
+
+	var resultMap map[string]interface{}
+
+	err = json.NewDecoder(response.Body).Decode(&resultMap)
+	if err != nil {
+		return nil, err
+	}
+
+	return objx.New(resultMap), nil
 }
