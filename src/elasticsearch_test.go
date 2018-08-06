@@ -4,9 +4,9 @@ import (
 	"flag"
 	"testing"
 
-	"github.com/newrelic/nri-elasticsearch/testutils"
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
+	"github.com/newrelic/nri-elasticsearch/testutils"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
