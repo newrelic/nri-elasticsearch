@@ -8,6 +8,23 @@ import (
 	"github.com/stretchr/objx"
 )
 
+func populateMetrics(i *integration.Integration, client *Client) {
+	logger.Infof("Collecting node metrics.")
+	responseObjectNode, err := client.Request(nodeMetricDefs.Endpoint)
+	panicOnErr(err)
+	collectNodesMetrics(i, &responseObjectNode)
+
+	logger.Infof("Collecting cluster metrics.")
+	responseObjectCluster, err := client.Request(clusterEndpoint)
+	panicOnErr(err)
+	collectClusterMetrics(i, &responseObjectCluster)
+
+	logger.Infof("Collecting common metrics.")
+	responseObjectCommon, err := client.Request(commonStatsEndpoint)
+	panicOnErr(err)
+	collectCommonMetrics(i, &responseObjectCommon)
+}
+
 func collectNodesMetrics(integration *integration.Integration, response *objx.Map) {
 	nodesResponse := response.Get("nodes")
 	nodes := nodesResponse.Data().(objx.Map)
@@ -72,7 +89,7 @@ func collectMetrics(data objx.Map, metricKey string, metricSet *metric.Set, metr
 			notFoundMetrics = append(notFoundMetrics, metricInfo.APIKey)
 		}
 		if metricInfoValue != nil {
-			setMetric(metricSet, metricKey, metricInfoValue, metricInfo.SourceType)
+			setMetric(metricSet, metricInfo.Name, metricInfoValue, metricInfo.SourceType)
 			foundMetrics = append(foundMetrics, metricInfo.APIKey)
 		}
 	}
