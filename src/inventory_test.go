@@ -80,7 +80,7 @@ func TestPopulateConfigInventory(t *testing.T) {
 
 	expected, _ := ioutil.ReadFile(goldenPath)
 
-	assert.Equal(t, string(expected), actual)
+	assert.Equal(t, expected, actual)
 }
 
 func TestParsePluginsAndModules(t *testing.T) {
@@ -104,7 +104,7 @@ func TestParsePluginsAndModules(t *testing.T) {
 
 	expectedJSON, _ := ioutil.ReadFile(goldenPath)
 
-	assert.Equal(t, string(expectedJSON), actualJSON)
+	assert.Equal(t, expectedJSON, actualJSON)
 }
 
 func TestParseLocalNode(t *testing.T) {

@@ -104,7 +104,7 @@ func parseNodeIngests(entity *integration.Entity, stats objx.Map) []string {
 		typeList = append(typeList, ingestType)
 	}
 
-	err := entity.SetInventoryItem("config", "ingest", strings.Join(typeList, ","))
+	err := entity.SetInventoryItem("config.ingest", "value", strings.Join(typeList, ","))
 	if err != nil {
 		logger.Errorf("error setting ingest types: %v", err)
 	}
@@ -116,7 +116,7 @@ func parseProcessStats(entity *integration.Entity, stats objx.Map) {
 	processStats := stats.Get("process").ObjxMap()
 
 	for k, v := range processStats {
-		err := entity.SetInventoryItem("config", "process."+k, v)
+		err := entity.SetInventoryItem("config.process."+k, "value", v)
 		if err != nil {
 			logger.Errorf("error setting inventory item [%s -> %s]: %v", k, v, err)
 		}
@@ -140,7 +140,7 @@ func parsePluginsAndModules(entity *integration.Entity, stats objx.Map) {
 			for _, field := range fieldNames {
 				inventoryKey := fmt.Sprintf("%s.%s.%s", addonType, addonName, field)
 				inventoryValue := addon.Get(field).Str()
-				err := entity.SetInventoryItem("config", inventoryKey, inventoryValue)
+				err := entity.SetInventoryItem("config."+inventoryKey, "value", inventoryValue)
 				if err != nil {
 					logger.Errorf("error setting inventory item [%s -> %s]: %v", inventoryKey, inventoryValue, err)
 				}
