@@ -38,14 +38,12 @@ func main() {
 	client, err := NewClient(nil)
 	panicOnErr(err)
 
-	// Add Inventory item
-	if args.All() || args.Inventory {
-		populateInventory(i)
-	}
-
-	// TODO refactor this
 	if args.All() || args.Metrics {
 		populateMetrics(i, client)
+	}
+
+	if args.All() || args.Inventory {
+		populateInventory(i, client)
 	}
 
 	panicOnErr(i.Publish())

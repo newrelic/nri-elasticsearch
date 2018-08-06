@@ -11,26 +11,25 @@ import (
 	"github.com/stretchr/objx"
 )
 
-func populateInventory(i *integration.Integration) {
-	// TODO lookup local node to append inventory to
-	entity, err := i.Entity("local", "local")
-	if err != nil {
-		logger.Errorf("couldn't create local entity: %v", err)
-		return
-	}
-
-	err = populateConfigInventory(entity)
-	if err != nil {
-		logger.Errorf("couldn't populate config inventory: %v", err)
-	}
-
-	localNode, err := getLocalNode()
+func populateInventory(i *integration.Integration, client *Client) {
+	// all inventory should be collected on the local node entity so we need to look that up
+	localNodeName, localNode, err := getLocalNode(client)
 	if err != nil {
 		logger.Errorf("couldn't get local node stats: %v", err)
 		return
 	}
 
-	populateNodeStatInventory(entity, localNode)
+	localNodeEntity, err := lookupLocalNode(i, localNodeName)
+	if err != nil {
+		logger.Errorf("couldn't look up local node entity: %v", err)
+	}
+
+	err = populateConfigInventory(localNodeEntity)
+	if err != nil {
+		logger.Errorf("couldn't populate config inventory: %v", err)
+	}
+
+	populateNodeStatInventory(localNodeEntity, localNode)
 }
 
 func readConfigFile(filePath string) (map[string]interface{}, error) {
@@ -72,28 +71,27 @@ func populateNodeStatInventory(entity *integration.Entity, localNode objx.Map) {
 	parseNodeIngests(entity, localNode)
 }
 
-func getLocalNode() (objx.Map, error) {
-	client, err := NewClient(nil)
+func getLocalNode(client *Client) (localNodeName string, localNodeStats objx.Map, err error) {
+	nodeStats, err := client.Request(localNodeInventoryEndpoint)
 	if err != nil {
-		return nil, err
+		return "", nil, err
 	}
 
-	localNodeStats, err := client.Request(localNodeInventoryEndpoint)
+	localNodeName, localNodeStats, err = parseLocalNode(nodeStats)
 	if err != nil {
-		return nil, err
+		return "", nil, err
 	}
-
-	return parseLocalNode(localNodeStats)
+	return
 }
 
-func parseLocalNode(nodeStats objx.Map) (objx.Map, error) {
+func parseLocalNode(nodeStats objx.Map) (string, objx.Map, error) {
 	nodes := nodeStats.Get("nodes").ObjxMap()
 	if len(nodes) == 1 {
-		for _, v := range nodes {
-			return objx.New(v), nil
+		for k := range nodes {
+			return k, nodes.Get(k).ObjxMap(), nil
 		}
 	}
-	return nil, fmt.Errorf("could not identify local node")
+	return "", nil, fmt.Errorf("could not identify local node")
 }
 
 func parseNodeIngests(entity *integration.Entity, stats objx.Map) []string {
@@ -149,4 +147,18 @@ func parsePluginsAndModules(entity *integration.Entity, stats objx.Map) {
 			}
 		}
 	}
+}
+
+func lookupLocalNode(i *integration.Integration, nodeName string) (*integration.Entity, error) {
+	for _, e := range i.Entities {
+		if e.Metadata.Name == nodeName {
+			return e, nil
+		}
+	}
+	logger.Infof("entity for local node did not exist after parsing metrics; creating entity")
+	localEntity, err := i.Entity(nodeName, "node")
+	if err != nil {
+		return nil, err
+	}
+	return localEntity, err
 }
