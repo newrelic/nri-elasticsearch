@@ -36,11 +36,7 @@ func collectNodesMetrics(integration *integration.Integration, response *objx.Ma
 			continue
 		}
 
-		metricSet, err := entity.NewMetricSet("nodesMetricSet")
-		if err != nil {
-			logger.Errorf("there was an error creating new metric set for nodes: %v", err)
-			continue
-		}
+		metricSet := entity.NewMetricSet("nodesMetricSet")
 
 		nodesData := nodes.Get(node).ObjxMap()
 		collectMetrics(nodesData, node, metricSet, nodeMetricDefs)
@@ -54,11 +50,7 @@ func collectClusterMetrics(integration *integration.Integration, response *objx.
 		logger.Errorf("there was an error creating new entity for clusters: %v", err)
 		return
 	}
-	metricSet, err := entity.NewMetricSet("clusterMetricSet")
-	if err != nil {
-		logger.Errorf("there was an error creating new metric set for clusters: %v", err)
-		return
-	}
+	metricSet := entity.NewMetricSet("clusterMetricSet")
 
 	collectMetrics(*response, clusterName, metricSet, clusterMetricDefs)
 }
@@ -70,11 +62,7 @@ func collectCommonMetrics(integration *integration.Integration, response *objx.M
 		return
 	}
 
-	metricSet, err := entity.NewMetricSet("clusterMetricSet")
-	if err != nil {
-		logger.Errorf("there was an error creating new metric set for commmon metrics: %v", err)
-		return
-	}
+	metricSet := entity.NewMetricSet("clusterMetricSet")
 
 	collectMetrics(*response, "commonMetrics", metricSet, commonStatsMetricDefs)
 }
