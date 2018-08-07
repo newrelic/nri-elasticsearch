@@ -11,9 +11,6 @@ import (
 )
 
 const (
-	//nodeIngestEndpoint         = "/_nodes/ingest"
-	//nodeProcessEndpoint        = "/_nodes/process"
-	//nodePluginsEndpoint        = "/_nodes/plugins"
 	nodeStatsEndpoint          = "/_nodes/stats"
 	localNodeInventoryEndpoint = "/_nodes/_local"
 	commonStatsEndpoint        = "/_stats"
