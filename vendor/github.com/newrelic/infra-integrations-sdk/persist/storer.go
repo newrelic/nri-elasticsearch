@@ -50,7 +50,6 @@ type Storer interface {
 type inMemoryStore struct {
 	cachedData map[string]jsonEntry
 	Data       map[string][]byte
-	Timestamps map[string]int64
 }
 
 // Holder for any entry in the JSON storage
@@ -62,8 +61,6 @@ type jsonEntry struct {
 // fileStore is a Storer implementation that uses the file system as persistence backend, storing
 // the objects as JSON.
 // This requires that any object that has to be stored is Marshallable and Unmarshallable.
-// TODO: make this implementation read all the cached values at the same time and persist them at the same time after
-// invoking a Persist() or Save() function. This will improve performance while minimizing disk usage.
 type fileStore struct {
 	inMemoryStore
 	path string
@@ -93,7 +90,6 @@ func NewInMemoryStore() Storer {
 	return &inMemoryStore{
 		cachedData: make(map[string]jsonEntry),
 		Data:       make(map[string][]byte),
-		Timestamps: make(map[string]int64),
 	}
 }
 
@@ -193,7 +189,7 @@ func (j inMemoryStore) Get(key string, valuePtr interface{}) (int64, error) {
 	return entry.Timestamp, nil
 }
 
-// flushcache marshalls all the cached data into JSON, ready to be stored into disk
+// flushCache marshalls all the cached data into JSON, ready to be stored into disk
 func (j *inMemoryStore) flushCache() error {
 	for k, v := range j.cachedData {
 		bytes, err := json.Marshal(v)
@@ -223,6 +219,5 @@ func (j *fileStore) loadFromDisk() error {
 func (j inMemoryStore) Delete(key string) error {
 	delete(j.cachedData, key)
 	delete(j.Data, key)
-	delete(j.Timestamps, key)
 	return nil
 }
