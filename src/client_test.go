@@ -31,8 +31,8 @@ func TestNewClient(t *testing.T) {
 		if err != nil {
 			t.Errorf("Unexpected error: %s", err.Error())
 		} else {
-			if client.BaseURL != tc.wantURL {
-				t.Errorf("Expected BaseURL '%s' got '%s'", tc.wantURL, client.BaseURL)
+			if client.baseURL != tc.wantURL {
+				t.Errorf("Expected BaseURL '%s' got '%s'", tc.wantURL, client.baseURL)
 			}
 		}
 	}

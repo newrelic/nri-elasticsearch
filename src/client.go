@@ -11,25 +11,30 @@ import (
 )
 
 const (
-	nodeIngestEndpoint         = "/_nodes/ingest"
-	nodeProcessEndpoint        = "/_nodes/process"
-	nodePluginsEndpoint        = "/_nodes/plugins"
+	//nodeIngestEndpoint         = "/_nodes/ingest"
+	//nodeProcessEndpoint        = "/_nodes/process"
+	//nodePluginsEndpoint        = "/_nodes/plugins"
 	nodeStatsEndpoint          = "/_nodes/stats"
 	localNodeInventoryEndpoint = "/_nodes/_local"
 	commonStatsEndpoint        = "/_stats"
 	clusterEndpoint            = "/_cluster/health"
 )
 
-// Client represents a single connection to an Elasticsearch host
-type Client struct {
-	BaseURL string
+// HTTPClient represents a single connection to an Elasticsearch host
+type HTTPClient struct {
+	baseURL string
 	client  *http.Client
+}
+
+// Client represents an object that can make a request for a map
+type Client interface {
+	Request(string) (objx.Map, error)
 }
 
 // NewClient creates a new Elasticsearch http client.
 // httpClient passed in variable should be nil for non-test usage. It is
 // available to enable easier mocking of http calls during tests.
-func NewClient(httpClient *http.Client) (*Client, error) {
+func NewClient(httpClient *http.Client) (*HTTPClient, error) {
 	if httpClient == nil {
 		var err error
 		httpClient, err = nrHttp.New(args.CABundleFile, args.CABundleDir, time.Duration(args.Timeout)*time.Second)
@@ -38,9 +43,9 @@ func NewClient(httpClient *http.Client) (*Client, error) {
 		}
 	}
 
-	return &Client{
+	return &HTTPClient{
 		client: httpClient,
-		BaseURL: func() string {
+		baseURL: func() string {
 			if args.UseSSL {
 				return fmt.Sprintf("https://%s:%d", args.Hostname, args.Port)
 			}
@@ -52,8 +57,8 @@ func NewClient(httpClient *http.Client) (*Client, error) {
 
 // Request takes an endpoint, makes a GET request to that endpoint,
 // and parses the response JSON into a map, which it returns.
-func (c *Client) Request(endpoint string) (objx.Map, error) {
-	response, err := c.client.Get(c.BaseURL + endpoint)
+func (c *HTTPClient) Request(endpoint string) (objx.Map, error) {
+	response, err := c.client.Get(c.baseURL + endpoint)
 	if err != nil {
 		return nil, err
 	}

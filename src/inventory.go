@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/objx"
 )
 
-func populateInventory(i *integration.Integration, client *Client) {
+func populateInventory(i *integration.Integration, client Client) {
 	// all inventory should be collected on the local node entity so we need to look that up
 	localNodeName, localNode, err := getLocalNode(client)
 	if err != nil {
@@ -71,7 +71,7 @@ func populateNodeStatInventory(entity *integration.Entity, localNode objx.Map) {
 	parseNodeIngests(entity, localNode)
 }
 
-func getLocalNode(client *Client) (localNodeName string, localNodeStats objx.Map, err error) {
+func getLocalNode(client Client) (localNodeName string, localNodeStats objx.Map, err error) {
 	nodeStats, err := client.Request(localNodeInventoryEndpoint)
 	if err != nil {
 		return "", nil, err

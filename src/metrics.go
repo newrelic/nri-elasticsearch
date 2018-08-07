@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/objx"
 )
 
-func populateMetrics(i *integration.Integration, client *Client) {
+func populateMetrics(i *integration.Integration, client Client) {
 	logger.Infof("Collecting node metrics.")
 	responseObjectNode, err := client.Request(nodeMetricDefs.Endpoint)
 	panicOnErr(err)
@@ -27,7 +27,7 @@ func populateMetrics(i *integration.Integration, client *Client) {
 
 func collectNodesMetrics(integration *integration.Integration, response *objx.Map) {
 	nodesResponse := response.Get("nodes")
-	nodes := nodesResponse.Data().(objx.Map)
+	nodes := nodesResponse.ObjxMap()
 	// endpoint has multiple nodes so we need to collect for all of them
 	for node := range nodes {
 		entity, err := integration.Entity(node, "node")
