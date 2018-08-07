@@ -82,7 +82,6 @@ func collectCommonMetrics(integration *integration.Integration, response *objx.M
 // generic function that sets metrics in SDK
 func collectMetrics(data objx.Map, metricKey string, metricSet *metric.Set, metricDefs *metricSet) {
 	notFoundMetrics := make([]string, 0)
-	foundMetrics := make([]string, 0)
 	for _, metricInfo := range metricDefs.MetricDefs {
 		metricInfoValue, err := parseJSON(data, metricInfo.APIKey)
 		if err != nil {
@@ -90,7 +89,6 @@ func collectMetrics(data objx.Map, metricKey string, metricSet *metric.Set, metr
 		}
 		if metricInfoValue != nil {
 			setMetric(metricSet, metricInfo.Name, metricInfoValue, metricInfo.SourceType)
-			foundMetrics = append(foundMetrics, metricInfo.APIKey)
 		}
 	}
 }

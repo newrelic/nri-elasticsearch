@@ -5,10 +5,9 @@ import (
 	"io/ioutil"
 	"strings"
 
-	"gopkg.in/yaml.v2"
-
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/stretchr/objx"
+	"gopkg.in/yaml.v2"
 )
 
 func populateInventory(i *integration.Integration, client *Client) {

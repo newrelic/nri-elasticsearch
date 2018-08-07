@@ -3,9 +3,29 @@ package main
 import (
 	"testing"
 
+	"github.com/newrelic/infra-integrations-sdk/data/metric"
+	"github.com/newrelic/infra-integrations-sdk/integration"
+	"github.com/newrelic/nri-rabbitmq/testutils"
 	"github.com/stretchr/objx"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
+
+func TestSetMetric(t *testing.T) {
+	l := testutils.SetMockLogger()
+	defer func() {
+		testutils.SetTestLogger(t)
+	}()
+
+	i, _ := integration.New("name", "version", integration.Logger(l))
+	l.On("Errorf", mock.Anything, mock.Anything).Once()
+
+	firstQueue, _ := i.Entity("first-metric", "/my-vhost/_nodes")
+	metrics, _ := firstQueue.NewMetricSet("ElasticsearchSample")
+	setMetric(metrics, "sample-name", 0.5, metric.RATE)
+
+	l.AssertExpectations(t)
+}
 
 func TestParseJSONString(t *testing.T) {
 	stringTest := `{
