@@ -144,7 +144,7 @@ func TestGetLocalNode(t *testing.T) {
 
 	fakeClient := mockClient{}
 	mockedReturnVal := filepath.Join("testdata", "good-nodes-local.json")
-	fakeClient.On("Request", "/_nodes/_local").Return(mockedReturnVal, nil)
+	fakeClient.On("Request", "/_nodes/_local").Return(mockedReturnVal, nil).Once()
 
 	resultName, resultStats, _ := getLocalNode(fakeClient)
 	assert.Equal(t, "z9ZPp87vT92qG1cRVRIcMQ", resultName)
@@ -170,7 +170,7 @@ func TestPopulateInventory(t *testing.T) {
 
 	fakeClient := mockClient{}
 	mockedReturnVal := filepath.Join("testdata", "good-nodes-local.json")
-	fakeClient.On("Request", "/_nodes/_local").Return(mockedReturnVal, nil)
+	fakeClient.On("Request", "/_nodes/_local").Return(mockedReturnVal, nil).Once()
 
 	i := getTestingIntegration(t)
 	populateInventory(i, fakeClient)

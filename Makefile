@@ -44,11 +44,11 @@ validate-all: deps
 
 compile: deps
 	@echo "=== $(INTEGRATION) === [ compile ]: Building $(BINARY_NAME)..."
-	@GOARCH=amd64 GOOS=linux go build -o bin/$(BINARY_NAME) ./src
+	@go build -o bin/$(BINARY_NAME) ./src
 
 compile-only: deps-only
 	@echo "=== $(INTEGRATION) === [ compile ]: Building $(BINARY_NAME)..."
-	@GOARCH=amd64 GOOS=linux go build -o bin/$(BINARY_NAME) ./src
+	@go build -o bin/$(BINARY_NAME) ./src
 
 test: deps
 	@echo "=== $(INTEGRATION) === [ test ]: Running unit tests..."
