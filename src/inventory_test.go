@@ -159,6 +159,7 @@ func TestGetLocalNode(t *testing.T) {
 	expectedJSON, _ := ioutil.ReadFile(goldenPath)
 
 	assert.Equal(t, string(expectedJSON), actualString)
+	fakeClient.AssertExpectations(t)
 }
 
 func TestPopulateInventory(t *testing.T) {
@@ -184,6 +185,7 @@ func TestPopulateInventory(t *testing.T) {
 	expectedJSON, _ := ioutil.ReadFile(goldenPath)
 
 	assert.Equal(t, expectedJSON, actualJSON)
+	fakeClient.AssertExpectations(t)
 }
 
 func getObjxMapFromFile(fileName string) objx.Map {
