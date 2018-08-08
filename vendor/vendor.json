@@ -57,14 +57,6 @@
 			"revisionTime": "2018-07-31T07:45:10Z"
 		},
 		{
-			"path": "github.com/newrelic/infra-integrations/args",
-			"revision": ""
-		},
-		{
-			"path": "github.com/newrelic/infra-integrations/http",
-			"revision": ""
-		},
-		{
 			"checksumSHA1": "ljd3FhYRJ91cLZz3wsH9BQQ2JbA=",
 			"path": "github.com/pkg/errors",
 			"revision": "816c9085562cd7ee03e7f8188a1cfd942858cded",
