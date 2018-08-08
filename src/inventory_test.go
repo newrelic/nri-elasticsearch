@@ -9,7 +9,18 @@ import (
 
 	"github.com/stretchr/objx"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
+
+var NodeTestFile = filepath.Join("testdata", "good-nodes-local.json")
+
+type mockClient struct{
+	mock.Mock
+}
+
+func (mc mockClient) Request(endpoint string) (objx.Map, error) {
+	return getObjxMapFromFile(mc.Called(endpoint).String(0)), nil
+}
 
 func TestReadConfigFile(t *testing.T) {
 	testCases := []struct {
@@ -126,6 +137,55 @@ func TestParseLocalNode(t *testing.T) {
 	expectedJSON, _ := ioutil.ReadFile(goldenPath)
 
 	assert.Equal(t, string(expectedJSON), actualString)
+}
+
+func TestGetLocalNode(t *testing.T) {
+	goldenPath := filepath.Join("testdata", "good-nodes-local.json.golden")
+
+	fakeClient := mockClient{}
+	mockedReturnVal := filepath.Join("testdata", "good-nodes-local.json")
+	fakeClient.On("Request", "/_nodes/_local").Return(mockedReturnVal, nil).Once()
+
+	resultName, resultStats, _ := getLocalNode(fakeClient)
+	assert.Equal(t, "z9ZPp87vT92qG1cRVRIcMQ", resultName)
+
+	actualString, _ := resultStats.JSON()
+	if *update {
+		t.Log("Writing .golden file")
+		err := ioutil.WriteFile(goldenPath, []byte(actualString), 0644)
+		assert.NoError(t, err)
+	}
+
+	expectedJSON, _ := ioutil.ReadFile(goldenPath)
+
+	assert.Equal(t, string(expectedJSON), actualString)
+	fakeClient.AssertExpectations(t)
+}
+
+func TestPopulateInventory(t *testing.T) {
+	setupTestArgs()
+	args.ConfigPath = filepath.Join("testdata", "elasticsearch_sample.yml")
+
+	goldenPath := filepath.Join("testdata", "good-inventory.json.golden")
+
+	fakeClient := mockClient{}
+	mockedReturnVal := filepath.Join("testdata", "good-nodes-local.json")
+	fakeClient.On("Request", "/_nodes/_local").Return(mockedReturnVal, nil).Once()
+
+	i := getTestingIntegration(t)
+	populateInventory(i, fakeClient)
+
+	actualJSON, _ := i.MarshalJSON()
+	if *update {
+		t.Log("Writing .golden file")
+		err := ioutil.WriteFile(goldenPath, actualJSON, 0644)
+		assert.NoError(t, err)
+	}
+
+	expectedJSON, _ := ioutil.ReadFile(goldenPath)
+
+	assert.Equal(t, expectedJSON, actualJSON)
+	fakeClient.AssertExpectations(t)
 }
 
 func getObjxMapFromFile(fileName string) objx.Map {

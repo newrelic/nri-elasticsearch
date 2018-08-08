@@ -50,8 +50,7 @@ func New(name, version string, opts ...Option) (i *Integration, err error) {
 		IntegrationVersion: version,
 		Entities:           []*Entity{},
 		writer:             os.Stdout,
-		locker:             DisabledLocker,
-		logger:             log.NewStdErr(false),
+		locker:             &sync.Mutex{},
 	}
 
 	for _, opt := range opts {
@@ -70,6 +69,11 @@ func New(name, version string, opts ...Option) (i *Integration, err error) {
 	}
 	defaultArgs := args.GetDefaultArgs(i.args)
 	i.prettyOutput = defaultArgs.Pretty
+
+	// Setting default values, if not set yet
+	if i.logger == nil {
+		i.logger = log.NewStdErr(defaultArgs.Verbose)
+	}
 
 	if i.storer == nil {
 		var err error
@@ -93,15 +97,11 @@ func (i *Integration) LocalEntity() *Entity {
 		}
 	}
 
-	e := newLocalEntity(i.storer, i.isSynchronized())
+	e := newLocalEntity(i.storer)
 
 	i.Entities = append(i.Entities, e)
 
 	return e
-}
-
-func (i *Integration) isSynchronized() bool {
-	return i.locker != DisabledLocker
 }
 
 // Entity method creates or retrieves an already created entity.
@@ -111,12 +111,12 @@ func (i *Integration) Entity(name, namespace string) (e *Entity, err error) {
 
 	// we should change this to map for performance
 	for _, e = range i.Entities {
-		if e.Metadata.Name == name && e.Metadata.Namespace == namespace {
+		if e.Metadata != nil && e.Metadata.Name == name && e.Metadata.Namespace == namespace {
 			return e, nil
 		}
 	}
 
-	e, err = newEntity(name, namespace, i.storer, i.isSynchronized())
+	e, err = newEntity(name, namespace, i.storer)
 	if err != nil {
 		return nil, err
 	}
