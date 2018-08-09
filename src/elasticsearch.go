@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+
 	sdkArgs "github.com/newrelic/infra-integrations-sdk/args"
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
@@ -26,17 +28,15 @@ const (
 
 var (
 	args   argumentList
-	logger log.Logger
 )
 
 func main() {
 	// Create Integration
 	i, err := integration.New(integrationName, integrationVersion, integration.Args(&args))
-	panicOnErr(err)
-	logger = i.Logger()
+	logErrorAndExit(err)
 
 	client, err := NewClient(nil)
-	panicOnErr(err)
+	logErrorAndExit(err)
 
 	if args.All() || args.Metrics {
 		populateMetrics(i, client)
@@ -46,17 +46,18 @@ func main() {
 		populateInventory(i, client)
 	}
 
-	panicOnErr(i.Publish())
+	logErrorAndExit(i.Publish())
 }
 
 func checkErr(f func() error) {
 	if err := f(); err != nil {
-		logger.Errorf("%v", err)
+		log.Error("%v", err)
 	}
 }
 
-func panicOnErr(err error) {
+func logErrorAndExit(err error) {
 	if err != nil {
-		panic(err)
+		log.Error("encountered fatal error: %v", err)
+		os.Exit(1)
 	}
 }
