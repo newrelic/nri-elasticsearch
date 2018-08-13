@@ -5,13 +5,13 @@ import (
 )
 
 func populateMetrics(i *integration.Integration, client *Client) {
-	populateNodeMetrics(i, client)
+	populateNodesMetrics(i, client)
 	populateClusterMetrics(i, client)
 	populateCommonMetrics(i, client)
 	populateIndicesMetrics(i, client)
 }
 
-func populateNodeMetrics(i *integration.Integration, client *Client) {
+func populateNodesMetrics(i *integration.Integration, client *Client) {
 	logger.Infof("Collecting node metrics")
 	nodeResponse := new(NodeResponse)
 	err := client.Request(nodeMetricDefs.Endpoint, nodeResponse)
@@ -20,9 +20,6 @@ func populateNodeMetrics(i *integration.Integration, client *Client) {
 	}
 	// curt wrote a thing to gracefully exit, put that here
 	setNodesMetricsResponse(i, nodeResponse)
-	// if err != nil {
-	// 	logger.Errorf("there was an error setting metrics for node metrics", err)
-	// }
 }
 
 func populateClusterMetrics(i *integration.Integration, client *Client) {
