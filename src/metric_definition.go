@@ -59,47 +59,47 @@ var nodeMetricDefs = &metricSet{
 		{
 			Name:       "fs.bytesAvailableJVMInBytes",
 			SourceType: metric.GAUGE,
-			APIKey:     "jvm.fs.total.available_in_bytes",
+			APIKey:     "fs.total.available_in_bytes",
 		},
 		{
 			Name:       "fs.iOOperations",
 			SourceType: metric.GAUGE,
-			APIKey:     "jvm.fs.io_stats.total.operations",
+			APIKey:     "fs.io_stats.total.operations",
 		},
 		{
 			Name:       "fs.bytesUserIoOperationsInBytes",
 			SourceType: metric.GAUGE,
-			APIKey:     "jvm.fs.total.total_in_bytes",
+			APIKey:     "fs.total.total_in_bytes",
 		},
 		{
 			Name:       "fs.bytesReadsInBytes",
 			SourceType: metric.GAUGE,
-			APIKey:     "jvm.fs.io_stats.total.read_kilobytes",
+			APIKey:     "fs.io_stats.total.read_kilobytes",
 		},
 		{
 			Name:       "fs.reads",
 			SourceType: metric.GAUGE,
-			APIKey:     "jvm.fs.io_stats.total.read_operations",
+			APIKey:     "fs.io_stats.total.read_operations",
 		},
 		{
 			Name:       "fs.writesInBytes",
 			SourceType: metric.GAUGE,
-			APIKey:     "jvm.fs.io_stats.total.write_kilobytes",
+			APIKey:     "fs.io_stats.total.write_kilobytes",
 		},
 		{
 			Name:       "fs.writesInBytes",
 			SourceType: metric.GAUGE,
-			APIKey:     "jvm.fs.io_stats.total.write_operations",
+			APIKey:     "fs.io_stats.total.write_operations",
 		},
 		{
 			Name:       "fs.unallocatedBytesInBYtes",
 			SourceType: metric.GAUGE,
-			APIKey:     "jvm.fs.total.free_in_bytes",
+			APIKey:     "fs.total.free_in_bytes",
 		},
 		{
 			Name:       "fs.totalSizeInBytes",
 			SourceType: metric.GAUGE,
-			APIKey:     "jvm.fs.total.total_in_bytes",
+			APIKey:     "fs.total.total_in_bytes",
 		},
 		{
 			Name:       "get.currentRequestsRunning",
@@ -554,22 +554,22 @@ var nodeMetricDefs = &metricSet{
 		{
 			Name:       "threadpool.bulkActive",
 			SourceType: metric.GAUGE,
-			APIKey:     "jvm.thread_pool.bulk.active",
+			APIKey:     "thread_pool.bulk.active",
 		},
 		{
 			Name:       "threadpool.bulk.Aueue",
 			SourceType: metric.GAUGE,
-			APIKey:     "jvm.thread_pool.bulk.queue",
+			APIKey:     "thread_pool.bulk.queue",
 		},
 		{
 			Name:       "threadpool.bulkThreads",
 			SourceType: metric.GAUGE,
-			APIKey:     "jvm.thread_pool.bulk.threads",
+			APIKey:     "thread_pool.bulk.threads",
 		},
 		{
 			Name:       "threadpool.bulkRejected",
 			SourceType: metric.GAUGE,
-			APIKey:     "jvm.thread_pool.bulk.rejected",
+			APIKey:     "thread_pool.bulk.rejected",
 		},
 		{
 			Name:       "threadpoolActivefetchShardStarted",
@@ -922,7 +922,6 @@ var clusterMetricDefs = &metricSet{
 			SourceType: metric.GAUGE,
 			APIKey:     "store_size",
 		},
-
 		{
 			Name:       "shards.relocating",
 			SourceType: metric.GAUGE,
@@ -938,7 +937,6 @@ var clusterMetricDefs = &metricSet{
 			SourceType: metric.GAUGE,
 			APIKey:     "unassigned_shards",
 		},
-
 		{
 			Name:       "cluster.dataNodes",
 			SourceType: metric.GAUGE,

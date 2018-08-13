@@ -79,6 +79,7 @@ type clusterMetric struct {
 
 // ClusterResponse metrics on /_cluster/health
 type ClusterResponse struct {
+	Name                *string `json:"cluster_name"`
 	Status              *string `json:"status" metric_name:"cluster.status" sourceType:"gauge"`
 	NumberOfNodes       *int    `json:"number_of_nodes" metric_name:"cluster.nodes" sourceType:"gauge"`
 	NumberOfDataNodes   *int    `json:"number_of_data_nodes" metric_name:"cluster.dataNodes" sourceType:"gauge"`
