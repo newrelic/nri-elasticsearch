@@ -1,70 +1,28 @@
 package main
 
 import (
+	"github.com/newrelic/infra-integrations-sdk/data/metric"
 	"github.com/newrelic/infra-integrations-sdk/integration"
 )
 
-func populateMetrics(i *integration.Integration, client *Client) {
+func populateMetrics(i *integration.Integration, client Client) {
 	populateNodesMetrics(i, client)
 	populateClusterMetrics(i, client)
 	populateCommonMetrics(i, client)
 	populateIndicesMetrics(i, client)
 }
 
-func populateNodesMetrics(i *integration.Integration, client *Client) {
+func populateNodesMetrics(i *integration.Integration, client Client) {
 	logger.Infof("Collecting node metrics")
 	nodeResponse := new(NodeResponse)
-	err := client.Request(nodeMetricDefs.Endpoint, nodeResponse)
+	err := client.Request(nodeStatsEndpoint, nodeResponse)
 	if err != nil {
 		logger.Errorf("there was an error creating request for node metrics", err)
 	}
-	// curt wrote a thing to gracefully exit, put that here
+
 	setNodesMetricsResponse(i, nodeResponse)
 }
 
-func populateClusterMetrics(i *integration.Integration, client *Client) {
-	logger.Infof("Collecting cluster metrics.")
-	clusterResponse := new(ClusterResponse)
-	err := client.Request(clusterEndpoint, clusterResponse)
-	if err != nil {
-		logger.Errorf("there was an error creating request for cluster metrics", err)
-	}
-	// curt wrote a thing to gracefully exit, put that here
-	err = setClusterMetricsResponse(i, clusterResponse)
-	if err != nil {
-		logger.Errorf("there was an error setting metrics for cluster metrics", err)
-	}
-}
-
-func populateCommonMetrics(i *integration.Integration, client *Client) {
-	logger.Infof("Collecting common metrics.")
-	commonResponse := new(All)
-	err := client.Request(commonStatsEndpoint, commonResponse)
-	if err != nil {
-		logger.Errorf("there was an error creating request for common metrics", err)
-	}
-	// curt wrote a thing to gracefully exit, put that here
-	err = setCommonMetricsResponse(i, commonResponse)
-	if err != nil {
-		logger.Errorf("there was an error setting metrics for common metrics", err)
-	}
-}
-
-func populateIndicesMetrics(i *integration.Integration, client *Client) {
-	logger.Infof("Collecting indices metrics")
-	indicesStatsResponse := new(IndicesStatsResponse)
-	err := client.Request(indicesStatsEndpoint, indicesStatsResponse)
-	if err != nil {
-		logger.Errorf("there was an error creating request for indices stats", err)
-	}
-	// curt wrote a thing to gracefully exit, put that here
-	err = setIndicesStatsMetricsResponse(i, indicesStatsResponse)
-	if err != nil {
-		logger.Errorf("there was an error setting metrics for indices metrics", err)
-	}
-}
-
-//TODO make sure this works
 func setNodesMetricsResponse(integration *integration.Integration, resp *NodeResponse) {
 	for node := range resp.Nodes {
 		entity, err := integration.Entity(node, "node")
@@ -85,7 +43,20 @@ func setNodesMetricsResponse(integration *integration.Integration, resp *NodeRes
 	}
 }
 
-//TODO make sure this works
+func populateClusterMetrics(i *integration.Integration, client Client) {
+	logger.Infof("Collecting cluster metrics.")
+	clusterResponse := new(ClusterResponse)
+	err := client.Request(clusterEndpoint, clusterResponse)
+	if err != nil {
+		logger.Errorf("there was an error creating request for cluster metrics", err)
+	}
+
+	err = setClusterMetricsResponse(i, clusterResponse)
+	if err != nil {
+		logger.Errorf("there was an error setting metrics for cluster metrics", err)
+	}
+}
+
 func setClusterMetricsResponse(integration *integration.Integration, resp *ClusterResponse) error {
 	clusterName := *resp.Name
 	entity, err := integration.Entity(clusterName, "cluster")
@@ -101,7 +72,20 @@ func setClusterMetricsResponse(integration *integration.Integration, resp *Clust
 	return metricSet.MarshalMetrics(resp)
 }
 
-// TODO make sure this works
+func populateCommonMetrics(i *integration.Integration, client Client) {
+	logger.Infof("Collecting common metrics.")
+	commonResponse := new(All)
+	err := client.Request(commonStatsEndpoint, commonResponse)
+	if err != nil {
+		logger.Errorf("there was an error creating request for common metrics", err)
+	}
+
+	err = setCommonMetricsResponse(i, commonResponse)
+	if err != nil {
+		logger.Errorf("there was an error setting metrics for common metrics", err)
+	}
+}
+
 func setCommonMetricsResponse(integration *integration.Integration, resp *All) error {
 	entity, err := integration.Entity("commonMetrics", "common")
 	if err != nil {
@@ -118,19 +102,29 @@ func setCommonMetricsResponse(integration *integration.Integration, resp *All) e
 	return metricSet.MarshalMetrics(resp)
 }
 
-// TODO make sure this works
-func setIndicesStatsMetricsResponse(integration *integration.Integration, resp *IndicesStatsResponse) error {
-	entity, err := integration.Entity("indicesStatsMetrics", "indices")
+func populateIndicesMetrics(i *integration.Integration, client Client) {
+	logger.Infof("Collecting indices metrics")
+	indicesStats := make([]*IndexStats, 0)
+	err := client.Request(indicesStatsEndpoint, &indicesStats)
 	if err != nil {
-		logger.Errorf("there was an error creating new entity for indices stats metrics: %v", err)
-		return err
+		logger.Errorf("there was an error creating request for indices stats", err)
 	}
+	setIndicesStatsMetricsResponse(i, indicesStats)
+}
 
-	metricSet := entity.NewMetricSet("indicesMetricsSet")
-	if err != nil {
-		logger.Errorf("there was an error creating new metric set for indicies stats metrics: %v", err)
-		return err
+func setIndicesStatsMetricsResponse(integration *integration.Integration, resp []*IndexStats) {
+	for _, object := range resp {
+		entity, err := integration.Entity(*object.UUID, "indices")
+		if err != nil {
+			logger.Errorf("there was an error creating new entity for indices stats metrics: %v", err)
+		}
+		metricSet := entity.NewMetricSet("indicesMetricsSet",
+			metric.Attribute{Key: "displayName", Value: entity.Metadata.Name},
+			metric.Attribute{Key: "entityName", Value: entity.Metadata.Namespace + ":" + entity.Metadata.Name})
+
+		err = metricSet.MarshalMetrics(object)
+		if err != nil {
+			logger.Errorf("there was an error marshaling new metric set for index %s: %v", *object.UUID, err)
+		}
 	}
-
-	return metricSet.MarshalMetrics(resp)
 }
