@@ -4,7 +4,6 @@ import (
 	"github.com/newrelic/infra-integrations-sdk/data/metric"
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
-	"github.com/newrelic/nri-rabbitmq/logger"
 )
 
 // populateMetrics wrapper to call each of the individual populate functions
@@ -28,11 +27,10 @@ func populateMetrics(i *integration.Integration, client Client) {
 }
 
 func populateNodesMetrics(i *integration.Integration, client Client) error {
-	logger.Infof("Collecting node metrics")
+	log.Info("Collecting node metrics")
 	nodeResponse := new(NodeResponse)
 	err := client.Request(nodeStatsEndpoint, nodeResponse)
 	if err != nil {
-		log.Error("There was an error creating request for node metrics: %v", err)
 		return err
 	}
 
@@ -51,11 +49,10 @@ func setNodesMetricsResponse(integration *integration.Integration, resp *NodeRes
 }
 
 func populateClusterMetrics(i *integration.Integration, client Client) error {
-	logger.Infof("Collecting cluster metrics.")
+	log.Info("Collecting cluster metrics.")
 	clusterResponse := new(ClusterResponse)
 	err := client.Request(clusterEndpoint, clusterResponse)
 	if err != nil {
-		log.Error("There was an error creating request for cluster metrics: %v", err)
 		return err
 	}
 
@@ -67,11 +64,10 @@ func populateClusterMetrics(i *integration.Integration, client Client) error {
 }
 
 func populateCommonMetrics(i *integration.Integration, client Client) error {
-	logger.Infof("Collecting common metrics.")
+	log.Info("Collecting common metrics.")
 	commonResponse := new(CommonMetrics)
 	err := client.Request(commonStatsEndpoint, commonResponse)
 	if err != nil {
-		log.Error("There was an error creating request for common metrics: %v", err)
 		return err
 	}
 
@@ -83,11 +79,10 @@ func populateCommonMetrics(i *integration.Integration, client Client) error {
 }
 
 func populateIndicesMetrics(i *integration.Integration, client Client) error {
-	logger.Infof("Collecting indices metrics")
+	log.Info("Collecting indices metrics")
 	indicesStats := make([]*IndexStats, 0)
 	err := client.Request(indicesStatsEndpoint, &indicesStats)
 	if err != nil {
-		log.Error("There was an error creating request for indices stats: %v", err)
 		return err
 	}
 	setIndicesStatsMetricsResponse(i, indicesStats)
@@ -108,7 +103,6 @@ func setIndicesStatsMetricsResponse(integration *integration.Integration, resp [
 func setMetricsResponse(integration *integration.Integration, resp interface{}, name string, namespace string) error {
 	entity, err := integration.Entity(name, namespace)
 	if err != nil {
-		log.Error("There was an error creating new entity for %s: %v", namespace, err)
 		return err
 	}
 
