@@ -9,15 +9,9 @@ commands:
       - ./bin/nr-elasticsearch
     prefix: config/elasticsearch
     interval: 15
-
   inventory:
     command:
       - ./bin/nr-elasticsearch
       - --inventory
     prefix: config/elasticsearch
-    interval: 15
-  events:
-    command:
-    - ./bin/nr-elasticsearch
-    - --events
     interval: 15
