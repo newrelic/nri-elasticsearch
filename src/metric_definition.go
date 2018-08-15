@@ -1,16 +1,16 @@
 package main
 
-// CommonMetrics documentation
+// CommonMetrics struct
 type CommonMetrics struct {
 	All *All `json:"_all"`
 }
 
-// All documentation
+// All struct
 type All struct {
 	Primaries *Primaries `json:"primaries"`
 }
 
-// Primaries documentation
+// Primaries struct
 type Primaries struct {
 	Docs     *PrimariesDocs     `json:"docs"`
 	Flush    *PrimariesFlush    `json:"flush"`
@@ -22,19 +22,19 @@ type Primaries struct {
 	Store    *PrimariesStore    `json:"store"`
 }
 
-// PrimariesDocs documentation
+// PrimariesDocs struct
 type PrimariesDocs struct {
 	Count   *int `json:"count" metric_name:"primaries.docsnumber" source_type:"gauge"`
 	Deleted *int `json:"deleted" metric_name:"primaries.docsDeleted" source_type:"gauge"`
 }
 
-// PrimariesFlush documentation
+// PrimariesFlush struct
 type PrimariesFlush struct {
 	Total             *int `json:"total" metric_name:"primaries.flushesTotal" source_type:"gauge"`
 	TotalTimeInMillis *int `json:"total_time_in_millis" metric_name:"primaries.flushTotalTimeInMilliseconds" source_type:"gauge"`
 }
 
-// PrimariesGet documentation
+// PrimariesGet struct
 type PrimariesGet struct {
 	Current             *int `json:"current" metric_name:"primaries.get.requestsCurrent" source_type:"gauge"`
 	ExistsTimeInMillis  *int `json:"exists_time_in_millis" metric_name:"primaries.get.documentsExistInMiliseconds" source_type:"gauge"`
@@ -45,7 +45,7 @@ type PrimariesGet struct {
 	Total               *int `json:"total" metric_name:"primaries.get.requests" source_type:"gauge"`
 }
 
-// PrimariesIndexing documentation
+// PrimariesIndexing struct
 type PrimariesIndexing struct {
 	DeleteCurrent      *int `json:"delete_current" metric_name:"primaries.index.docsCurrentlyDeleted" source_type:"gauge"`
 	DeleteTimeInMillis *int `json:"delete_time_in_millis" metric_name:"primaries.index.docsCurrentlyDeletedInMiliseconds" source_type:"gauge"`
@@ -55,7 +55,7 @@ type PrimariesIndexing struct {
 	IndexTotal         *int `json:"index_total" metric_name:"primaries.index.docsTotal" source_type:"gauge"`
 }
 
-// PrimariesMerges documentation
+// PrimariesMerges struct
 type PrimariesMerges struct {
 	Current            *int `json:"current" metric_name:"primaries.merges.current" source_type:"gauge"`
 	CurrentDocs        *int `json:"current_docs" metric_name:"primaries.merges.docsSegementsCurrentlyMerged" source_type:"gauge"`
@@ -66,13 +66,13 @@ type PrimariesMerges struct {
 	TotalTimeInMillis  *int `json:"total_time_in_millis" metric_name:"primaries.merges.segmentsTotalInMiliseconds" source_type:"gauge"`
 }
 
-// PrimariesRefresh documentation
+// PrimariesRefresh struct
 type PrimariesRefresh struct {
 	Total             *int `json:"total" metric_name:"primaries.indexRefreshesTotal" source_type:"gauge"`
 	TotalTimeInMillis *int `json:"total_time_in_millis" metric_name:"primaries.indexRefreshesTotalInMiliseconds" source_type:"gauge"`
 }
 
-// PrimariesSearch documentation
+// PrimariesSearch struct
 type PrimariesSearch struct {
 	FetchCurrent      *int `json:"fetch_current" metric_name:"primaries.queryFetches" source_type:"gauge"`
 	FetchTimeInMillis *int `json:"fetch_time_in_millis" metric_name:"primaries.queryFetchesInMiliseconds" source_type:"gauge"`
@@ -82,17 +82,17 @@ type PrimariesSearch struct {
 	QueryTotal        *int `json:"query_total" metric_name:"primaries.queriesTotal" source_type:"gauge"`
 }
 
-// PrimariesStore documentation
+// PrimariesStore struct
 type PrimariesStore struct {
 	SizeInBytes *int `json:"size_in_bytes" metric_name:"primaries.sizeInBytes" source_type:"gauge"`
 }
 
-// clusterMetric documentation
+// clusterMetric struct
 type clusterMetric struct {
 	jsonKey string
 }
 
-// ClusterResponse documentation
+// ClusterResponse struct
 type ClusterResponse struct {
 	Name                *string `json:"cluster_name"`
 	Status              *string `json:"status" metric_name:"cluster.status" source_type:"attribute"`
@@ -105,7 +105,7 @@ type ClusterResponse struct {
 	UnassignedShards    *int    `json:"unassigned_shards" metric_name:"shards.unassigned" source_type:"gauge"`
 }
 
-// IndexStats documentation
+// IndexStats struct
 type IndexStats struct {
 	Health           *string `json:"health" metric_name:"index.health" source_type:"attribute"`
 	DocsCount        *string `json:"docs.count" metric_name:"index.docs" source_type:"attribute"`
@@ -117,21 +117,21 @@ type IndexStats struct {
 	UUID             *string `json:"uuid"`
 }
 
-// NodeResponse documentation
+// NodeResponse struct
 type NodeResponse struct {
 	NodeStats   *NodeCounts      `json:"_nodes"`
 	ClusterName string           `json:"cluster_name"`
 	Nodes       map[string]*Node `json:"nodes"`
 }
 
-// NodeCounts documentation
+// NodeCounts struct
 type NodeCounts struct {
 	Total      *int `json:"total"`
 	Successful *int `json:"successful"`
 	Failed     *int `json:"failed"`
 }
 
-// Node documentation from /_api/nodes
+// Node struct from /_api/nodes
 type Node struct {
 	Name       *string         `json:"name"`
 	Host       *string         `json:"host"`
@@ -145,7 +145,7 @@ type Node struct {
 	ThreadPool *NodeThreadPool `json:"thread_pool"`
 }
 
-// NodeIndices documentation
+// NodeIndices struct
 type NodeIndices struct {
 	Docs         *IndicesDocs         `json:"docs"`
 	Store        *IndicesStore        `json:"store"`
@@ -163,17 +163,17 @@ type NodeIndices struct {
 	IDCache      *IndicesIDCache      `json:"id_cache"`
 }
 
-// IndicesDocs documentation
+// IndicesDocs struct
 type IndicesDocs struct {
 	Count *int `json:"count" metric_name:"indices.numberIndices" source_type:"gauge"`
 }
 
-// IndicesStore documentation
+// IndicesStore struct
 type IndicesStore struct {
 	SizeInBytes *int `json:"size_in_bytes" metric_name:"primaries.sizeInBytes" source_type:"gauge"`
 }
 
-// IndicesIndexing documentation
+// IndicesIndexing struct
 type IndicesIndexing struct {
 	IndexTotal           *int `json:"index_total" metric_name:"indexing.documentsIndexed" source_type:"gauge"`
 	IndexTimeInMillis    *int `json:"index_time_in_millis" metric_name:"indexing.timeIndexingDocumentsInMiliseconds" source_type:"gauge"`
@@ -185,7 +185,7 @@ type IndicesIndexing struct {
 	ThrottleTimeInMillis *int `json:"throttle_time_in_millis" metric_name:"indices.indexingWaitedThrottlingInMiliseconds" source_type:"gauge"`
 }
 
-// IndicesGet documentation
+// IndicesGet struct
 type IndicesGet struct {
 	Current             *int `json:"current" metric_name:"get.currentRequestsRunning" source_type:"gauge"`
 	ExistsTimeInMillis  *int `json:"exists_time_in_millis" metric_name:"get.requestsDocumentExistsInMiliseconds" source_type:"gauge"`
@@ -196,7 +196,7 @@ type IndicesGet struct {
 	Total               *int `json:"total" metric_name:"get.totalGetReqeuests" source_type:"gauge"`
 }
 
-// IndicesSearch documentation
+// IndicesSearch struct
 type IndicesSearch struct {
 	FetchCurrent      *int `json:"fetch_current" metric_name:"primaries.queryFetches" source_type:"gauge"`
 	OpenContexts      *int `json:"open_contexts" metric_name:"activeSearches" source_type:"gauge"`
@@ -207,7 +207,7 @@ type IndicesSearch struct {
 	QueryTotal        *int `json:"query_total" metric_name:"primaries.queriesTotal" source_type:"gauge"`
 }
 
-// IndicesMerges documentation
+// IndicesMerges struct
 type IndicesMerges struct {
 	Current            *int `json:"current" metric_name:"merges.currentActive" source_type:"gauge"`
 	CurrentDocs        *int `json:"current_docs" metric_name:"merges.docsSegementsMerging" source_type:"gauge"`
@@ -218,19 +218,19 @@ type IndicesMerges struct {
 	TotalTimeInMillis  *int `json:"total_time_in_millis" metric_name:"merges.totalSegmentMergingInMiliseconds" source_type:"gauge"`
 }
 
-// IndicesRefresh documentation
+// IndicesRefresh struct
 type IndicesRefresh struct {
 	Total             *int `json:"total" metric_name:"primaries.indexRefreshesTotal" source_type:"gauge"`
 	TotalTimeInMillis *int `json:"total_time_in_millis" metric_name:"primaries.indexRefreshesTotalInMiliseconds" source_type:"gauge"`
 }
 
-// IndicesFlush documentation
+// IndicesFlush struct
 type IndicesFlush struct {
 	Total             *int `json:"total" metric_name:"flush.indexRefreshesTotal" source_type:"gauge"`
 	TotalTimeInMillis *int `json:"total_time_in_millis" metric_name:"flush.indexRefreshesTotalInMiliseconds" source_type:"gauge"`
 }
 
-// IndicesQueryCache documentation
+// IndicesQueryCache struct
 type IndicesQueryCache struct {
 	Evictions         *int `json:"evictions" metric_name:"indices.queryCacheEvictions" source_type:"gauge"`
 	HitCount          *int `json:"hit_count" metric_name:"indices.queryCacheHits" source_type:"gauge"`
@@ -238,7 +238,7 @@ type IndicesQueryCache struct {
 	MissCount         *int `json:"miss_count" metric_name:"indices.queryCacheMisses" source_type:"gauge"`
 }
 
-// IndicesSegments documentation
+// IndicesSegments struct
 type IndicesSegments struct {
 	Count                       *int `json:"count" metric_name:"indices.segmentsIndexShard" source_type:"gauge"`
 	DocValuesMemoryInBytes      *int `json:"doc_values_memory_in_bytes" metric_name:"indices.segmentsMemoryUsedDocValuesInBytes" source_type:"gauge"`
@@ -253,13 +253,13 @@ type IndicesSegments struct {
 	VersionMapMemoryInBytes     *int `json:"version_map_memory_in_bytes" metric_name:"indices.segmentsMemoryUsedSegmentVersionMapInBytes" source_type:"gauge"`
 }
 
-// IndicesTranslog documentation
+// IndicesTranslog struct
 type IndicesTranslog struct {
 	Operations  *int `json:"operations" metric_name:"indices.translogOperations" source_type:"gauge"`
 	SizeInBytes *int `json:"size_in_bytes" metric_name:"indices.translogOperationsInBytes" source_type:"gauge"`
 }
 
-// IndicesRequestCache documentation
+// IndicesRequestCache struct
 type IndicesRequestCache struct {
 	Evictions         *int `json:"evictions" metric_name:"indices.requestCacheEvicitons" source_type:"gauge"`
 	HitCount          *int `json:"hit_count" metric_name:"indices.requestCacheHits" source_type:"gauge"`
@@ -267,55 +267,55 @@ type IndicesRequestCache struct {
 	MissCount         *int `json:"miss_count" metric_name:"indices.requestCacheMisses" source_type:"gauge"`
 }
 
-// IndicesRecovery documentation
+// IndicesRecovery struct
 type IndicesRecovery struct {
 	CurrentAsSource      *int `json:"current_as_source" metric_name:"indices.recoveryOngoingShardSource" source_type:"gauge"` //
 	CurrentAsTarget      *int `json:"current_as_target" metric_name:"indices.recoveryOngoingShardTarget" source_type:"gauge"`
 	ThrottleTimeInMillis *int `json:"throttle_time_in_millis" metric_name:"indices.recoveryWaitedThrottlingInMiliseconds" source_type:"gauge"` //
 }
 
-// IndicesIDCache documentation
+// IndicesIDCache struct
 type IndicesIDCache struct {
 	MemorySizeInBytes *int `json:"memory_size_in_bytes" metric_name:"cache.cacheSizeIDInBytes" source_type:"gauge"`
 }
 
-// NodeFs documentation
+// NodeFs struct
 type NodeFs struct {
 	Total   *FsTotal   `json:"total"`
 	IoStats *FsIoStats `json:"io_stats"`
 }
 
-// NodeBreakers documentation
+// NodeBreakers struct
 type NodeBreakers struct {
 	Fielddata *BreakersFielddata `json:"fielddata"`
 	Parent    *BreakersParent    `json:"parent"`
 	Request   *BreakersRequest   `json:"request"`
 }
 
-// BreakersFielddata documentation
+// BreakersFielddata struct
 type BreakersFielddata struct {
 	EstimatedSizeInBytes *int `json:"estimated_size_in_bytes" metric_name:"breakers.estimatedSizeFieldDataCircuitBreakerInBytes" source_type:"gauge"`
 	Tripped              *int `json:"tripped" metric_name:"breakers.fieldDataCircuitBreakerTripped" source_type:"gauge"`
 }
 
-// BreakersParent documentation
+// BreakersParent struct
 type BreakersParent struct {
 	EstimatedSizeInBytes *int `json:"estimated_size_in_bytes" metric_name:"breakers.estimatedSizeParentCircuitBreakerInBytes" source_type:"gauge"`
 	Tripped              *int `json:"tripped" metric_name:"breakers.parentCircuitBreakerTripped" source_type:"gauge"`
 }
 
-// BreakersRequest documentation
+// BreakersRequest struct
 type BreakersRequest struct {
 	EstimatedSizeInBytes *int `json:"estimated_size_in_bytes" metric_name:"breakers.estimatedSizeRequestCircuitBreakerInBytes" source_type:"gauge"`
 	Tripped              *int `json:"tripped" metric_name:"breakers.requestCircuitBreakerTripped" source_type:"gauge"`
 }
 
-// NodeProcess documentation
+// NodeProcess struct
 type NodeProcess struct {
 	OpenFileDescriptors *int `json:"open_file_descriptors" metric_name:"openFD" source_type:"gauge"`
 }
 
-// NodeTransport documentation
+// NodeTransport struct
 type NodeTransport struct {
 	RxCount       *int `json:"rx_count" metric_name:"transport.packetsReceived" source_type:"gauge"`
 	RxSizeInBytes *int `json:"rx_size_in_bytes" metric_name:"transport.packetsReceivedInBytes" source_type:"gauge"`
@@ -324,7 +324,7 @@ type NodeTransport struct {
 	TxSizeInBytes *int `json:"tx_size_in_bytes" metric_name:"transport.packetsSentInBytes" source_type:"gauge"`
 }
 
-// FsTotal documentation
+// FsTotal struct
 type FsTotal struct {
 	AvailableInBytes  *int `json:"available_in_bytes" metric_name:"fs.bytesAvailableJVMInBytes" source_type:"gauge"`
 	TotalInBytes      *int `json:"total_in_bytes" metric_name:"fs.totalSizeInBytes" source_type:"gauge"`
@@ -332,12 +332,12 @@ type FsTotal struct {
 	DiskIoSizeInBytes *int `json:"disk_io_size_in_bytes" metric_name:"fs.bytesUserIoOperationsInBytes" source_type:"gauge"`
 }
 
-// FsIoStats documentation
+// FsIoStats struct
 type FsIoStats struct {
 	Devices *IoStatsTotal `json:"total"`
 }
 
-// IoStatsTotal documentation
+// IoStatsTotal struct
 type IoStatsTotal struct {
 	Operations      *int `json:"operations" metric_name:"fs.iOOperations" source_type:"gauge"`
 	ReadKilobytes   *int `json:"read_kilobytes" metric_name:"fs.bytesReadsInBytes" source_type:"gauge"`
@@ -346,14 +346,14 @@ type IoStatsTotal struct {
 	WriteOperations *int `json:"write_operations" metric_name:"fs.writesInBytes" source_type:"gauge"`
 }
 
-// NodeJvm documentation
+// NodeJvm struct
 type NodeJvm struct {
 	Gc      *JvmGc      `json:"gc"`
 	Mem     *JvmMem     `json:"mem"`
 	Threads *JvmThreads `json:"threads"`
 }
 
-// JvmGc documentation
+// JvmGc struct
 type JvmGc struct {
 	CollectionCount                   *int          `json:"collection_count" metric_name:"jvm.gc.collections" source_type:"gauge"`
 	CollectionTime                    *int          `json:"collection_time" metric_name:"jvm.gc.collectionsInMiliseconds" source_type:"gauge"`
@@ -364,25 +364,25 @@ type JvmGc struct {
 	Collectors                        *GcCollectors `json:"collectors"`
 }
 
-// GcCollectors documentation
+// GcCollectors struct
 type GcCollectors struct {
 	Old   *CollectorsOld   `json:"old"`
 	Young *CollectorsYoung `json:"young"`
 }
 
-// CollectorsOld documentation
+// CollectorsOld struct
 type CollectorsOld struct {
 	CollectionTimeInMillis *int `json:"collection_time_in_millis" metric_name:"jvm.gc.majorCollectionsOldGenerationObjectsInMiliseconds" source_type:"gauge"`
 	CollectionCount        *int `json:"collection_count" metric_name:"jvm.gc.majorCollectionsOldGenerationObjects" source_type:"gauge"`
 }
 
-// CollectorsYoung documentation
+// CollectorsYoung struct
 type CollectorsYoung struct {
 	CollectionTimeInMillis *int `json:"collection_time_in_millis" metric_name:"jvm.gc.majorCollectionsYoungGenerationObjectsInMiliseconds" source_type:"gauge"`
 	CollectionCount        *int `json:"collection_count" metric_name:"jvm.gc.majorCollectionsYoungGenerationObjects" source_type:"gauge"`
 }
 
-// JvmMem documentation
+// JvmMem struct
 type JvmMem struct {
 	HeapCommittedInBytes    *int      `json:"heap_committed_in_bytes" metric_name:"jvm.mem.heapCommittedInBytes" source_type:"gauge"`
 	HeapInUse               *int      `json:"heap_in_use" metric_name:"jvm.mem.heapUsed" source_type:"gauge"`
@@ -393,38 +393,38 @@ type JvmMem struct {
 	Pools                   *MemPools `json:"pools"`
 }
 
-// MemPools documentation
+// MemPools struct
 type MemPools struct {
 	Young    *PoolsYoung    `json:"young"`
 	Old      *PoolsOld      `json:"old"`
 	Survivor *PoolsSurvivor `json:"survivor"`
 }
 
-// PoolsYoung documentation
+// PoolsYoung struct
 type PoolsYoung struct {
 	UsedInBytes *int `json:"used_in_bytes" metric_name:"jvm.mem.usedYoungGenerationHeapInBytes" source_type:"gauge"`
 	MaxInBytes  *int `json:"max_in_bytes" metric_name:"jvm.mem.maxYoungGenerationHeapInBytes" source_type:"gauge"`
 }
 
-// PoolsOld documentation
+// PoolsOld struct
 type PoolsOld struct {
 	UsedInBytes *int `json:"used_in_bytes" metric_name:"jvm.mem.usedOldGenerationHeapInBytes" source_type:"gauge"`
 	MaxInBytes  *int `json:"max_in_bytes" metric_name:"jvm.mem.maxOldGenerationHeapInBytes" source_type:"gauge"`
 }
 
-// PoolsSurvivor documentation
+// PoolsSurvivor struct
 type PoolsSurvivor struct {
 	UsedInBytes *int `json:"used_in_bytes" metric_name:"jvm.mem.usedSurvivorSpaceInBytes" source_type:"gauge"`
 	MaxInBytes  *int `json:"max_in_bytes" metric_name:"jvm.mem.maxSurvivorSpaceInBYtes" source_type:"gauge"`
 }
 
-// JvmThreads documentation
+// JvmThreads struct
 type JvmThreads struct {
 	Count     *int `json:"count" metric_name:"jvm.ThreadsActive" source_type:"gauge"`
 	PeakCount *int `json:"peak_count" metric_name:"jvm.ThreadsPeak" source_type:"gauge"`
 }
 
-// ThreadPool documentation
+// ThreadPool struct
 type NodeThreadPool struct {
 	Bulk              *ThreadPoolBulk              `json:"bulk"`
 	FetchShardStarted *ThreadPoolFetchShardStarted `json:"fetch_shard_started"`
@@ -443,7 +443,7 @@ type NodeThreadPool struct {
 	Snapshot          *ThreadPoolSnapshot          `json:"snapshot"`
 }
 
-// ThreadPoolBulk documentation
+// ThreadPoolBulk struct
 type ThreadPoolBulk struct {
 	Active   *int `json:"active" metric_name:"threadpool.bulkActive" source_type:"gauge"`
 	Queue    *int `json:"queue" metric_name:"threadpool.bulk.Aueue" source_type:"gauge"`
@@ -451,7 +451,7 @@ type ThreadPoolBulk struct {
 	Rejected *int `json:"rejected" metric_name:"threadpool.bulkRejected" source_type:"gauge"`
 }
 
-// ThreadPoolFetchShardStarted documentation
+// ThreadPoolFetchShardStarted struct
 type ThreadPoolFetchShardStarted struct {
 	Active   *int `json:"active" metric_name:"threadpoolActivefetchShardStarted" source_type:"gauge"`
 	Queue    *int `json:"queue" metric_name:"threadpool.fetchShardStartedThreads" source_type:"gauge"`
@@ -459,7 +459,7 @@ type ThreadPoolFetchShardStarted struct {
 	Rejected *int `json:"rejected" metric_name:"threadpool.fetchShardStartedRejected" source_type:"gauge"`
 }
 
-// ThreadPoolFetchShardStore documentation
+// ThreadPoolFetchShardStore struct
 type ThreadPoolFetchShardStore struct {
 	Active   *int `json:"active" metric_name:"threadpool.fetchShardStoreActive" source_type:"gauge"`
 	Queue    *int `json:"queue" metric_name:"threadpool.fetchShardStoreThreads" source_type:"gauge"`
@@ -467,7 +467,7 @@ type ThreadPoolFetchShardStore struct {
 	Rejected *int `json:"rejected" metric_name:"threadpool.fetchShardStoreRejected" source_type:"gauge"`
 }
 
-// ThreadPoolFlush documentation
+// ThreadPoolFlush struct
 type ThreadPoolFlush struct {
 	Active   *int `json:"active" metric_name:"threadpool.flushActive" source_type:"gauge"`
 	Queue    *int `json:"queue" metric_name:"threadpool.flushQueue" source_type:"gauge"`
@@ -475,7 +475,7 @@ type ThreadPoolFlush struct {
 	Rejected *int `json:"rejected" metric_name:"threadpool.flushRejected" source_type:"gauge"`
 }
 
-// ThreadPoolForceMerge documentation
+// ThreadPoolForceMerge struct
 type ThreadPoolForceMerge struct {
 	Active   *int `json:"active" metric_name:"threadpool.forceMergeActive" source_type:"gauge"`
 	Queue    *int `json:"queue" metric_name:"threadpool.forceMergeThreads" source_type:"gauge"`
@@ -483,7 +483,7 @@ type ThreadPoolForceMerge struct {
 	Rejected *int `json:"rejected" metric_name:"threadpool.forceMergeRejected" source_type:"gauge"`
 }
 
-// ThreadPoolGeneric documentation
+// ThreadPoolGeneric struct
 type ThreadPoolGeneric struct {
 	Active   *int `json:"active" metric_name:"threadpool.genericActive" source_type:"gauge"`
 	Queue    *int `json:"queue" metric_name:"threadpool.genericQueue" source_type:"gauge"`
@@ -491,7 +491,7 @@ type ThreadPoolGeneric struct {
 	Rejected *int `json:"rejected" metric_name:"threadpool.genericRejected" source_type:"gauge"`
 }
 
-// ThreadPoolGet documentation
+// ThreadPoolGet struct
 type ThreadPoolGet struct {
 	Active   *int `json:"active" metric_name:"threadpool.getActive" source_type:"gauge"`
 	Queue    *int `json:"queue" metric_name:"threadpool.getQueue" source_type:"gauge"`
@@ -499,7 +499,7 @@ type ThreadPoolGet struct {
 	Rejected *int `json:"rejected" metric_name:"threadpool.getRejected" source_type:"gauge"`
 }
 
-// ThreadPoolIndex documentation
+// ThreadPoolIndex struct
 type ThreadPoolIndex struct {
 	Active   *int `json:"active" metric_name:"threadpool.indexActive" source_type:"gauge"`
 	Queue    *int `json:"queue" metric_name:"threadpool.indexQueue" source_type:"gauge"`
@@ -507,7 +507,7 @@ type ThreadPoolIndex struct {
 	Rejected *int `json:"rejected" metric_name:"threadpool.indexRejected" source_type:"gauge"`
 }
 
-// ThreadPoolListener documentation
+// ThreadPoolListener struct
 type ThreadPoolListener struct {
 	Active   *int `json:"active" metric_name:"threadpool.listenerActive" source_type:"gauge"`
 	Queue    *int `json:"queue" metric_name:"threadpool.listenerQueue" source_type:"gauge"`
@@ -515,7 +515,7 @@ type ThreadPoolListener struct {
 	Rejected *int `json:"rejected" metric_name:"threadpool.listenerRejected" source_type:"gauge"`
 }
 
-// ThreadPoolManagement documentation
+// ThreadPoolManagement struct
 type ThreadPoolManagement struct {
 	Active   *int `json:"active" metric_name:"threadpool.managementActive" source_type:"gauge"`
 	Queue    *int `json:"queue" metric_name:"threadpool.managementQueue" source_type:"gauge"`
@@ -523,7 +523,7 @@ type ThreadPoolManagement struct {
 	Rejected *int `json:"rejected" metric_name:"threadpool.managementRejected" source_type:"gauge"`
 }
 
-// ThreadPoolMerge documentation
+// ThreadPoolMerge struct
 type ThreadPoolMerge struct {
 	Active   *int `json:"active" metric_name:"threadpool.mergeActive" source_type:"gauge"`
 	Queue    *int `json:"queue" metric_name:"threadpool.mergeQueue" source_type:"gauge"`
@@ -531,7 +531,7 @@ type ThreadPoolMerge struct {
 	Rejected *int `json:"rejected" metric_name:"threadpool.mergeRejected" source_type:"gauge"`
 }
 
-// ThreadPoolPercolate documentation
+// ThreadPoolPercolate struct
 type ThreadPoolPercolate struct {
 	Active   *int `json:"active" metric_name:"threadpool.percolateActive" source_type:"gauge"`
 	Queue    *int `json:"queue" metric_name:"threadpool.percolateQueue" source_type:"gauge"`
@@ -539,7 +539,7 @@ type ThreadPoolPercolate struct {
 	Rejected *int `json:"rejected" metric_name:"threadpool.percolateRejected" source_type:"gauge"`
 }
 
-// ThreadPoolRefresh documentation
+// ThreadPoolRefresh struct
 type ThreadPoolRefresh struct {
 	Active   *int `json:"active" metric_name:"threadpool.refreshActive" source_type:"gauge"`
 	Queue    *int `json:"queue" metric_name:"threadpool.refreshQueue" source_type:"gauge"`
@@ -547,7 +547,7 @@ type ThreadPoolRefresh struct {
 	Rejected *int `json:"rejected" metric_name:"threadpool.refreshRejected" source_type:"gauge"`
 }
 
-// ThreadPoolSearch documentation
+// ThreadPoolSearch struct
 type ThreadPoolSearch struct {
 	Active   *int `json:"active" metric_name:"threadpool.searchActive" source_type:"gauge"`
 	Queue    *int `json:"queue" metric_name:"threadpool.searchQueue" source_type:"gauge"`
@@ -555,7 +555,7 @@ type ThreadPoolSearch struct {
 	Rejected *int `json:"rejected" metric_name:"threadpool.searchRejected" source_type:"gauge"`
 }
 
-// ThreadPoolSnapshot documentation
+// ThreadPoolSnapshot struct
 type ThreadPoolSnapshot struct {
 	Active   *int `json:"active" metric_name:"threadpool.snapshotActive" source_type:"gauge"`
 	Queue    *int `json:"queue" metric_name:"threadpool.snapshotQueue" source_type:"gauge"`
@@ -563,7 +563,7 @@ type ThreadPoolSnapshot struct {
 	Rejected *int `json:"rejected" metric_name:"threadpool.snapshotRejected" source_type:"gauge"`
 }
 
-// ThreadPoolHTTP documentation
+// ThreadPoolHTTP struct
 type ThreadPoolHTTP struct {
 	CurrentOpen *int `json:"current_open" metric_name:"http.currentOpenConnections" source_type:"gauge"`
 	TotalOpened *int `json:"total_opened" metric_name:"http.openedConnections" source_type:"gauge"`

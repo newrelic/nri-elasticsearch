@@ -6,6 +6,7 @@ import (
 	"github.com/newrelic/infra-integrations-sdk/log"
 )
 
+// populateMetrics wrapper to call each of the individual populate functions
 func populateMetrics(i *integration.Integration, client Client) {
 	err := populateNodesMetrics(i, client)
 	if err != nil {
@@ -38,6 +39,7 @@ func populateNodesMetrics(i *integration.Integration, client Client) error {
 	return nil
 }
 
+// setNodesMetricsResponse calls setMetricsResponse for each node in the response
 func setNodesMetricsResponse(integration *integration.Integration, resp *NodeResponse) {
 	for node := range resp.Nodes {
 		err := setMetricsResponse(integration, resp.Nodes[node], node, "node")
@@ -97,23 +99,11 @@ func setIndicesStatsMetricsResponse(integration *integration.Integration, resp [
 		if err != nil {
 			log.Error("there was an error setting metrics for indices metrics", err)
 		}
-		// entity, err := integration.Entity(*object.UUID, "indices")
-		// if err != nil {
-		// 	log.Error("there was an error creating new entity for indices stats metrics: %v", err)
-		// 	continue
-		// }
-		// metricSet := entity.NewMetricSet("indicesMetricsSet",
-		// 	metric.Attribute{Key: "displayName", Value: entity.Metadata.Name},
-		// 	metric.Attribute{Key: "entityName", Value: entity.Metadata.Namespace + ":" + entity.Metadata.Name})
-
-		// err = metricSet.MarshalMetrics(object)
-		// if err != nil {
-		// 	log.Error("there was an error marshaling new metric set for index %s: %v", *object.UUID, err)
-
-		// }
 	}
 }
 
+// setMetricsResponse creates an entity and a metric set for the
+// type of response and calls MarshalMetrics using that response
 func setMetricsResponse(integration *integration.Integration, resp interface{}, name string, namespace string) error {
 	entity, err := integration.Entity(name, namespace)
 	if err != nil {
