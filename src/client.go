@@ -26,7 +26,6 @@ type HTTPClient struct {
 	client  *http.Client
 }
 
-// Client are you happy now
 type Client interface {
 	Request(string, interface{}) error
 }

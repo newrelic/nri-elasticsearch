@@ -1,5 +1,10 @@
 package main
 
+// CommonMetrics documentation
+type CommonMetrics struct {
+	All *All `json:"_all"`
+}
+
 // All documentation
 type All struct {
 	Primaries *Primaries `json:"primaries"`
