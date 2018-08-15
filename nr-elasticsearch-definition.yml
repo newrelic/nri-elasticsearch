@@ -4,20 +4,14 @@ protocol_version: 1
 os: linux
 
 commands:
-  metrics:
+  all:
     command:
       - ./bin/nr-elasticsearch
-      - --metrics
+    prefix: config/elasticsearch
     interval: 15
-
   inventory:
     command:
       - ./bin/nr-elasticsearch
       - --inventory
-    prefix: config/nr-elasticsearch
-    interval: 15
-  events:
-    command:
-    - ./bin/nr-elasticsearch
-    - --events
+    prefix: config/elasticsearch
     interval: 15

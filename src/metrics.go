@@ -4,25 +4,26 @@ import (
 	"github.com/newrelic/infra-integrations-sdk/data/metric"
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
+	"github.com/newrelic/nri-rabbitmq/logger"
 )
 
 // populateMetrics wrapper to call each of the individual populate functions
 func populateMetrics(i *integration.Integration, client Client) {
 	err := populateNodesMetrics(i, client)
 	if err != nil {
-		log.Error("there was an error populating metrics for nodes: %v", err)
+		log.Error("There was an error populating metrics for nodes: %v", err)
 	}
 	err = populateClusterMetrics(i, client)
 	if err != nil {
-		log.Error("there was an error populating metrics for clusters: %v", err)
+		log.Error("There was an error populating metrics for clusters: %v", err)
 	}
 	err = populateCommonMetrics(i, client)
 	if err != nil {
-		log.Error("there was an error populating metrics for common metrics: %v", err)
+		log.Error("There was an error populating metrics for common metrics: %v", err)
 	}
 	err = populateIndicesMetrics(i, client)
 	if err != nil {
-		log.Error("there was an error populating metrics for indices: %v", err)
+		log.Error("There was an error populating metrics for indices: %v", err)
 	}
 }
 
@@ -31,7 +32,7 @@ func populateNodesMetrics(i *integration.Integration, client Client) error {
 	nodeResponse := new(NodeResponse)
 	err := client.Request(nodeStatsEndpoint, nodeResponse)
 	if err != nil {
-		log.Error("there was an error creating request for node metrics: %v", err)
+		log.Error("There was an error creating request for node metrics: %v", err)
 		return err
 	}
 
@@ -44,7 +45,7 @@ func setNodesMetricsResponse(integration *integration.Integration, resp *NodeRes
 	for node := range resp.Nodes {
 		err := setMetricsResponse(integration, resp.Nodes[node], node, "node")
 		if err != nil {
-			log.Error("there was an error setting metrics for node metrics on %s: %v", node, err)
+			log.Error("There was an error setting metrics for node metrics on %s: %v", node, err)
 		}
 	}
 }
@@ -54,13 +55,13 @@ func populateClusterMetrics(i *integration.Integration, client Client) error {
 	clusterResponse := new(ClusterResponse)
 	err := client.Request(clusterEndpoint, clusterResponse)
 	if err != nil {
-		log.Error("there was an error creating request for cluster metrics: %v", err)
+		log.Error("There was an error creating request for cluster metrics: %v", err)
 		return err
 	}
 
 	err = setMetricsResponse(i, clusterResponse, *clusterResponse.Name, "cluster")
 	if err != nil {
-		log.Error("there was an error setting metrics for cluster metrics: %v", err)
+		log.Error("There was an error setting metrics for cluster metrics: %v", err)
 	}
 	return err
 }
@@ -70,13 +71,13 @@ func populateCommonMetrics(i *integration.Integration, client Client) error {
 	commonResponse := new(CommonMetrics)
 	err := client.Request(commonStatsEndpoint, commonResponse)
 	if err != nil {
-		log.Error("there was an error creating request for common metrics: %v", err)
+		log.Error("There was an error creating request for common metrics: %v", err)
 		return err
 	}
 
 	err = setMetricsResponse(i, commonResponse.All, "commonMetrics", "common")
 	if err != nil {
-		log.Error("there was an error setting metrics for common metrics: %v", err)
+		log.Error("There was an error setting metrics for common metrics: %v", err)
 	}
 	return nil
 }
@@ -86,7 +87,7 @@ func populateIndicesMetrics(i *integration.Integration, client Client) error {
 	indicesStats := make([]*IndexStats, 0)
 	err := client.Request(indicesStatsEndpoint, &indicesStats)
 	if err != nil {
-		log.Error("there was an error creating request for indices stats: %v", err)
+		log.Error("There was an error creating request for indices stats: %v", err)
 		return err
 	}
 	setIndicesStatsMetricsResponse(i, indicesStats)
@@ -97,7 +98,7 @@ func setIndicesStatsMetricsResponse(integration *integration.Integration, resp [
 	for _, object := range resp {
 		err := setMetricsResponse(integration, object, *object.UUID, "indices")
 		if err != nil {
-			log.Error("there was an error setting metrics for indices metrics: %v", err)
+			log.Error("There was an error setting metrics for indices metrics: %v", err)
 		}
 	}
 }
@@ -107,7 +108,7 @@ func setIndicesStatsMetricsResponse(integration *integration.Integration, resp [
 func setMetricsResponse(integration *integration.Integration, resp interface{}, name string, namespace string) error {
 	entity, err := integration.Entity(name, namespace)
 	if err != nil {
-		log.Error("there was an error creating new entity for %s: %v", namespace, err)
+		log.Error("There was an error creating new entity for %s: %v", namespace, err)
 		return err
 	}
 

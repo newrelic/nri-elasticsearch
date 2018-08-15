@@ -10,9 +10,6 @@ import (
 )
 
 const (
-	nodeIngestEndpoint         = "/_nodes/ingest"
-	nodeProcessEndpoint        = "/_nodes/process"
-	nodePluginsEndpoint        = "/_nodes/plugins"
 	nodeStatsEndpoint          = "/_nodes/stats"
 	localNodeInventoryEndpoint = "/_nodes/_local"
 	commonStatsEndpoint        = "/_stats"
@@ -22,12 +19,22 @@ const (
 
 // HTTPClient represents a single connection to an Elasticsearch host
 type HTTPClient struct {
+<<<<<<< HEAD
 	BaseURL string
 	client  *http.Client
 }
 
 type Client interface {
 	Request(string, interface{}) error
+=======
+	baseURL string
+	client  *http.Client
+}
+
+// Client represents an object that can make a request for a map
+type Client interface {
+	Request(string) (objx.Map, error)
+>>>>>>> master
 }
 
 // NewClient creates a new Elasticsearch http client.
@@ -44,7 +51,7 @@ func NewClient(httpClient *http.Client) (*HTTPClient, error) {
 
 	return &HTTPClient{
 		client: httpClient,
-		BaseURL: func() string {
+		baseURL: func() string {
 			if args.UseSSL {
 				return fmt.Sprintf("https://%s:%d", args.Hostname, args.Port)
 			}
@@ -56,8 +63,13 @@ func NewClient(httpClient *http.Client) (*HTTPClient, error) {
 
 // Request takes an endpoint, makes a GET request to that endpoint,
 // and parses the response JSON into a map, which it returns.
+<<<<<<< HEAD
 func (c *HTTPClient) Request(endpoint string, v interface{}) error {
 	response, err := c.client.Get(c.BaseURL + endpoint)
+=======
+func (c *HTTPClient) Request(endpoint string) (objx.Map, error) {
+	response, err := c.client.Get(c.baseURL + endpoint)
+>>>>>>> master
 	if err != nil {
 		return err
 	}
