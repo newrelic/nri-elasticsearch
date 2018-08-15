@@ -27,27 +27,19 @@ type EntityMetadata struct {
 }
 
 // newLocalEntity creates unique default entity without identifier (name & type)
-func newLocalEntity(storer persist.Storer, synchronized bool) *Entity {
+func newLocalEntity(storer persist.Storer) *Entity {
 	return &Entity{
 		// empty array or object preferred instead of null on marshaling.
 		Metrics:   []*metric.Set{},
 		Inventory: inventory.New(),
 		Events:    []*event.Event{},
 		storer:    storer,
-		lock:      newLocker(synchronized),
+		lock:      &sync.Mutex{},
 	}
-}
-
-func newLocker(synchronized bool) sync.Locker {
-	if synchronized {
-		return &sync.Mutex{}
-	}
-
-	return DisabledLocker
 }
 
 // newEntity creates a new remote-entity.
-func newEntity(name, namespace string, storer persist.Storer, synchronized bool) (*Entity, error) {
+func newEntity(name, namespace string, storer persist.Storer) (*Entity, error) {
 	// If one of the attributes is defined, both Name and Namespace are needed.
 	if name == "" && namespace != "" || name != "" && namespace == "" {
 		return nil, errors.New("entity name and type are required when defining one")
@@ -59,7 +51,7 @@ func newEntity(name, namespace string, storer persist.Storer, synchronized bool)
 		Inventory: inventory.New(),
 		Events:    []*event.Event{},
 		storer:    storer,
-		lock:      newLocker(synchronized),
+		lock:      &sync.Mutex{},
 	}
 
 	// Entity data is optional. When not specified, data from the integration is reported for the agent's own entity.
@@ -79,16 +71,13 @@ func (e *Entity) isLocalEntity() bool {
 }
 
 // NewMetricSet returns a new instance of Set with its sample attached to the integration.
-func (e *Entity) NewMetricSet(eventType string) (s *metric.Set, err error) {
-	s, err = metric.NewSet(eventType, e.storer)
-	if err != nil {
-		return
-	}
+func (e *Entity) NewMetricSet(eventType string, nameSpacingAttributes ...metric.Attribute) *metric.Set {
+	s := metric.NewSet(eventType, e.storer, nameSpacingAttributes...)
 
 	e.lock.Lock()
 	defer e.lock.Unlock()
 	e.Metrics = append(e.Metrics, s)
-	return
+	return s
 }
 
 // AddEvent method adds a new Event.
