@@ -16,19 +16,19 @@ func populateInventory(i *integration.Integration, client Client) {
 	// all inventory should be collected on the local node entity so we need to look that up
 	localNodeName, localNode, err := getLocalNode(client)
 	if err != nil {
-		log.Error("couldn't get local node stats: %v", err)
+		log.Error("Couldn't get local node stats: %v", err)
 		return
 	}
 
 	localNodeEntity, err := i.Entity(localNodeName, "node")
 	if err != nil {
-		log.Error("couldn't get local node entity: %v", err)
+		log.Error("Couldn't get local node entity: %v", err)
 		return
 	}
 
 	err = populateConfigInventory(localNodeEntity)
 	if err != nil {
-		log.Error("couldn't populate config inventory: %v", err)
+		log.Error("Couldn't populate config inventory: %v", err)
 	}
 
 	populateNodeStatInventory(localNodeEntity, localNode)
@@ -37,7 +37,7 @@ func populateInventory(i *integration.Integration, client Client) {
 func readConfigFile(filePath string) (map[string]interface{}, error) {
 	rawYaml, err := ioutil.ReadFile(filePath)
 	if err != nil {
-		log.Error("could not open specified config file: %v", err)
+		log.Error("Could not open specified config file: %v", err)
 		return nil, err
 	}
 
@@ -45,7 +45,7 @@ func readConfigFile(filePath string) (map[string]interface{}, error) {
 
 	err = yaml.Unmarshal(rawYaml, parsedYaml)
 	if err != nil {
-		log.Error("could not parse configuration yaml: %v", err)
+		log.Error("Could not parse configuration yaml: %v", err)
 		return nil, err
 	}
 
@@ -61,7 +61,7 @@ func populateConfigInventory(entity *integration.Entity) error {
 	for key, value := range configYaml {
 		err = entity.SetInventoryItem("config."+key, "value", value)
 		if err != nil {
-			log.Error("could not set inventory item: %v", err)
+			log.Error("Could not set inventory item: %v", err)
 		}
 	}
 	return nil
@@ -108,7 +108,7 @@ func parseNodeIngests(entity *integration.Entity, stats objx.Map) []string {
 
 	err := entity.SetInventoryItem("config.ingest", "value", strings.Join(typeList, ","))
 	if err != nil {
-		log.Error("error setting ingest types: %v", err)
+		log.Error("Error setting ingest types: %v", err)
 	}
 
 	return typeList
@@ -120,7 +120,7 @@ func parseProcessStats(entity *integration.Entity, stats objx.Map) {
 	for k, v := range processStats {
 		err := entity.SetInventoryItem("config.process."+k, "value", v)
 		if err != nil {
-			log.Error("error setting inventory item [%s -> %s]: %v", k, v, err)
+			log.Error("Error setting inventory item [%s -> %s]: %v", k, v, err)
 		}
 	}
 }
@@ -144,7 +144,7 @@ func parsePluginsAndModules(entity *integration.Entity, stats objx.Map) {
 				inventoryValue := addon.Get(field).Str()
 				err := entity.SetInventoryItem("config."+inventoryKey, "value", inventoryValue)
 				if err != nil {
-					log.Error("error setting inventory item [%s -> %s]: %v", inventoryKey, inventoryValue, err)
+					log.Error("Error setting inventory item [%s -> %s]: %v", inventoryKey, inventoryValue, err)
 				}
 			}
 		}

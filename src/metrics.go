@@ -19,7 +19,7 @@ func collectNodesMetrics(integration *integration.Integration, client Client) {
 	log.Info("Collecting node metrics.")
 	responseObjectNode, err := client.Request(nodeStatsEndpoint)
 	if err != nil {
-		log.Error("could not get node stats from API: %v", err)
+		log.Error("Could not get node stats from API: %v", err)
 		return
 	}
 
@@ -28,7 +28,7 @@ func collectNodesMetrics(integration *integration.Integration, client Client) {
 	for node := range nodes {
 		entity, err := integration.Entity(node, "node")
 		if err != nil {
-			log.Error("could not create new entity for node [%s]: %v", node, err)
+			log.Error("Could not create new entity for node [%s]: %v", node, err)
 			continue
 		}
 
@@ -43,14 +43,14 @@ func collectClusterMetrics(integration *integration.Integration, client Client) 
 	log.Info("Collecting cluster metrics.")
 	responseObjectCluster, err := client.Request(clusterEndpoint)
 	if err != nil {
-		log.Error("could not get cluster stats from API: %v", err)
+		log.Error("Could not get cluster stats from API: %v", err)
 		return
 	}
 
 	clusterName := responseObjectCluster.Get("cluster_name").Str()
 	entity, err := integration.Entity(clusterName, "cluster")
 	if err != nil {
-		log.Error("could not create new entity for cluster: %v", err)
+		log.Error("Could not create new entity for cluster: %v", err)
 		return
 	}
 	metricSet := entity.NewMetricSet("clusterMetricSet")
@@ -62,13 +62,13 @@ func collectCommonMetrics(integration *integration.Integration, client Client) {
 	log.Info("Collecting common metrics.")
 	responseObjectCommon, err := client.Request(commonStatsEndpoint)
 	if err != nil {
-		log.Error("could not get common stats from API: %v", err)
+		log.Error("Could not get common stats from API: %v", err)
 		return
 	}
 
 	entity, err := integration.Entity("commonMetrics", "common")
 	if err != nil {
-		log.Error("could not create new entity for common metrics: %v", err)
+		log.Error("Could not create new entity for common metrics: %v", err)
 		return
 	}
 
@@ -95,7 +95,7 @@ func collectMetrics(data objx.Map, metricKey string, metricSet *metric.Set, metr
 
 func setMetric(metricSet *metric.Set, metricName string, metricValue interface{}, metricType metric.SourceType) {
 	if err := metricSet.SetMetric(metricName, metricValue, metricType); err != nil {
-		log.Error("could not set metric value: %v", err)
+		log.Error("Could not set metric value: %v", err)
 	}
 }
 

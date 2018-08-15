@@ -57,7 +57,7 @@ func checkErr(f func() error) {
 
 func logErrorAndExit(err error) {
 	if err != nil {
-		log.Error("encountered fatal error: %v", err)
+		log.Error("Encountered fatal error: %v", err)
 		os.Exit(1)
 	}
 }
