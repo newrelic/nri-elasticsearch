@@ -5,34 +5,30 @@ import (
 
 	"github.com/newrelic/infra-integrations-sdk/data/metric"
 	"github.com/newrelic/infra-integrations-sdk/integration"
+	"github.com/newrelic/infra-integrations-sdk/log"
 	"github.com/stretchr/objx"
 )
 
 func populateMetrics(i *integration.Integration, client Client) {
-	logger.Infof("Collecting node metrics.")
-	responseObjectNode, err := client.Request(nodeMetricDefs.Endpoint)
-	panicOnErr(err)
-	collectNodesMetrics(i, &responseObjectNode)
-
-	logger.Infof("Collecting cluster metrics.")
-	responseObjectCluster, err := client.Request(clusterEndpoint)
-	panicOnErr(err)
-	collectClusterMetrics(i, &responseObjectCluster)
-
-	logger.Infof("Collecting common metrics.")
-	responseObjectCommon, err := client.Request(commonStatsEndpoint)
-	panicOnErr(err)
-	collectCommonMetrics(i, &responseObjectCommon)
+	collectNodesMetrics(i, client)
+	collectClusterMetrics(i, client)
+	collectCommonMetrics(i, client)
 }
 
-func collectNodesMetrics(integration *integration.Integration, response *objx.Map) {
-	nodesResponse := response.Get("nodes")
-	nodes := nodesResponse.ObjxMap()
+func collectNodesMetrics(integration *integration.Integration, client Client) {
+	log.Info("Collecting node metrics.")
+	responseObjectNode, err := client.Request(nodeStatsEndpoint)
+	if err != nil {
+		log.Error("Could not get node stats from API: %v", err)
+		return
+	}
+
+	nodes := responseObjectNode.Get("nodes").ObjxMap()
 	// endpoint has multiple nodes so we need to collect for all of them
 	for node := range nodes {
 		entity, err := integration.Entity(node, "node")
 		if err != nil {
-			logger.Errorf("there was an error creating new entity for nodes: %v", err)
+			log.Error("Could not create new entity for node [%s]: %v", node, err)
 			continue
 		}
 
@@ -43,28 +39,42 @@ func collectNodesMetrics(integration *integration.Integration, response *objx.Ma
 	}
 }
 
-func collectClusterMetrics(integration *integration.Integration, response *objx.Map) {
-	clusterName := response.Get("cluster_name").Str()
+func collectClusterMetrics(integration *integration.Integration, client Client) {
+	log.Info("Collecting cluster metrics.")
+	responseObjectCluster, err := client.Request(clusterEndpoint)
+	if err != nil {
+		log.Error("Could not get cluster stats from API: %v", err)
+		return
+	}
+
+	clusterName := responseObjectCluster.Get("cluster_name").Str()
 	entity, err := integration.Entity(clusterName, "cluster")
 	if err != nil {
-		logger.Errorf("there was an error creating new entity for clusters: %v", err)
+		log.Error("Could not create new entity for cluster: %v", err)
 		return
 	}
 	metricSet := entity.NewMetricSet("clusterMetricSet")
 
-	collectMetrics(*response, clusterName, metricSet, clusterMetricDefs)
+	collectMetrics(responseObjectCluster, clusterName, metricSet, clusterMetricDefs)
 }
 
-func collectCommonMetrics(integration *integration.Integration, response *objx.Map) {
+func collectCommonMetrics(integration *integration.Integration, client Client) {
+	log.Info("Collecting common metrics.")
+	responseObjectCommon, err := client.Request(commonStatsEndpoint)
+	if err != nil {
+		log.Error("Could not get common stats from API: %v", err)
+		return
+	}
+
 	entity, err := integration.Entity("commonMetrics", "common")
 	if err != nil {
-		logger.Errorf("there was an error creating new entity for common metrics: %v", err)
+		log.Error("Could not create new entity for common metrics: %v", err)
 		return
 	}
 
 	metricSet := entity.NewMetricSet("clusterMetricSet")
 
-	collectMetrics(*response, "commonMetrics", metricSet, commonStatsMetricDefs)
+	collectMetrics(responseObjectCommon, "commonMetrics", metricSet, commonStatsMetricDefs)
 }
 
 // generic function that sets metrics in SDK
@@ -85,7 +95,7 @@ func collectMetrics(data objx.Map, metricKey string, metricSet *metric.Set, metr
 
 func setMetric(metricSet *metric.Set, metricName string, metricValue interface{}, metricType metric.SourceType) {
 	if err := metricSet.SetMetric(metricName, metricValue, metricType); err != nil {
-		logger.Errorf("There was an error when trying to set metric value: %s", err)
+		log.Error("Could not set metric value: %v", err)
 	}
 }
 
