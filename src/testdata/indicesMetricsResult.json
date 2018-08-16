@@ -1,0 +1,26 @@
+[
+	{
+		"health": "green",
+		"status": "open",
+		"index": "twitter",
+		"uuid": "rj_6yR2fSLWNxMHvw7QSiw",
+		"pri": "3",
+		"rep": "2",
+		"docs.count": "1",
+		"docs.deleted": "0",
+		"store.size": "12kb",
+		"pri.store.size": "4kb"
+	},
+	{
+		"health": "yellow",
+		"status": "open",
+		"index": "reddit",
+		"uuid": "im-Uv5zrTYKs7Mtj6-478A",
+		"pri": "7",
+		"rep": "3",
+		"docs.count": "1",
+		"docs.deleted": "0",
+		"store.size": "15.3kb",
+		"pri.store.size": "5.1kb"
+	}
+]
