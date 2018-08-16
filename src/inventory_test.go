@@ -17,8 +17,10 @@ type mockClient struct{
 	mock.Mock
 }
 
-func (mc mockClient) Request(endpoint string) (objx.Map, error) {
-	return getObjxMapFromFile(mc.Called(endpoint).String(0)), nil
+func (mc mockClient) Request(endpoint string, responseObject interface{}) error {
+	fileData, _ := ioutil.ReadFile(mc.Called(endpoint).String(0))
+	_ = json.Unmarshal(fileData, responseObject)
+	return nil
 }
 
 func TestReadConfigFile(t *testing.T) {
@@ -129,7 +131,7 @@ func TestGetLocalNode(t *testing.T) {
 	resultName, resultStats, _ := getLocalNode(fakeClient)
 	assert.Equal(t, "z9ZPp87vT92qG1cRVRIcMQ", resultName)
 
-	actualString, _ := resultStats.JSON()
+	actualString, _ := json.Marshal(resultStats)
 	if *update {
 		t.Log("Writing .golden file")
 		err := ioutil.WriteFile(goldenPath, []byte(actualString), 0644)
@@ -138,7 +140,7 @@ func TestGetLocalNode(t *testing.T) {
 
 	expectedJSON, _ := ioutil.ReadFile(goldenPath)
 
-	assert.Equal(t, string(expectedJSON), actualString)
+	assert.Equal(t, string(expectedJSON), string(actualString))
 	fakeClient.AssertExpectations(t)
 }
 

@@ -41,7 +41,7 @@ func NewClient(httpClient *http.Client) (*HTTPClient, error) {
 
 	return &HTTPClient{
 		client: httpClient,
-		baseURL: func() string {
+		BaseURL: func() string {
 			if args.UseSSL {
 				return fmt.Sprintf("https://%s:%d", args.Hostname, args.Port)
 			}

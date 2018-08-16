@@ -73,7 +73,7 @@ func populateNodeStatInventory(entity *integration.Entity, localNode *LocalNode)
 	parseNodeIngests(entity, localNode)
 }
 
-func getLocalNode(client *Client) (localNodeName string, localNodeStats *LocalNode, err error) {
+func getLocalNode(client Client) (localNodeName string, localNodeStats *LocalNode, err error) {
 	nodeResponseObject := new(LocalNodeResponse)
 	err = client.Request(localNodeInventoryEndpoint, &nodeResponseObject)
 	if err != nil {
