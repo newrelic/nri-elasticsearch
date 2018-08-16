@@ -56,11 +56,7 @@ func populateClusterMetrics(i *integration.Integration, client Client) error {
 		return err
 	}
 
-	err = setMetricsResponse(i, clusterResponse, *clusterResponse.Name, "cluster")
-	if err != nil {
-		log.Error("There was an error setting metrics for cluster metrics: %v", err)
-	}
-	return err
+	return setMetricsResponse(i, clusterResponse, *clusterResponse.Name, "cluster")
 }
 
 func populateCommonMetrics(i *integration.Integration, client Client) error {
@@ -71,11 +67,7 @@ func populateCommonMetrics(i *integration.Integration, client Client) error {
 		return err
 	}
 
-	err = setMetricsResponse(i, commonResponse.All, "commonMetrics", "common")
-	if err != nil {
-		log.Error("There was an error setting metrics for common metrics: %v", err)
-	}
-	return nil
+	return setMetricsResponse(i, commonResponse.All, "commonMetrics", "common")
 }
 
 func populateIndicesMetrics(i *integration.Integration, client Client) error {
