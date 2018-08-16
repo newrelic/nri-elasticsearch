@@ -1,124 +1,107 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/newrelic/infra-integrations-sdk/data/metric"
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
-	"github.com/stretchr/objx"
 )
 
+// populateMetrics wrapper to call each of the individual populate functions
 func populateMetrics(i *integration.Integration, client Client) {
-	collectNodesMetrics(i, client)
-	collectClusterMetrics(i, client)
-	collectCommonMetrics(i, client)
-}
-
-func collectNodesMetrics(integration *integration.Integration, client Client) {
-	log.Info("Collecting node metrics.")
-	responseObjectNode, err := client.Request(nodeStatsEndpoint)
+	err := populateNodesMetrics(i, client)
 	if err != nil {
-		log.Error("Could not get node stats from API: %v", err)
-		return
+		log.Error("There was an error populating metrics for nodes: %v", err)
 	}
-
-	nodes := responseObjectNode.Get("nodes").ObjxMap()
-	// endpoint has multiple nodes so we need to collect for all of them
-	for node := range nodes {
-		entity, err := integration.Entity(node, "node")
-		if err != nil {
-			log.Error("Could not create new entity for node [%s]: %v", node, err)
-			continue
-		}
-
-		metricSet := entity.NewMetricSet("nodesMetricSet")
-
-		nodesData := nodes.Get(node).ObjxMap()
-		collectMetrics(nodesData, node, metricSet, nodeMetricDefs)
+	err = populateClusterMetrics(i, client)
+	if err != nil {
+		log.Error("There was an error populating metrics for clusters: %v", err)
+	}
+	err = populateCommonMetrics(i, client)
+	if err != nil {
+		log.Error("There was an error populating metrics for common metrics: %v", err)
+	}
+	err = populateIndicesMetrics(i, client)
+	if err != nil {
+		log.Error("There was an error populating metrics for indices: %v", err)
 	}
 }
 
-func collectClusterMetrics(integration *integration.Integration, client Client) {
+func populateNodesMetrics(i *integration.Integration, client Client) error {
+	log.Info("Collecting node metrics")
+	nodeResponse := new(NodeResponse)
+	err := client.Request(nodeStatsEndpoint, nodeResponse)
+	if err != nil {
+		return err
+	}
+
+	setNodesMetricsResponse(i, nodeResponse)
+	return nil
+}
+
+// setNodesMetricsResponse calls setMetricsResponse for each node in the response
+func setNodesMetricsResponse(integration *integration.Integration, resp *NodeResponse) {
+	for node := range resp.Nodes {
+		err := setMetricsResponse(integration, resp.Nodes[node], node, "node")
+		if err != nil {
+			log.Error("There was an error setting metrics for node metrics on %s: %v", node, err)
+		}
+	}
+}
+
+func populateClusterMetrics(i *integration.Integration, client Client) error {
 	log.Info("Collecting cluster metrics.")
-	responseObjectCluster, err := client.Request(clusterEndpoint)
+	clusterResponse := new(ClusterResponse)
+	err := client.Request(clusterEndpoint, clusterResponse)
 	if err != nil {
-		log.Error("Could not get cluster stats from API: %v", err)
-		return
+		return err
 	}
 
-	clusterName := responseObjectCluster.Get("cluster_name").Str()
-	entity, err := integration.Entity(clusterName, "cluster")
-	if err != nil {
-		log.Error("Could not create new entity for cluster: %v", err)
-		return
-	}
-	metricSet := entity.NewMetricSet("clusterMetricSet")
-
-	collectMetrics(responseObjectCluster, clusterName, metricSet, clusterMetricDefs)
+	return setMetricsResponse(i, clusterResponse, *clusterResponse.Name, "cluster")
 }
 
-func collectCommonMetrics(integration *integration.Integration, client Client) {
+func populateCommonMetrics(i *integration.Integration, client Client) error {
 	log.Info("Collecting common metrics.")
-	responseObjectCommon, err := client.Request(commonStatsEndpoint)
+	commonResponse := new(CommonMetrics)
+	err := client.Request(commonStatsEndpoint, commonResponse)
 	if err != nil {
-		log.Error("Could not get common stats from API: %v", err)
-		return
+		return err
 	}
 
-	entity, err := integration.Entity("commonMetrics", "common")
-	if err != nil {
-		log.Error("Could not create new entity for common metrics: %v", err)
-		return
-	}
-
-	metricSet := entity.NewMetricSet("clusterMetricSet")
-
-	collectMetrics(responseObjectCommon, "commonMetrics", metricSet, commonStatsMetricDefs)
+	return setMetricsResponse(i, commonResponse.All, "commonMetrics", "common")
 }
 
-// generic function that sets metrics in SDK
-func collectMetrics(data objx.Map, metricKey string, metricSet *metric.Set, metricDefs *metricSet) {
-	notFoundMetrics := make([]string, 0)
-	foundMetrics := make([]string, 0)
-	for _, metricInfo := range metricDefs.MetricDefs {
-		metricInfoValue, err := parseJSON(data, metricInfo.APIKey)
+func populateIndicesMetrics(i *integration.Integration, client Client) error {
+	log.Info("Collecting indices metrics")
+	indicesStats := make([]*IndexStats, 0)
+	err := client.Request(indicesStatsEndpoint, &indicesStats)
+	if err != nil {
+		return err
+	}
+	setIndicesStatsMetricsResponse(i, indicesStats)
+	return nil
+}
+
+func setIndicesStatsMetricsResponse(integration *integration.Integration, resp []*IndexStats) {
+	for _, object := range resp {
+		err := setMetricsResponse(integration, object, *object.UUID, "indices")
 		if err != nil {
-			notFoundMetrics = append(notFoundMetrics, metricInfo.APIKey)
-		}
-		if metricInfoValue != nil {
-			setMetric(metricSet, metricInfo.Name, metricInfoValue, metricInfo.SourceType)
-			foundMetrics = append(foundMetrics, metricInfo.APIKey)
+			log.Error("There was an error setting metrics for indices metrics: %v", err)
 		}
 	}
 }
 
-func setMetric(metricSet *metric.Set, metricName string, metricValue interface{}, metricType metric.SourceType) {
-	if err := metricSet.SetMetric(metricName, metricValue, metricType); err != nil {
-		log.Error("Could not set metric value: %v", err)
-	}
-}
-
-func parseJSON(jsonData objx.Map, key string) (interface{}, error) {
-	value := jsonData.Get(key)
-	if value.IsStr() {
-		return value.Str(), nil
-	} else if value.IsBool() {
-		return convertBoolToInt(value.Bool()), nil
-	} else if value.IsFloat64() {
-		return value.Float64(), nil
-	} else if value.IsInt() {
-		return value.Int(), nil
-	} else {
-		return nil, fmt.Errorf("could not parse json for value for key: [%v]: ", key)
-	}
-}
-
-func convertBoolToInt(val bool) (returnval int) {
-	returnval = 0
-	if val {
-		returnval = 1
+// setMetricsResponse creates an entity and a metric set for the
+// type of response and calls MarshalMetrics using that response
+func setMetricsResponse(integration *integration.Integration, resp interface{}, name string, namespace string) error {
+	entity, err := integration.Entity(name, namespace)
+	if err != nil {
+		return err
 	}
 
-	return
+	metricSet := entity.NewMetricSet(namespace+"MetricSet",
+		metric.Attribute{Key: "displayName", Value: entity.Metadata.Name},
+		metric.Attribute{Key: "entityName", Value: entity.Metadata.Namespace + ":" + entity.Metadata.Name},
+	)
+
+	return metricSet.MarshalMetrics(resp)
 }

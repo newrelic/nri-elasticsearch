@@ -7,7 +7,6 @@ import (
 	"time"
 
 	nrHttp "github.com/newrelic/infra-integrations-sdk/http"
-	"github.com/stretchr/objx"
 )
 
 const (
@@ -15,17 +14,17 @@ const (
 	localNodeInventoryEndpoint = "/_nodes/_local"
 	commonStatsEndpoint        = "/_stats"
 	clusterEndpoint            = "/_cluster/health"
+	indicesStatsEndpoint       = "/_cat/indices?format=json"
 )
 
 // HTTPClient represents a single connection to an Elasticsearch host
 type HTTPClient struct {
-	baseURL string
+	BaseURL string
 	client  *http.Client
 }
 
-// Client represents an object that can make a request for a map
 type Client interface {
-	Request(string) (objx.Map, error)
+	Request(string, interface{}) error
 }
 
 // NewClient creates a new Elasticsearch http client.
@@ -54,19 +53,17 @@ func NewClient(httpClient *http.Client) (*HTTPClient, error) {
 
 // Request takes an endpoint, makes a GET request to that endpoint,
 // and parses the response JSON into a map, which it returns.
-func (c *HTTPClient) Request(endpoint string) (objx.Map, error) {
-	response, err := c.client.Get(c.baseURL + endpoint)
+func (c *HTTPClient) Request(endpoint string, v interface{}) error {
+	response, err := c.client.Get(c.BaseURL + endpoint)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	defer checkErr(response.Body.Close)
 
-	var resultMap map[string]interface{}
-
-	err = json.NewDecoder(response.Body).Decode(&resultMap)
+	err = json.NewDecoder(response.Body).Decode(&v)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return objx.New(resultMap), nil
+	return nil
 }
