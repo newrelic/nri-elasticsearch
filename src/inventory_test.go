@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"path/filepath"
 	"reflect"
@@ -18,7 +19,12 @@ type mockClient struct{
 }
 
 func (mc mockClient) Request(endpoint string, responseObject interface{}) error {
-	fileData, _ := ioutil.ReadFile(mc.Called(endpoint).String(0))
+	param := mc.Called(endpoint).String(0)
+	if param == "error" {
+		return fmt.Errorf("client error")
+	}
+
+	fileData, _ := ioutil.ReadFile(param)
 	_ = json.Unmarshal(fileData, responseObject)
 	return nil
 }
@@ -95,6 +101,16 @@ func TestPopulateConfigInventory(t *testing.T) {
 	assert.Equal(t, expected, actual)
 }
 
+func TestPopulateConfigInventoryWithBadFilename(t *testing.T) {
+	_, e := getTestingEntity(t)
+
+	dataPath := filepath.Join("testdata", "elasticsearch_doesntexist.yml")
+	args.ConfigPath = dataPath
+
+	err := populateConfigInventory(e)
+	assert.Error(t, err)
+}
+
 func TestParsePluginsAndModules(t *testing.T) {
 	i, e := getTestingEntity(t)
 
@@ -142,6 +158,28 @@ func TestGetLocalNode(t *testing.T) {
 
 	assert.Equal(t, string(expectedJSON), string(actualString))
 	fakeClient.AssertExpectations(t)
+}
+
+func TestGetLocalNodeWithBadNodeResponse(t *testing.T) {
+	fakeClient := mockClient{}
+	mockedReturnVal := "error"
+	fakeClient.On("Request", "/_nodes/_local").Return(mockedReturnVal, nil).Once()
+
+	resultName, resultObject, err := getLocalNode(fakeClient)
+	assert.Equal(t, "", resultName)
+	assert.Nil(t, resultObject)
+	assert.Error(t, err)
+}
+
+func TestGetLocalNodeWithMultipleNodes(t *testing.T) {
+	fakeClient := mockClient{}
+	mockedReturnVal := filepath.Join("testdata", "bad-nodes-local.json")
+	fakeClient.On("Request", "/_nodes/_local").Return(mockedReturnVal, nil).Once()
+
+	resultName, resultStats, err := getLocalNode(fakeClient)
+	assert.Equal(t, "", resultName)
+	assert.Nil(t, resultStats)
+	assert.Error(t, err)
 }
 
 func TestPopulateInventory(t *testing.T) {
