@@ -3,12 +3,13 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"reflect"
 	"strings"
 
 	"gopkg.in/yaml.v2"
 
 	"github.com/newrelic/infra-integrations-sdk/integration"
-	"github.com/stretchr/objx"
+	"github.com/newrelic/infra-integrations-sdk/log"
 )
 
 func populateInventory(i *integration.Integration, client *Client) {
@@ -57,7 +58,7 @@ func populateConfigInventory(entity *integration.Entity) error {
 	}
 
 	for key, value := range configYaml {
-		err = entity.SetInventoryItem("config."+key, "value", value)
+		err = entity.SetInventoryItem("config/"+key, "value", value)
 		if err != nil {
 			logger.Errorf("could not set inventory item: %v", err)
 		}
@@ -65,46 +66,46 @@ func populateConfigInventory(entity *integration.Entity) error {
 	return nil
 }
 
-func populateNodeStatInventory(entity *integration.Entity, localNode objx.Map) {
+func populateNodeStatInventory(entity *integration.Entity, localNode *LocalNode) {
 	parseProcessStats(entity, localNode)
 	parsePluginsAndModules(entity, localNode)
 	parseNodeIngests(entity, localNode)
 }
 
-func getLocalNode(client *Client) (localNodeName string, localNodeStats objx.Map, err error) {
-	nodeStats, err := client.Request(localNodeInventoryEndpoint)
+func getLocalNode(client *Client) (localNodeName string, localNodeStats *LocalNode, err error) {
+	nodeResponseObject := new(LocalNodeResponse)
+	err = client.Request(localNodeInventoryEndpoint, &nodeResponseObject)
 	if err != nil {
 		return "", nil, err
 	}
 
-	localNodeName, localNodeStats, err = parseLocalNode(nodeStats)
+	localNodeName, localNodeStats, err = parseLocalNode(nodeResponseObject)
 	if err != nil {
 		return "", nil, err
 	}
 	return
 }
 
-func parseLocalNode(nodeStats objx.Map) (string, objx.Map, error) {
-	nodes := nodeStats.Get("nodes").ObjxMap()
+func parseLocalNode(nodeStats *LocalNodeResponse) (string, *LocalNode, error) {
+	nodes := nodeStats.Nodes
 	if len(nodes) == 1 {
 		for k := range nodes {
-			return k, nodes.Get(k).ObjxMap(), nil
+			return k, nodes[k], nil
 		}
 	}
 	return "", nil, fmt.Errorf("could not identify local node")
 }
 
-func parseNodeIngests(entity *integration.Entity, stats objx.Map) []string {
-	processorList := stats.Get("ingest.processors").ObjxMapSlice()
-
+func parseNodeIngests(entity *integration.Entity, stats *LocalNode) []string {
+	processorList := stats.Ingest.Processors
 	typeList := []string{}
 
 	for _, processor := range processorList {
-		ingestType := processor.Get("type").String()
-		typeList = append(typeList, ingestType)
+		ingestType := processor.Type
+		typeList = append(typeList, *ingestType)
 	}
 
-	err := entity.SetInventoryItem("config.ingest", "value", strings.Join(typeList, ","))
+	err := entity.SetInventoryItem("config/ingest", "value", strings.Join(typeList, ","))
 	if err != nil {
 		logger.Errorf("error setting ingest types: %v", err)
 	}
@@ -112,37 +113,50 @@ func parseNodeIngests(entity *integration.Entity, stats objx.Map) []string {
 	return typeList
 }
 
-func parseProcessStats(entity *integration.Entity, stats objx.Map) {
-	processStats := stats.Get("process").ObjxMap()
-
-	for k, v := range processStats {
-		err := entity.SetInventoryItem("config.process."+k, "value", v)
+func parseProcessStats(entity *integration.Entity, stats *LocalNode) {
+	statsFields := reflect.TypeOf(*stats.Process)
+	statsValues := reflect.ValueOf(*stats.Process)
+	for i := 0; i < statsFields.NumField(); i++ {
+		field := statsFields.Field(i)
+		jsonKey, ok := field.Tag.Lookup("json")
+		if !ok {
+			continue
+		}
+		value := statsValues.Field(i).Interface()
+		err := entity.SetInventoryItem("config/process/"+jsonKey, "value", value)
 		if err != nil {
-			logger.Errorf("error setting inventory item [%s -> %s]: %v", k, v, err)
+			log.Error("Error setting inventory item [%s -> %s]: %v", jsonKey, value, err)
 		}
 	}
 }
 
-func parsePluginsAndModules(entity *integration.Entity, stats objx.Map) {
+func parsePluginsAndModules(entity *integration.Entity, stats *LocalNode) {
 
 	fieldNames := []string{
-		"version",
-		"elasticsearch_version",
-		"java_version",
-		"description",
-		"classname",
+		"Version",
+		"ElasticsearchVersion",
+		"JavaVersion",
+		"Description",
+		"ClassName",
 	}
 
-	for _, addonType := range []string{"plugins", "modules"} {
-		addonStats := stats.Get(addonType).ObjxMapSlice()
+	for _, addonSet := range []string{"plugins", "modules"} {
+		var addonStats []*LocalNodeAddon
+		if addonSet == "plugins" {
+			addonStats = stats.Plugins
+		} else {
+			addonStats = stats.Modules
+		}
+
 		for _, addon := range addonStats {
-			addonName := addon.Get("name").Str()
+			addonName := *addon.Name
+			addonFields := reflect.ValueOf(*addon)
 			for _, field := range fieldNames {
-				inventoryKey := fmt.Sprintf("%s.%s.%s", addonType, addonName, field)
-				inventoryValue := addon.Get(field).Str()
-				err := entity.SetInventoryItem("config."+inventoryKey, "value", inventoryValue)
+				addonFieldValue := addonFields.FieldByName(field).Interface()
+				inventoryKey := fmt.Sprintf("%s/%s/%s", addonSet, addonName, field)
+				err := entity.SetInventoryItem("config/"+inventoryKey, "value", addonFieldValue)
 				if err != nil {
-					logger.Errorf("error setting inventory item [%s -> %s]: %v", inventoryKey, inventoryValue, err)
+					log.Error("Error setting inventory item [%s -> %s]: %v", inventoryKey, addonFieldValue, err)
 				}
 			}
 		}

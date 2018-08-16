@@ -60,8 +60,6 @@ func (c *Client) Request(endpoint string, v interface{}) error {
 	}
 	defer checkErr(response.Body.Close)
 
-	var resultMap map[string]interface{}
-
 	err = json.NewDecoder(response.Body).Decode(&v)
 	if err != nil {
 		return err
