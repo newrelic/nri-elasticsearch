@@ -23,6 +23,7 @@ type HTTPClient struct {
 	client  *http.Client
 }
 
+// Client interface that assists in mocking for tests
 type Client interface {
 	Request(string, interface{}) error
 }

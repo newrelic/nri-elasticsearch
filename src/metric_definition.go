@@ -424,7 +424,7 @@ type JvmThreads struct {
 	PeakCount *int `json:"peak_count" metric_name:"jvm.ThreadsPeak" source_type:"gauge"`
 }
 
-// ThreadPool struct
+// NodeThreadPool struct
 type NodeThreadPool struct {
 	Bulk              *ThreadPoolBulk              `json:"bulk"`
 	FetchShardStarted *ThreadPoolFetchShardStarted `json:"fetch_shard_started"`
