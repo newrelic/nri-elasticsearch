@@ -118,7 +118,7 @@ func parseProcessStats(entity *integration.Entity, stats *LocalNode) {
 	if stats.Process == nil {
 		return
 	}
-	
+
 	statsFields := reflect.TypeOf(*stats.Process)
 	statsValues := reflect.ValueOf(*stats.Process)
 	for i := 0; i < statsFields.NumField(); i++ {

@@ -14,7 +14,7 @@ import (
 
 var NodeTestFile = filepath.Join("testdata", "good-nodes-local.json")
 
-type mockClient struct{
+type mockClient struct {
 	mock.Mock
 }
 

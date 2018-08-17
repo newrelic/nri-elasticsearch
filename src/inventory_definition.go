@@ -2,7 +2,7 @@ package main
 
 // LocalNodeResponse struct (/_nodes/_local endpoint)
 type LocalNodeResponse struct {
-	Nodes       map[string]*LocalNode `json:"nodes"`
+	Nodes map[string]*LocalNode `json:"nodes"`
 }
 
 // LocalNode is the node API object
