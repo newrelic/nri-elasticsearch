@@ -90,11 +90,7 @@ func TestPopulateConfigInventory(t *testing.T) {
 
 	actual, _ := i.MarshalJSON()
 
-	if *update {
-		t.Log("Writing .golden file")
-		err := ioutil.WriteFile(goldenPath, actual, 0644)
-		assert.NoError(t, err)
-	}
+	writeGoldenFile(t, goldenPath, actual)
 
 	expected, _ := ioutil.ReadFile(goldenPath)
 
@@ -126,11 +122,7 @@ func TestParsePluginsAndModules(t *testing.T) {
 	actualJSON, err := i.MarshalJSON()
 	assert.NoError(t, err)
 
-	if *update {
-		t.Log("Writing .golden file")
-		err := ioutil.WriteFile(goldenPath, actualJSON, 0644)
-		assert.NoError(t, err)
-	}
+	writeGoldenFile(t, goldenPath, actualJSON)
 
 	expectedJSON, _ := ioutil.ReadFile(goldenPath)
 
@@ -148,11 +140,7 @@ func TestGetLocalNode(t *testing.T) {
 	assert.Equal(t, "z9ZPp87vT92qG1cRVRIcMQ", resultName)
 
 	actualString, _ := json.Marshal(resultStats)
-	if *update {
-		t.Log("Writing .golden file")
-		err := ioutil.WriteFile(goldenPath, []byte(actualString), 0644)
-		assert.NoError(t, err)
-	}
+	writeGoldenFile(t, goldenPath, actualString)
 
 	expectedJSON, _ := ioutil.ReadFile(goldenPath)
 
@@ -196,11 +184,7 @@ func TestPopulateInventory(t *testing.T) {
 	populateInventory(i, fakeClient)
 
 	actualJSON, _ := i.MarshalJSON()
-	if *update {
-		t.Log("Writing .golden file")
-		err := ioutil.WriteFile(goldenPath, actualJSON, 0644)
-		assert.NoError(t, err)
-	}
+	writeGoldenFile(t, goldenPath, actualJSON)
 
 	expectedJSON, _ := ioutil.ReadFile(goldenPath)
 
@@ -209,34 +193,21 @@ func TestPopulateInventory(t *testing.T) {
 }
 
 func TestParseProcessStatsWithIncorrectTypes(t *testing.T) {
-	dataPath := filepath.Join("testdata", "bad-process-stats.json")
-	goldenPath := dataPath + ".golden"
-
-	jsonBytes, _ := ioutil.ReadFile(dataPath)
-	nodeObject := new(LocalNode)
-	_ = json.Unmarshal(jsonBytes, nodeObject)
-
-	i, e := getTestingEntity(t)
-
-	parseProcessStats(e, nodeObject)
-
-	actualJSON, _ := i.MarshalJSON()
-	if *update {
-		t.Log("Writing .golden file")
-		err := ioutil.WriteFile(goldenPath, actualJSON, 0644)
-		assert.NoError(t, err)
-	}
-
-	expectedJSON, _ := ioutil.ReadFile(goldenPath)
-
-	assert.Equal(t, expectedJSON, actualJSON)
+	testProcessStats(t, filepath.Join("testdata", "bad-process-stats.json"))
 }
 
 func TestParseProcessStatsWithEmptyStats(t *testing.T) {
-	dataPath := filepath.Join("testdata", "empty-process-stats.json")
-	goldenPath := dataPath + ".golden"
+	testProcessStats(t, filepath.Join("testdata", "empty-process-stats.json"))
+}
 
-	jsonBytes, _ := ioutil.ReadFile(dataPath)
+func TestParseProcessStatsWithMissingProcessStats(t *testing.T) {
+	testProcessStats(t, filepath.Join("testdata", "missing-process-stats.json"))
+}
+
+func testProcessStats(t *testing.T, filePath string) {
+	goldenPath := filePath + ".golden"
+
+	jsonBytes, _ := ioutil.ReadFile(filePath)
 	nodeObject := new(LocalNode)
 	_ = json.Unmarshal(jsonBytes, nodeObject)
 
@@ -245,37 +216,17 @@ func TestParseProcessStatsWithEmptyStats(t *testing.T) {
 	parseProcessStats(e, nodeObject)
 
 	actualJSON, _ := i.MarshalJSON()
-	if *update {
-		t.Log("Writing .golden file")
-		err := ioutil.WriteFile(goldenPath, actualJSON, 0644)
-		assert.NoError(t, err)
-	}
+	writeGoldenFile(t, goldenPath, actualJSON)
 
 	expectedJSON, _ := ioutil.ReadFile(goldenPath)
 
 	assert.Equal(t, expectedJSON, actualJSON)
 }
 
-func TestParseProcessStatsWithMissingProcessStats(t *testing.T) {
-	dataPath := filepath.Join("testdata", "missing-process-stats.json")
-	goldenPath := dataPath + ".golden"
-
-	jsonBytes, _ := ioutil.ReadFile(dataPath)
-	nodeObject := new(LocalNode)
-	_ = json.Unmarshal(jsonBytes, nodeObject)
-
-	i, e := getTestingEntity(t)
-
-	parseProcessStats(e, nodeObject)
-
-	actualJSON, _ := i.MarshalJSON()
+func writeGoldenFile(t *testing.T, goldenPath string, data []byte) {
 	if *update {
 		t.Log("Writing .golden file")
-		err := ioutil.WriteFile(goldenPath, actualJSON, 0644)
+		err := ioutil.WriteFile(goldenPath, data, 0644)
 		assert.NoError(t, err)
 	}
-
-	expectedJSON, _ := ioutil.ReadFile(goldenPath)
-
-	assert.Equal(t, expectedJSON, actualJSON)
 }
