@@ -2,24 +2,31 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"path/filepath"
 	"reflect"
 	"testing"
 
-	"github.com/stretchr/objx"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 var NodeTestFile = filepath.Join("testdata", "good-nodes-local.json")
 
-type mockClient struct{
+type mockClient struct {
 	mock.Mock
 }
 
-func (mc mockClient) Request(endpoint string) (objx.Map, error) {
-	return getObjxMapFromFile(mc.Called(endpoint).String(0)), nil
+func (mc *mockClient) Request(endpoint string, responseObject interface{}) error {
+	param := mc.Called(endpoint).String(0)
+	if param == "error" {
+		return fmt.Errorf("client error")
+	}
+
+	fileData, _ := ioutil.ReadFile(param)
+	_ = json.Unmarshal(fileData, responseObject)
+	return nil
 }
 
 func TestReadConfigFile(t *testing.T) {
@@ -83,15 +90,21 @@ func TestPopulateConfigInventory(t *testing.T) {
 
 	actual, _ := i.MarshalJSON()
 
-	if *update {
-		t.Log("Writing .golden file")
-		err := ioutil.WriteFile(goldenPath, actual, 0644)
-		assert.NoError(t, err)
-	}
+	writeGoldenFile(t, goldenPath, actual)
 
 	expected, _ := ioutil.ReadFile(goldenPath)
 
 	assert.Equal(t, expected, actual)
+}
+
+func TestPopulateConfigInventoryWithBadFilename(t *testing.T) {
+	_, e := getTestingEntity(t)
+
+	dataPath := filepath.Join("testdata", "elasticsearch_doesntexist.yml")
+	args.ConfigPath = dataPath
+
+	err := populateConfigInventory(e)
+	assert.Error(t, err)
 }
 
 func TestParsePluginsAndModules(t *testing.T) {
@@ -100,43 +113,20 @@ func TestParsePluginsAndModules(t *testing.T) {
 	dataPath := filepath.Join("testdata", "good-node.json")
 	goldenPath := dataPath + ".golden"
 
-	statsJSON := getObjxMapFromFile(dataPath)
+	statsFromFile, _ := ioutil.ReadFile(dataPath)
+	responseObject := new(LocalNode)
+	_ = json.Unmarshal(statsFromFile, &responseObject)
 
-	populateNodeStatInventory(e, statsJSON)
+	populateNodeStatInventory(e, responseObject)
 
 	actualJSON, err := i.MarshalJSON()
 	assert.NoError(t, err)
 
-	if *update {
-		t.Log("Writing .golden file")
-		err := ioutil.WriteFile(goldenPath, actualJSON, 0644)
-		assert.NoError(t, err)
-	}
+	writeGoldenFile(t, goldenPath, actualJSON)
 
 	expectedJSON, _ := ioutil.ReadFile(goldenPath)
 
 	assert.Equal(t, expectedJSON, actualJSON)
-}
-
-func TestParseLocalNode(t *testing.T) {
-	dataPath := filepath.Join("testdata", "good-nodes-local.json")
-	goldenPath := dataPath + ".golden"
-
-	statsJSON := getObjxMapFromFile(dataPath)
-
-	_, actualStats, err := parseLocalNode(statsJSON)
-	assert.NoError(t, err)
-
-	actualString, _ := actualStats.JSON()
-	if *update {
-		t.Log("Writing .golden file")
-		err := ioutil.WriteFile(goldenPath, []byte(actualString), 0644)
-		assert.NoError(t, err)
-	}
-
-	expectedJSON, _ := ioutil.ReadFile(goldenPath)
-
-	assert.Equal(t, string(expectedJSON), actualString)
 }
 
 func TestGetLocalNode(t *testing.T) {
@@ -146,20 +136,38 @@ func TestGetLocalNode(t *testing.T) {
 	mockedReturnVal := filepath.Join("testdata", "good-nodes-local.json")
 	fakeClient.On("Request", "/_nodes/_local").Return(mockedReturnVal, nil).Once()
 
-	resultName, resultStats, _ := getLocalNode(fakeClient)
+	resultName, resultStats, _ := getLocalNode(&fakeClient)
 	assert.Equal(t, "z9ZPp87vT92qG1cRVRIcMQ", resultName)
 
-	actualString, _ := resultStats.JSON()
-	if *update {
-		t.Log("Writing .golden file")
-		err := ioutil.WriteFile(goldenPath, []byte(actualString), 0644)
-		assert.NoError(t, err)
-	}
+	actualString, _ := json.Marshal(resultStats)
+	writeGoldenFile(t, goldenPath, actualString)
 
 	expectedJSON, _ := ioutil.ReadFile(goldenPath)
 
-	assert.Equal(t, string(expectedJSON), actualString)
+	assert.Equal(t, string(expectedJSON), string(actualString))
 	fakeClient.AssertExpectations(t)
+}
+
+func TestGetLocalNodeWithBadNodeResponse(t *testing.T) {
+	fakeClient := mockClient{}
+	mockedReturnVal := "error"
+	fakeClient.On("Request", "/_nodes/_local").Return(mockedReturnVal, nil).Once()
+
+	resultName, resultObject, err := getLocalNode(&fakeClient)
+	assert.Equal(t, "", resultName)
+	assert.Nil(t, resultObject)
+	assert.Error(t, err)
+}
+
+func TestGetLocalNodeWithMultipleNodes(t *testing.T) {
+	fakeClient := mockClient{}
+	mockedReturnVal := filepath.Join("testdata", "bad-nodes-local.json")
+	fakeClient.On("Request", "/_nodes/_local").Return(mockedReturnVal, nil).Once()
+
+	resultName, resultStats, err := getLocalNode(&fakeClient)
+	assert.Equal(t, "", resultName)
+	assert.Nil(t, resultStats)
+	assert.Error(t, err)
 }
 
 func TestPopulateInventory(t *testing.T) {
@@ -173,14 +181,10 @@ func TestPopulateInventory(t *testing.T) {
 	fakeClient.On("Request", "/_nodes/_local").Return(mockedReturnVal, nil).Once()
 
 	i := getTestingIntegration(t)
-	populateInventory(i, fakeClient)
+	populateInventory(i, &fakeClient)
 
 	actualJSON, _ := i.MarshalJSON()
-	if *update {
-		t.Log("Writing .golden file")
-		err := ioutil.WriteFile(goldenPath, actualJSON, 0644)
-		assert.NoError(t, err)
-	}
+	writeGoldenFile(t, goldenPath, actualJSON)
 
 	expectedJSON, _ := ioutil.ReadFile(goldenPath)
 
@@ -188,12 +192,41 @@ func TestPopulateInventory(t *testing.T) {
 	fakeClient.AssertExpectations(t)
 }
 
-func getObjxMapFromFile(fileName string) objx.Map {
-	fileBytes, _ := ioutil.ReadFile(fileName)
+func TestParseProcessStatsWithIncorrectTypes(t *testing.T) {
+	testProcessStats(t, filepath.Join("testdata", "bad-process-stats.json"))
+}
 
-	var resultMap map[string]interface{}
+func TestParseProcessStatsWithEmptyStats(t *testing.T) {
+	testProcessStats(t, filepath.Join("testdata", "empty-process-stats.json"))
+}
 
-	_ = json.Unmarshal(fileBytes, &resultMap)
+func TestParseProcessStatsWithMissingProcessStats(t *testing.T) {
+	testProcessStats(t, filepath.Join("testdata", "missing-process-stats.json"))
+}
 
-	return objx.New(resultMap)
+func testProcessStats(t *testing.T, filePath string) {
+	goldenPath := filePath + ".golden"
+
+	jsonBytes, _ := ioutil.ReadFile(filePath)
+	nodeObject := new(LocalNode)
+	_ = json.Unmarshal(jsonBytes, nodeObject)
+
+	i, e := getTestingEntity(t)
+
+	parseProcessStats(e, nodeObject)
+
+	actualJSON, _ := i.MarshalJSON()
+	writeGoldenFile(t, goldenPath, actualJSON)
+
+	expectedJSON, _ := ioutil.ReadFile(goldenPath)
+
+	assert.Equal(t, expectedJSON, actualJSON)
+}
+
+func writeGoldenFile(t *testing.T, goldenPath string, data []byte) {
+	if *update {
+		t.Log("Writing .golden file")
+		err := ioutil.WriteFile(goldenPath, data, 0644)
+		assert.NoError(t, err)
+	}
 }

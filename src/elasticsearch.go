@@ -27,7 +27,7 @@ const (
 )
 
 var (
-	args   argumentList
+	args argumentList
 )
 
 func main() {

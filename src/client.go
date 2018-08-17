@@ -23,6 +23,7 @@ type HTTPClient struct {
 	client  *http.Client
 }
 
+// Client interface that assists in mocking for tests
 type Client interface {
 	Request(string, interface{}) error
 }
@@ -41,7 +42,7 @@ func NewClient(httpClient *http.Client) (*HTTPClient, error) {
 
 	return &HTTPClient{
 		client: httpClient,
-		baseURL: func() string {
+		BaseURL: func() string {
 			if args.UseSSL {
 				return fmt.Sprintf("https://%s:%d", args.Hostname, args.Port)
 			}

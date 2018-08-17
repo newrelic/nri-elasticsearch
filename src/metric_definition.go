@@ -87,11 +87,6 @@ type PrimariesStore struct {
 	SizeInBytes *int `json:"size_in_bytes" metric_name:"primaries.sizeInBytes" source_type:"gauge"`
 }
 
-// clusterMetric struct
-type clusterMetric struct {
-	jsonKey string
-}
-
 // ClusterResponse struct
 type ClusterResponse struct {
 	Name                *string `json:"cluster_name"`
@@ -424,7 +419,7 @@ type JvmThreads struct {
 	PeakCount *int `json:"peak_count" metric_name:"jvm.ThreadsPeak" source_type:"gauge"`
 }
 
-// ThreadPool struct
+// NodeThreadPool struct
 type NodeThreadPool struct {
 	Bulk              *ThreadPoolBulk              `json:"bulk"`
 	FetchShardStarted *ThreadPoolFetchShardStarted `json:"fetch_shard_started"`
@@ -433,6 +428,7 @@ type NodeThreadPool struct {
 	ForceMerge        *ThreadPoolForceMerge        `json:"force_merge"`
 	Generic           *ThreadPoolGeneric           `json:"generic"`
 	Get               *ThreadPoolGet               `json:"get"`
+	HTTP              *ThreadPoolHTTP              `json:"http"`
 	Index             *ThreadPoolIndex             `json:"index"`
 	Listener          *ThreadPoolListener          `json:"listener"`
 	Management        *ThreadPoolManagement        `json:"management"`
