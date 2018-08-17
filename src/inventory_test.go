@@ -18,7 +18,7 @@ type mockClient struct{
 	mock.Mock
 }
 
-func (mc mockClient) Request(endpoint string, responseObject interface{}) error {
+func (mc *mockClient) Request(endpoint string, responseObject interface{}) error {
 	param := mc.Called(endpoint).String(0)
 	if param == "error" {
 		return fmt.Errorf("client error")
@@ -136,7 +136,7 @@ func TestGetLocalNode(t *testing.T) {
 	mockedReturnVal := filepath.Join("testdata", "good-nodes-local.json")
 	fakeClient.On("Request", "/_nodes/_local").Return(mockedReturnVal, nil).Once()
 
-	resultName, resultStats, _ := getLocalNode(fakeClient)
+	resultName, resultStats, _ := getLocalNode(&fakeClient)
 	assert.Equal(t, "z9ZPp87vT92qG1cRVRIcMQ", resultName)
 
 	actualString, _ := json.Marshal(resultStats)
@@ -153,7 +153,7 @@ func TestGetLocalNodeWithBadNodeResponse(t *testing.T) {
 	mockedReturnVal := "error"
 	fakeClient.On("Request", "/_nodes/_local").Return(mockedReturnVal, nil).Once()
 
-	resultName, resultObject, err := getLocalNode(fakeClient)
+	resultName, resultObject, err := getLocalNode(&fakeClient)
 	assert.Equal(t, "", resultName)
 	assert.Nil(t, resultObject)
 	assert.Error(t, err)
@@ -164,7 +164,7 @@ func TestGetLocalNodeWithMultipleNodes(t *testing.T) {
 	mockedReturnVal := filepath.Join("testdata", "bad-nodes-local.json")
 	fakeClient.On("Request", "/_nodes/_local").Return(mockedReturnVal, nil).Once()
 
-	resultName, resultStats, err := getLocalNode(fakeClient)
+	resultName, resultStats, err := getLocalNode(&fakeClient)
 	assert.Equal(t, "", resultName)
 	assert.Nil(t, resultStats)
 	assert.Error(t, err)
@@ -181,7 +181,7 @@ func TestPopulateInventory(t *testing.T) {
 	fakeClient.On("Request", "/_nodes/_local").Return(mockedReturnVal, nil).Once()
 
 	i := getTestingIntegration(t)
-	populateInventory(i, fakeClient)
+	populateInventory(i, &fakeClient)
 
 	actualJSON, _ := i.MarshalJSON()
 	writeGoldenFile(t, goldenPath, actualJSON)
