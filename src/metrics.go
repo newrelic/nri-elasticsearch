@@ -94,7 +94,7 @@ func setIndicesStatsMetricsResponse(integration *integration.Integration, resp [
 			continue
 		}
 
-		if err := setMetricsResponse(integration, object, *object.UUID, "indicies"); err != nil {
+		if err := setMetricsResponse(integration, object, *object.UUID, "index"); err != nil {
 			log.Error("There was an error setting metrics for indices metrics: %v", err)
 		}
 	}

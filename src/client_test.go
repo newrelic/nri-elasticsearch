@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNewClient(t *testing.T) {
@@ -53,4 +55,14 @@ func TestHostnameOverride(t *testing.T) {
 			t.Errorf("Expected BaseURL '%s' got '%s'", expectedURL, client.baseURL)
 		}
 	}
+}
+
+func TestBadCertFile(t *testing.T) {
+	setupTestArgs()
+	args.UseSSL = true
+	args.CABundleDir = "thisdirectorydoesntexist"
+	args.CABundleFile = "bad_file.nope"
+
+	_, err := NewClient("")
+	assert.Error(t, err)
 }
