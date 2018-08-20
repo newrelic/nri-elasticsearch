@@ -16,19 +16,19 @@ func populateInventory(i *integration.Integration, client Client) {
 	// all inventory should be collected on the local node entity so we need to look that up
 	localNodeName, localNode, err := getLocalNode(client)
 	if err != nil {
-		log.Error("Couldn't get local node stats: %v", err)
+		log.Error("Could not get local node stats: %v", err)
 		return
 	}
 
 	localNodeEntity, err := i.Entity(localNodeName, "node")
 	if err != nil {
-		log.Error("Couldn't get local node entity: %v", err)
+		log.Error("Could not get local node entity: %v", err)
 		return
 	}
 
 	err = populateConfigInventory(localNodeEntity)
 	if err != nil {
-		log.Error("Couldn't populate config inventory: %v", err)
+		log.Error("Could not populate config inventory: %v", err)
 	}
 
 	populateNodeStatInventory(localNodeEntity, localNode)
@@ -73,6 +73,7 @@ func populateNodeStatInventory(entity *integration.Entity, localNode *LocalNode)
 	parseNodeIngests(entity, localNode)
 }
 
+//TODO hardcode a client pointing to `localhost` for inventory only
 func getLocalNode(client Client) (localNodeName string, localNodeStats *LocalNode, err error) {
 	nodeResponseObject := new(LocalNodeResponse)
 	err = client.Request(localNodeInventoryEndpoint, &nodeResponseObject)
@@ -142,7 +143,6 @@ func parseProcessStats(entity *integration.Entity, stats *LocalNode) {
 }
 
 func parsePluginsAndModules(entity *integration.Entity, stats *LocalNode) {
-
 	fieldNames := []string{
 		"Version",
 		"ElasticsearchVersion",

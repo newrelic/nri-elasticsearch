@@ -27,13 +27,30 @@ func TestNewClient(t *testing.T) {
 	for _, tc := range testCases {
 		setupTestArgs()
 		args.Hostname, args.Port, args.UseSSL = hostname, port, tc.useSSL
-		client, err := NewClient(nil)
+		client, err := NewClient("")
 		if err != nil {
 			t.Errorf("Unexpected error: %s", err.Error())
 		} else {
-			if client.BaseURL != tc.wantURL {
-				t.Errorf("Expected BaseURL '%s' got '%s'", tc.wantURL, client.BaseURL)
+			if client.baseURL != tc.wantURL {
+				t.Errorf("Expected BaseURL '%s' got '%s'", tc.wantURL, client.baseURL)
 			}
+		}
+	}
+}
+
+func TestHostnameOverride(t *testing.T) {
+	hostname, port, ssl := "host", 9, false
+	hostOverride := "overridden"
+	expectedURL := fmt.Sprintf("http://%s:%d", hostOverride, port)
+
+	setupTestArgs()
+	args.Hostname, args.Port, args.UseSSL = hostname, port, ssl
+	client, err := NewClient(hostOverride)
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err.Error())
+	} else {
+		if client.baseURL != expectedURL {
+			t.Errorf("Expected BaseURL '%s' got '%s'", expectedURL, client.baseURL)
 		}
 	}
 }

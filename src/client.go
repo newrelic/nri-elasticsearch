@@ -19,7 +19,7 @@ const (
 
 // HTTPClient represents a single connection to an Elasticsearch host
 type HTTPClient struct {
-	BaseURL string
+	baseURL string
 	client  *http.Client
 }
 
@@ -31,23 +31,26 @@ type Client interface {
 // NewClient creates a new Elasticsearch http client.
 // httpClient passed in variable should be nil for non-test usage. It is
 // available to enable easier mocking of http calls during tests.
-func NewClient(httpClient *http.Client) (*HTTPClient, error) {
-	if httpClient == nil {
-		var err error
-		httpClient, err = nrHttp.New(args.CABundleFile, args.CABundleDir, time.Duration(args.Timeout)*time.Second)
-		if err != nil {
-			return nil, err
-		}
+func NewClient(hostnameOverride string) (*HTTPClient, error) {
+	httpClient, err := nrHttp.New(args.CABundleFile, args.CABundleDir, time.Duration(args.Timeout)*time.Second)
+	if err != nil {
+		return nil, err
 	}
 
 	return &HTTPClient{
 		client: httpClient,
-		BaseURL: func() string {
+		baseURL: func() string {
+			protocol := "http"
 			if args.UseSSL {
-				return fmt.Sprintf("https://%s:%d", args.Hostname, args.Port)
+				protocol = "https"
 			}
 
-			return fmt.Sprintf("http://%s:%d", args.Hostname, args.Port)
+			hostname := args.Hostname
+			if hostnameOverride != "" {
+				hostname = hostnameOverride
+			}
+
+			return fmt.Sprintf("%s://%s:%d", protocol, hostname, args.Port)
 		}(),
 	}, nil
 }
@@ -55,7 +58,7 @@ func NewClient(httpClient *http.Client) (*HTTPClient, error) {
 // Request takes an endpoint, makes a GET request to that endpoint,
 // and parses the response JSON into a map, which it returns.
 func (c *HTTPClient) Request(endpoint string, v interface{}) error {
-	response, err := c.client.Get(c.BaseURL + endpoint)
+	response, err := c.client.Get(c.baseURL + endpoint)
 	if err != nil {
 		return err
 	}
