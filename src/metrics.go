@@ -59,7 +59,7 @@ func populateClusterMetrics(i *integration.Integration, client Client) error {
 	}
 
 	if clusterResponse.Name == nil {
-		return fmt.Errorf("cannot set metric response because clusterResponse.Name is nil")
+		return fmt.Errorf("cannot set metric response, missing cluster name")
 	}
 	return setMetricsResponse(i, clusterResponse, *clusterResponse.Name, "cluster")
 }
@@ -88,13 +88,13 @@ func populateIndicesMetrics(i *integration.Integration, client Client) error {
 
 func setIndicesStatsMetricsResponse(integration *integration.Integration, resp []*IndexStats) {
 	for _, object := range resp {
-		if object.UUID != nil {
-			err := setMetricsResponse(integration, object, *object.UUID, "indices")
-			if err != nil {
-				log.Error("There was an error setting metrics for indices metrics: %v", err)
-			}
-		} else {
-			log.Error("cannot set metric response because object.UUID is nil")
+		if object.UUID == nil {
+			log.Error("cannot set metric response, missing UUID")
+			continue
+		}
+
+		if err := setMetricsResponse(integration, object, *object.UUID, "indicies"); err != nil {
+			log.Error("There was an error setting metrics for indices metrics: %v", err)
 		}
 	}
 }
