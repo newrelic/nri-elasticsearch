@@ -29,8 +29,8 @@ type Client interface {
 }
 
 // NewClient creates a new Elasticsearch http client.
-// httpClient passed in variable should be nil for non-test usage. It is
-// available to enable easier mocking of http calls during tests.
+// The hostnameOverride parameter specifies a hostname that the client should connect to.
+// Passing in an empty string causes the client to use the hostname specified in the command-line args. (default behavior)
 func NewClient(hostnameOverride string) (*HTTPClient, error) {
 	httpClient, err := nrHttp.New(args.CABundleFile, args.CABundleDir, time.Duration(args.Timeout)*time.Second)
 	if err != nil {
