@@ -64,7 +64,7 @@ func (c *HTTPClient) Request(endpoint string, v interface{}) error {
 	}
 	defer checkErr(response.Body.Close)
 
-	err = json.NewDecoder(response.Body).Decode(&v)
+	err = json.NewDecoder(response.Body).Decode(v)
 	if err != nil {
 		return err
 	}
