@@ -34,46 +34,6 @@ func populateInventory(i *integration.Integration, client Client) {
 	populateNodeStatInventory(localNodeEntity, localNode)
 }
 
-func readConfigFile(filePath string) (map[string]interface{}, error) {
-	rawYaml, err := ioutil.ReadFile(filePath)
-	if err != nil {
-		log.Error("Could not open specified config file: %v", err)
-		return nil, err
-	}
-
-	parsedYaml := make(map[string]interface{})
-
-	err = yaml.Unmarshal(rawYaml, parsedYaml)
-	if err != nil {
-		log.Error("Could not parse configuration yaml: %v", err)
-		return nil, err
-	}
-
-	return parsedYaml, nil
-}
-
-func populateConfigInventory(entity *integration.Entity) error {
-	configYaml, err := readConfigFile(args.ConfigPath)
-	if err != nil {
-		return err
-	}
-
-	for key, value := range configYaml {
-		err = entity.SetInventoryItem("config/"+key, "value", value)
-		if err != nil {
-			log.Error("Could not set inventory item: %v", err)
-		}
-	}
-	return nil
-}
-
-func populateNodeStatInventory(entity *integration.Entity, localNode *LocalNode) {
-	parseProcessStats(entity, localNode)
-	parsePluginsAndModules(entity, localNode)
-	parseNodeIngests(entity, localNode)
-}
-
-//TODO hardcode a client pointing to `localhost` for inventory only
 func getLocalNode(client Client) (localNodeName string, localNodeStats *LocalNode, err error) {
 	nodeResponseObject := new(LocalNodeResponse)
 	err = client.Request(localNodeInventoryEndpoint, &nodeResponseObject)
@@ -98,21 +58,43 @@ func parseLocalNode(nodeStats *LocalNodeResponse) (string, *LocalNode, error) {
 	return "", nil, fmt.Errorf("could not identify local node")
 }
 
-func parseNodeIngests(entity *integration.Entity, stats *LocalNode) []string {
-	processorList := stats.Ingest.Processors
-	typeList := []string{}
-
-	for _, processor := range processorList {
-		ingestType := processor.Type
-		typeList = append(typeList, *ingestType)
-	}
-
-	err := entity.SetInventoryItem("config/ingest", "value", strings.Join(typeList, ","))
+func populateConfigInventory(entity *integration.Entity) error {
+	configYaml, err := readConfigFile(args.ConfigPath)
 	if err != nil {
-		log.Error("Error setting ingest types: %v", err)
+		return err
 	}
 
-	return typeList
+	for key, value := range configYaml {
+		err = entity.SetInventoryItem("config/"+key, "value", value)
+		if err != nil {
+			log.Error("Could not set inventory item: %v", err)
+		}
+	}
+	return nil
+}
+
+func readConfigFile(filePath string) (map[string]interface{}, error) {
+	rawYaml, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		log.Error("Could not open specified config file: %v", err)
+		return nil, err
+	}
+
+	parsedYaml := make(map[string]interface{})
+
+	err = yaml.Unmarshal(rawYaml, parsedYaml)
+	if err != nil {
+		log.Error("Could not parse configuration yaml: %v", err)
+		return nil, err
+	}
+
+	return parsedYaml, nil
+}
+
+func populateNodeStatInventory(entity *integration.Entity, localNode *LocalNode) {
+	parseProcessStats(entity, localNode)
+	parsePluginsAndModules(entity, localNode)
+	parseNodeIngests(entity, localNode)
 }
 
 func parseProcessStats(entity *integration.Entity, stats *LocalNode) {
@@ -172,4 +154,21 @@ func parsePluginsAndModules(entity *integration.Entity, stats *LocalNode) {
 			}
 		}
 	}
+}
+
+func parseNodeIngests(entity *integration.Entity, stats *LocalNode) []string {
+	processorList := stats.Ingest.Processors
+	typeList := []string{}
+
+	for _, processor := range processorList {
+		ingestType := processor.Type
+		typeList = append(typeList, *ingestType)
+	}
+
+	err := entity.SetInventoryItem("config/ingest", "value", strings.Join(typeList, ","))
+	if err != nil {
+		log.Error("Error setting ingest types: %v", err)
+	}
+
+	return typeList
 }
