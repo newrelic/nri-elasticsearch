@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/newrelic/infra-integrations-sdk/data/metric"
 	"github.com/newrelic/infra-integrations-sdk/integration"
@@ -93,7 +94,7 @@ func setIndicesStatsMetricsResponse(integration *integration.Integration, resp [
 			continue
 		}
 
-		if err := setMetricsResponse(integration, object, *object.UUID, "indicies"); err != nil {
+		if err := setMetricsResponse(integration, object, *object.UUID, "index"); err != nil {
 			log.Error("There was an error setting metrics for indices metrics: %v", err)
 		}
 	}
@@ -107,10 +108,14 @@ func setMetricsResponse(integration *integration.Integration, resp interface{}, 
 		return err
 	}
 
-	metricSet := entity.NewMetricSet(namespace+"MetricSet",
+	metricSet := entity.NewMetricSet(getSampleName(namespace),
 		metric.Attribute{Key: "displayName", Value: entity.Metadata.Name},
 		metric.Attribute{Key: "entityName", Value: entity.Metadata.Namespace + ":" + entity.Metadata.Name},
 	)
 
 	return metricSet.MarshalMetrics(resp)
+}
+
+func getSampleName(entityType string) string {
+	return fmt.Sprintf("Elasticsearch%sSample", strings.Title(entityType))
 }

@@ -35,15 +35,18 @@ func main() {
 	i, err := integration.New(integrationName, integrationVersion, integration.Args(&args))
 	logErrorAndExit(err)
 
-	client, err := NewClient(nil)
+	metricsClient, err := NewClient("")
 	logErrorAndExit(err)
 
 	if args.All() || args.Metrics {
-		populateMetrics(i, client)
+		populateMetrics(i, metricsClient)
 	}
 
+	inventoryClient, err := NewClient("localhost")
+	logErrorAndExit(err)
+
 	if args.All() || args.Inventory {
-		populateInventory(i, client)
+		populateInventory(i, inventoryClient)
 	}
 
 	logErrorAndExit(i.Publish())
