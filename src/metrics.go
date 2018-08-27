@@ -19,11 +19,12 @@ func populateMetrics(i *integration.Integration, client Client) {
 	if err != nil {
 		log.Error("There was an error populating metrics for clusters: %v", err)
 	}
-	err = populateCommonMetrics(i, client)
+	// we want to use the response from common to populate some index-specific stats.
+	commonResponse, err := populateCommonMetrics(i, client)
 	if err != nil {
 		log.Error("There was an error populating metrics for common metrics: %v", err)
 	}
-	err = populateIndicesMetrics(i, client)
+	err = populateIndicesMetrics(i, client, commonResponse)
 	if err != nil {
 		log.Error("There was an error populating metrics for indices: %v", err)
 	}
@@ -65,36 +66,52 @@ func populateClusterMetrics(i *integration.Integration, client Client) error {
 	return setMetricsResponse(i, clusterResponse, *clusterResponse.Name, "cluster")
 }
 
-func populateCommonMetrics(i *integration.Integration, client Client) error {
+func populateCommonMetrics(i *integration.Integration, client Client) (*CommonMetrics, error) {
 	log.Info("Collecting common metrics.")
 	commonResponse := new(CommonMetrics)
 	err := client.Request(commonStatsEndpoint, &commonResponse)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return setMetricsResponse(i, commonResponse.All, "commonMetrics", "common")
+	return commonResponse, setMetricsResponse(i, commonResponse.All, "commonMetrics", "common")
 }
 
-func populateIndicesMetrics(i *integration.Integration, client Client) error {
+func populateIndicesMetrics(i *integration.Integration, client Client, commonStats *CommonMetrics) error {
 	log.Info("Collecting indices metrics")
 	indicesStats := make([]*IndexStats, 0)
 	err := client.Request(indicesStatsEndpoint, &indicesStats)
 	if err != nil {
 		return err
 	}
-	setIndicesStatsMetricsResponse(i, indicesStats)
+	setIndicesStatsMetricsResponse(i, indicesStats, commonStats)
 	return nil
 }
 
-func setIndicesStatsMetricsResponse(integration *integration.Integration, resp []*IndexStats) {
-	for _, object := range resp {
-		if object.UUID == nil {
-			log.Error("cannot set metric response, missing UUID")
+func setIndicesStatsMetricsResponse(integration *integration.Integration, indexResponse []*IndexStats, commonResponse *CommonMetrics) {
+	for _, object := range indexResponse {
+		if object.Name == nil {
+			log.Error("Can't set metric response, missing index name")
 			continue
 		}
 
-		if err := setMetricsResponse(integration, object, *object.UUID, "index"); err != nil {
+		// cross reference with common stats
+		var index *Index
+		for indexName, indexStats := range commonResponse.Indices {
+			if indexName == *object.Name {
+				index = indexStats
+			}
+		}
+		if index == nil {
+			log.Error("Couldn't match index name in common index stats response")
+			return
+		}
+
+		// populate fields from stats
+		object.PrimaryStoreSize = index.Primaries.Store.Size
+		object.StoreSize = index.Totals.Store.Size
+
+		if err := setMetricsResponse(integration, object, *object.Name, "index"); err != nil {
 			log.Error("There was an error setting metrics for indices metrics: %v", err)
 		}
 	}
