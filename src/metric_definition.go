@@ -2,7 +2,8 @@ package main
 
 // CommonMetrics struct
 type CommonMetrics struct {
-	All *All `json:"_all"`
+	All     *All `json:"_all"`
+	Indices map[string]*Index
 }
 
 // All struct
@@ -87,6 +88,32 @@ type PrimariesStore struct {
 	SizeInBytes *int `json:"size_in_bytes" metric_name:"primaries.sizeInBytes" source_type:"gauge"`
 }
 
+// Index struct
+type Index struct {
+	Primaries *IndexPrimaryStats `json:"primaries"`
+	Totals    *IndexTotalStats   `json:"total"`
+}
+
+// IndexPrimaryStats struct
+type IndexPrimaryStats struct {
+	Store *IndexPrimaryStore `json:"store"`
+}
+
+// IndexPrimaryStore struct
+type IndexPrimaryStore struct {
+	Size *int `json:"size_in_bytes" metric_name:"index.primaryStoreSizeInBytes" source_type:"gauge"`
+}
+
+// IndexTotalStats struct
+type IndexTotalStats struct {
+	Store *IndexTotalStore `json:"store"`
+}
+
+// IndexTotalStore struct
+type IndexTotalStore struct {
+	Size *int `json:"size_in_bytes" metric_name:"index.storeSizeInBytes" source_type:"gauge"`
+}
+
 // ClusterResponse struct
 type ClusterResponse struct {
 	Name                *string `json:"cluster_name"`
@@ -103,13 +130,13 @@ type ClusterResponse struct {
 // IndexStats struct
 type IndexStats struct {
 	Health           *string `json:"health" metric_name:"index.health" source_type:"attribute"`
-	DocsCount        *string `json:"docs.count" metric_name:"index.docs" source_type:"attribute"`
-	DocsDeleted      *string `json:"docs.deleted" metric_name:"index.docsDeleted" source_type:"attribute"`
-	PrimaryShards    *string `json:"pri" metric_name:"index.primaryShareds" source_type:"attribute"`
-	ReplicaShards    *string `json:"rep" metric_name:"index.replicaShards" source_type:"attribute"`
-	PrimaryStoreSize *string `json:"pri.store.size" metric_name:"index.primaryStoreSizeInBytes" source_type:"attribute"`
-	StoreSize        *string `json:"store.size" metric_name:"index.storeSizeInBytes" source_type:"attribute"`
-	UUID             *string `json:"uuid"`
+	DocsCount        *string `json:"docs.count" metric_name:"index.docs" source_type:"gauge"`
+	DocsDeleted      *string `json:"docs.deleted" metric_name:"index.docsDeleted" source_type:"gauge"`
+	PrimaryShards    *string `json:"pri" metric_name:"index.primaryShareds" source_type:"gauge"`
+	ReplicaShards    *string `json:"rep" metric_name:"index.replicaShards" source_type:"gauge"`
+	PrimaryStoreSize *int    `metric_name:"index.primaryStoreSizeInBytes" source_type:"gauge"`
+	StoreSize        *int    `metric_name:"index.storeSizeInBytes" source_type:"gauge"`
+	Name             *string `json:"index"`
 }
 
 // NodeResponse struct
@@ -138,6 +165,7 @@ type Node struct {
 	Jvm        *NodeJvm        `json:"jvm"`
 	Fs         *NodeFs         `json:"fs"`
 	ThreadPool *NodeThreadPool `json:"thread_pool"`
+	HTTP       *NodeHTTP       `json:"http"`
 }
 
 // NodeIndices struct
@@ -165,7 +193,7 @@ type IndicesDocs struct {
 
 // IndicesStore struct
 type IndicesStore struct {
-	SizeInBytes *int `json:"size_in_bytes" metric_name:"primaries.sizeInBytes" source_type:"gauge"`
+	SizeInBytes *int `json:"size_in_bytes" metric_name:"sizeStoreInBytes" source_type:"gauge"`
 }
 
 // IndicesIndexing struct
@@ -193,13 +221,10 @@ type IndicesGet struct {
 
 // IndicesSearch struct
 type IndicesSearch struct {
-	FetchCurrent      *int `json:"fetch_current" metric_name:"primaries.queryFetches" source_type:"gauge"`
-	OpenContexts      *int `json:"open_contexts" metric_name:"activeSearches" source_type:"gauge"`
-	FetchTimeInMillis *int `json:"fetch_time_in_millis" metric_name:"primaries.queryFetchesInMiliseconds" source_type:"gauge"`
-	FetchTotal        *int `json:"fetch_total" metric_name:"primaries.queryFetchesTotal" source_type:"gauge"`
-	QueryCurrent      *int `json:"query_current" metric_name:"primaries.queryActive" source_type:"gauge"`
-	QueryTimeInMillis *int `json:"query_time_in_millis" metric_name:"primaries.queriesInMiliseconds" source_type:"gauge"`
-	QueryTotal        *int `json:"query_total" metric_name:"primaries.queriesTotal" source_type:"gauge"`
+	FetchCurrent *int `json:"fetch_current" metric_name:"searchFetchCurrentlyRunning" source_type:"gauge"`
+	OpenContexts *int `json:"open_contexts" metric_name:"activeSearches" source_type:"gauge"`
+	FetchTotal   *int `json:"fetch_total" metric_name:"searchFetches" source_type:"gauge"`
+	QueryTotal   *int `json:"query_total" metric_name:"queriesTotal" source_type:"gauge"`
 }
 
 // IndicesMerges struct
@@ -215,8 +240,8 @@ type IndicesMerges struct {
 
 // IndicesRefresh struct
 type IndicesRefresh struct {
-	Total             *int `json:"total" metric_name:"primaries.indexRefreshesTotal" source_type:"gauge"`
-	TotalTimeInMillis *int `json:"total_time_in_millis" metric_name:"primaries.indexRefreshesTotalInMiliseconds" source_type:"gauge"`
+	Total             *int `json:"total" metric_name:"refresh.total" source_type:"gauge"`
+	TotalTimeInMillis *int `json:"total_time_in_millis" metric_name:"refresh.totalInMilliseconds" source_type:"gauge"`
 }
 
 // IndicesFlush struct
@@ -428,7 +453,6 @@ type NodeThreadPool struct {
 	ForceMerge        *ThreadPoolForceMerge        `json:"force_merge"`
 	Generic           *ThreadPoolGeneric           `json:"generic"`
 	Get               *ThreadPoolGet               `json:"get"`
-	HTTP              *ThreadPoolHTTP              `json:"http"`
 	Index             *ThreadPoolIndex             `json:"index"`
 	Listener          *ThreadPoolListener          `json:"listener"`
 	Management        *ThreadPoolManagement        `json:"management"`
@@ -559,8 +583,8 @@ type ThreadPoolSnapshot struct {
 	Rejected *int `json:"rejected" metric_name:"threadpool.snapshotRejected" source_type:"gauge"`
 }
 
-// ThreadPoolHTTP struct
-type ThreadPoolHTTP struct {
+// NodeHTTP struct
+type NodeHTTP struct {
 	CurrentOpen *int `json:"current_open" metric_name:"http.currentOpenConnections" source_type:"gauge"`
 	TotalOpened *int `json:"total_opened" metric_name:"http.openedConnections" source_type:"gauge"`
 }
