@@ -2,7 +2,7 @@ package main
 
 // CommonMetrics struct
 type CommonMetrics struct {
-	All *All `json:"_all"`
+	All     *All `json:"_all"`
 	Indices map[string]*Index
 }
 
@@ -221,10 +221,10 @@ type IndicesGet struct {
 
 // IndicesSearch struct
 type IndicesSearch struct {
-	FetchCurrent      *int `json:"fetch_current" metric_name:"searchFetchCurrentlyRunning" source_type:"gauge"`
-	OpenContexts      *int `json:"open_contexts" metric_name:"activeSearches" source_type:"gauge"`
-	FetchTotal        *int `json:"fetch_total" metric_name:"searchFetches" source_type:"gauge"`
-	QueryTotal        *int `json:"query_total" metric_name:"queriesTotal" source_type:"gauge"`
+	FetchCurrent *int `json:"fetch_current" metric_name:"searchFetchCurrentlyRunning" source_type:"gauge"`
+	OpenContexts *int `json:"open_contexts" metric_name:"activeSearches" source_type:"gauge"`
+	FetchTotal   *int `json:"fetch_total" metric_name:"searchFetches" source_type:"gauge"`
+	QueryTotal   *int `json:"query_total" metric_name:"queriesTotal" source_type:"gauge"`
 }
 
 // IndicesMerges struct

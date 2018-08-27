@@ -134,7 +134,7 @@ func TestPopulateIndicesMetrics(t *testing.T) {
 	i := getTestingIntegration(t)
 	client := createNewTestClient()
 	client.init("indicesMetricsResult.json", indicesStatsEndpoint)
-	
+
 	commonStruct := new(CommonMetrics)
 	commonData, _ := ioutil.ReadFile(filepath.Join("testdata", "indicesMetricsResult_Common.json"))
 	json.Unmarshal(commonData, commonStruct)
