@@ -35,6 +35,7 @@ func main() {
 	i, err := integration.New(integrationName, integrationVersion, integration.Args(&args))
 	logErrorAndExit(err)
 
+	// Create a client for metrics
 	metricsClient, err := NewClient("")
 	logErrorAndExit(err)
 
@@ -42,6 +43,8 @@ func main() {
 		populateMetrics(i, metricsClient)
 	}
 
+	// Create a client for inventory. Inventory needs to make REST calls against
+	// localhost to get information relative to this node only.
 	inventoryClient, err := NewClient("localhost")
 	logErrorAndExit(err)
 
@@ -52,12 +55,15 @@ func main() {
 	logErrorAndExit(i.Publish())
 }
 
+// checkErr logs an error if it exists
 func checkErr(f func() error) {
 	if err := f(); err != nil {
 		log.Error("%v", err)
 	}
 }
 
+// logErrorAndExit logs an error if it exits and
+// exits with a status code of 1
 func logErrorAndExit(err error) {
 	if err != nil {
 		log.Error("Encountered fatal error: %v", err)

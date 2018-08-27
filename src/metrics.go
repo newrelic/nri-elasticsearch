@@ -15,15 +15,18 @@ func populateMetrics(i *integration.Integration, client Client) {
 	if err != nil {
 		log.Error("There was an error populating metrics for nodes: %v", err)
 	}
+
 	err = populateClusterMetrics(i, client)
 	if err != nil {
 		log.Error("There was an error populating metrics for clusters: %v", err)
 	}
+
 	// we want to use the response from common to populate some index-specific stats.
 	commonResponse, err := populateCommonMetrics(i, client)
 	if err != nil {
 		log.Error("There was an error populating metrics for common metrics: %v", err)
 	}
+
 	err = populateIndicesMetrics(i, client, commonResponse)
 	if err != nil {
 		log.Error("There was an error populating metrics for indices: %v", err)
@@ -84,6 +87,7 @@ func populateIndicesMetrics(i *integration.Integration, client Client, commonSta
 	if err != nil {
 		return err
 	}
+
 	setIndicesStatsMetricsResponse(i, indicesStats, commonStats)
 	return nil
 }
@@ -103,6 +107,7 @@ func setIndicesStatsMetricsResponse(integration *integration.Integration, indexR
 				break
 			}
 		}
+
 		if index == nil {
 			log.Error("Couldn't match index name in common index stats response")
 			return
