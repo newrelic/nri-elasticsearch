@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"reflect"
@@ -55,7 +56,7 @@ func parseLocalNode(nodeStats *LocalNodeResponse) (string, *LocalNode, error) {
 			return k, nodes[k], nil
 		}
 	}
-	return "", nil, fmt.Errorf("could not identify local node")
+	return "", nil, errors.New("could not identify local node")
 }
 
 func populateConfigInventory(entity *integration.Entity) error {
