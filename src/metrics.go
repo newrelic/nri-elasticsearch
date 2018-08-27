@@ -100,6 +100,7 @@ func setIndicesStatsMetricsResponse(integration *integration.Integration, indexR
 		for indexName, indexStats := range commonResponse.Indices {
 			if indexName == *object.Name {
 				index = indexStats
+				break
 			}
 		}
 		if index == nil {
