@@ -62,13 +62,9 @@ func TestPopulateNodesMetrics(t *testing.T) {
 	goldenFile, actualContents := createGoldenFile(i, sourceFile)
 	expectedContents, _ := ioutil.ReadFile(goldenFile)
 
-	actualLength := len(i.Entities[0].Metrics[0].Metrics)
-	expectedLength := 166
-
 	assert.Equal(t, 1, len(i.Entities))
 	assert.Equal(t, 1, len(i.Entities[0].Metrics))
 	assert.Equal(t, expectedContents, actualContents)
-	assert.Equal(t, expectedLength, actualLength)
 }
 
 func TestPopulateNodesMetrics_Error(t *testing.T) {
@@ -130,7 +126,7 @@ func TestPopulateCommonMetrics_Error(t *testing.T) {
 	mockClient.ReturnRequestError = true
 
 	i := getTestingIntegration(t)
-	err := populateCommonMetrics(i, mockClient)
+	_, err := populateCommonMetrics(i, mockClient)
 	assert.Error(t, err, "should be an error")
 }
 
@@ -138,8 +134,12 @@ func TestPopulateIndicesMetrics(t *testing.T) {
 	i := getTestingIntegration(t)
 	client := createNewTestClient()
 	client.init("indicesMetricsResult.json", indicesStatsEndpoint)
+	
+	commonStruct := new(CommonMetrics)
+	commonData, _ := ioutil.ReadFile(filepath.Join("testdata", "indicesMetricsResult_Common.json"))
+	json.Unmarshal(commonData, commonStruct)
 
-	populateIndicesMetrics(i, client)
+	populateIndicesMetrics(i, client, commonStruct)
 
 	sourceFile := "testData/indicesMetricsResult.json"
 	goldenFile, actualContents := createGoldenFile(i, sourceFile)
@@ -160,6 +160,6 @@ func TestPopulateIndicesMetrics_Error(t *testing.T) {
 	mockClient.ReturnRequestError = true
 
 	i := getTestingIntegration(t)
-	err := populateIndicesMetrics(i, mockClient)
+	err := populateIndicesMetrics(i, mockClient, new(CommonMetrics))
 	assert.Error(t, err, "should be an error")
 }

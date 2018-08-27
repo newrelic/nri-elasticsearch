@@ -1,0 +1,28 @@
+{
+    "indices": {
+        "twitter": {
+            "primaries": {
+                "store": {
+                    "size_in_bytes": 4126 
+                }
+            },
+            "total": {
+                "store": {
+                    "size_in_bytes": 12378
+                }
+            }
+        },
+        "reddit": {
+            "primaries": {
+                "store": {
+                    "size_in_bytes": 5238
+                }
+            },
+            "total": {
+                "store": {
+                    "size_in_bytes": 15714
+                }
+            }
+        }
+    }
+}
