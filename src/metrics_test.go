@@ -3,8 +3,8 @@ package main
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 	"testing"
 
@@ -13,14 +13,30 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+var testWorkDir string
+
+func getWorkDir(t *testing.T) string {
+	var err error
+	if testWorkDir == "" {
+		testWorkDir, err = os.Getwd()
+
+	}
+
+	if err != nil {
+		t.Errorf("Unable to get working directory: %s", err.Error())
+	}
+
+	return testWorkDir
+}
+
 type testClient struct {
 	endpointMapping    map[string]string
 	ReturnRequestError bool
 }
 
-func (c *testClient) init(filename string, endpoint string) {
+func (c *testClient) init(filename string, endpoint string, t *testing.T) {
 	c.endpointMapping = map[string]string{
-		endpoint: filepath.Join("testdata", filename),
+		endpoint: filepath.Join(getWorkDir(t), "testdata", filename),
 	}
 }
 
@@ -55,11 +71,11 @@ func createGoldenFile(i *integration.Integration, sourceFile string) (string, []
 func TestPopulateNodesMetrics(t *testing.T) {
 	i := getTestingIntegration(t)
 	client := createNewTestClient()
-	client.init("nodeStatsMetricsResult.json", nodeStatsEndpoint)
+	client.init("nodeStatsMetricsResult.json", nodeStatsEndpoint, t)
 
 	populateNodesMetrics(i, client)
 
-	sourceFile := filepath.Join("testdata", "nodeStatsMetricsResult.json")
+	sourceFile := filepath.Join(getWorkDir(t), "testdata", "nodeStatsMetricsResult.json")
 	goldenFile, actualContents := createGoldenFile(i, sourceFile)
 	expectedContents, err := ioutil.ReadFile(goldenFile)
 	if err != nil {
@@ -84,13 +100,11 @@ func TestPopulateNodesMetrics_Error(t *testing.T) {
 func TestPopulateClusterMetrics(t *testing.T) {
 	i := getTestingIntegration(t)
 	client := createNewTestClient()
-	client.init("clusterStatsMetricsResult.json", clusterEndpoint)
+	client.init("clusterStatsMetricsResult.json", clusterEndpoint, t)
 
 	populateClusterMetrics(i, client)
 
 	sourceFile := filepath.Join("testData", "clusterStatsMetricsResult.json")
-	// TODO remove, for testing purposes only
-	fmt.Println(filepath.Abs(sourceFile))
 
 	goldenFile, actualContents := createGoldenFile(i, sourceFile)
 	expectedContents, err := ioutil.ReadFile(goldenFile)
@@ -118,7 +132,7 @@ func TestPopulateClusterMetrics_Error(t *testing.T) {
 func TestPopulateCommonMetrics(t *testing.T) {
 	i := getTestingIntegration(t)
 	client := createNewTestClient()
-	client.init("commonMetricsResult.json", commonStatsEndpoint)
+	client.init("commonMetricsResult.json", commonStatsEndpoint, t)
 
 	populateCommonMetrics(i, client)
 
@@ -149,10 +163,10 @@ func TestPopulateCommonMetrics_Error(t *testing.T) {
 func TestPopulateIndicesMetrics(t *testing.T) {
 	i := getTestingIntegration(t)
 	client := createNewTestClient()
-	client.init("indicesMetricsResult.json", indicesStatsEndpoint)
+	client.init("indicesMetricsResult.json", indicesStatsEndpoint, t)
 
 	commonStruct := new(CommonMetrics)
-	commonData, _ := ioutil.ReadFile(filepath.Join("testdata", "indicesMetricsResult_Common.json"))
+	commonData, _ := ioutil.ReadFile(filepath.Join(getWorkDir(t), "testdata", "indicesMetricsResult_Common.json"))
 	json.Unmarshal(commonData, commonStruct)
 
 	populateIndicesMetrics(i, client, commonStruct)
