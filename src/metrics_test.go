@@ -19,7 +19,6 @@ func getWorkDir(t *testing.T) string {
 	var err error
 	if testWorkDir == "" {
 		testWorkDir, err = os.Getwd()
-
 	}
 
 	if err != nil {
@@ -104,7 +103,7 @@ func TestPopulateClusterMetrics(t *testing.T) {
 
 	populateClusterMetrics(i, client)
 
-	sourceFile := filepath.Join("testData", "clusterStatsMetricsResult.json")
+	sourceFile := filepath.Join(getWorkDir(t), "testData", "clusterStatsMetricsResult.json")
 
 	goldenFile, actualContents := createGoldenFile(i, sourceFile)
 	expectedContents, err := ioutil.ReadFile(goldenFile)
@@ -136,7 +135,7 @@ func TestPopulateCommonMetrics(t *testing.T) {
 
 	populateCommonMetrics(i, client)
 
-	sourceFile := filepath.Join("testData", "commonMetricsResult.json")
+	sourceFile := filepath.Join(getWorkDir(t), "testData", "commonMetricsResult.json")
 	goldenFile, actualContents := createGoldenFile(i, sourceFile)
 	expectedContents, err := ioutil.ReadFile(goldenFile)
 	if err != nil {
@@ -171,7 +170,7 @@ func TestPopulateIndicesMetrics(t *testing.T) {
 
 	populateIndicesMetrics(i, client, commonStruct)
 
-	sourceFile := filepath.Join("testData", "indicesMetricsResult.json")
+	sourceFile := filepath.Join(getWorkDir(t), "testData", "indicesMetricsResult.json")
 	goldenFile, actualContents := createGoldenFile(i, sourceFile)
 
 	for j := range i.Entities {
