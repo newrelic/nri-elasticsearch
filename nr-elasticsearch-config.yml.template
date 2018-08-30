@@ -1,0 +1,17 @@
+integration_name: com.newrelic.elasticsearch
+
+instances:
+  - name: elasticsearch
+    command: <"all" or "inventory">
+    arguments:
+      config_path: <absolute path to the ElasticSearch configuration .yml file. (default "/etc/elasticsearch/elasticsearch.yml")>
+      hostname: <hostname or IP where Elasticsearch Node is running. (default "localhost")>
+      username: <username for accessing Elasticsearch Node>
+      password: <password for the given user.>
+      port: <port on which Elasticsearch Node is listening. (default 9200)>
+      timeout: <timeout in seconds for an API call (default 30)>
+      use_ssl <true or false to use SSL. If true Certificate bundle must be supplied>
+      ca_bundle_dir: <directory for certificate authority bundle, must be included if use_ssl is true>
+      ca_bundle_file: <file for certificate authority bundle, must be included if use_ssl is true>
+    labels:
+      role: elasticsearch
