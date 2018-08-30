@@ -58,7 +58,7 @@ func TestPopulateNodesMetrics(t *testing.T) {
 
 	populateNodesMetrics(i, client)
 
-	sourceFile := "testdata/nodeStatsMetricsResult.json"
+	sourceFile := filepath.Join("testdata", "nodeStatsMetricsResult.json")
 	goldenFile, actualContents := createGoldenFile(i, sourceFile)
 	expectedContents, _ := ioutil.ReadFile(goldenFile)
 
@@ -83,7 +83,7 @@ func TestPopulateClusterMetrics(t *testing.T) {
 
 	populateClusterMetrics(i, client)
 
-	sourceFile := "testData/clusterStatsMetricsResult.json"
+	sourceFile := filepath.Join("testData", "clusterStatsMetricsResult.json")
 	goldenFile, actualContents := createGoldenFile(i, sourceFile)
 	expectedContents, _ := ioutil.ReadFile(goldenFile)
 
@@ -110,7 +110,7 @@ func TestPopulateCommonMetrics(t *testing.T) {
 
 	populateCommonMetrics(i, client)
 
-	sourceFile := "testData/commonMetricsResult.json"
+	sourceFile := filepath.Join("testData", "commonMetricsResult.json")
 	goldenFile, actualContents := createGoldenFile(i, sourceFile)
 	expectedContents, _ := ioutil.ReadFile(goldenFile)
 
@@ -141,7 +141,7 @@ func TestPopulateIndicesMetrics(t *testing.T) {
 
 	populateIndicesMetrics(i, client, commonStruct)
 
-	sourceFile := "testData/indicesMetricsResult.json"
+	sourceFile := filepath.Join("testData", "indicesMetricsResult.json")
 	goldenFile, actualContents := createGoldenFile(i, sourceFile)
 
 	for j := range i.Entities {
