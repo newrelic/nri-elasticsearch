@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"path/filepath"
 	"testing"
@@ -61,7 +61,11 @@ func TestPopulateNodesMetrics(t *testing.T) {
 
 	sourceFile := filepath.Join("testdata", "nodeStatsMetricsResult.json")
 	goldenFile, actualContents := createGoldenFile(i, sourceFile)
-	expectedContents, _ := ioutil.ReadFile(goldenFile)
+	expectedContents, err := ioutil.ReadFile(goldenFile)
+	if err != nil {
+		t.Errorf("Failed to load golden file '%s': %s", goldenFile, err.Error())
+		t.FailNow()
+	}
 
 	assert.Equal(t, 1, len(i.Entities))
 	assert.Equal(t, 1, len(i.Entities[0].Metrics))
@@ -87,9 +91,13 @@ func TestPopulateClusterMetrics(t *testing.T) {
 	sourceFile := filepath.Join("testData", "clusterStatsMetricsResult.json")
 	// TODO remove, for testing purposes only
 	fmt.Println(filepath.Abs(sourceFile))
-	
+
 	goldenFile, actualContents := createGoldenFile(i, sourceFile)
-	expectedContents, _ := ioutil.ReadFile(goldenFile)
+	expectedContents, err := ioutil.ReadFile(goldenFile)
+	if err != nil {
+		t.Errorf("Failed to load golden file '%s': %s", goldenFile, err.Error())
+		t.FailNow()
+	}
 
 	actualLength := len(i.Entities[0].Metrics[0].Metrics)
 	expectedLength := 11
@@ -116,7 +124,11 @@ func TestPopulateCommonMetrics(t *testing.T) {
 
 	sourceFile := filepath.Join("testData", "commonMetricsResult.json")
 	goldenFile, actualContents := createGoldenFile(i, sourceFile)
-	expectedContents, _ := ioutil.ReadFile(goldenFile)
+	expectedContents, err := ioutil.ReadFile(goldenFile)
+	if err != nil {
+		t.Errorf("Failed to load golden file '%s': %s", goldenFile, err.Error())
+		t.FailNow()
+	}
 
 	actualLength := len(i.Entities[0].Metrics[0].Metrics)
 	expectedLength := 36
@@ -155,7 +167,11 @@ func TestPopulateIndicesMetrics(t *testing.T) {
 		assert.Equal(t, expectedLength, actualLength)
 	}
 
-	expectedContents, _ := ioutil.ReadFile(goldenFile)
+	expectedContents, err := ioutil.ReadFile(goldenFile)
+	if err != nil {
+		t.Errorf("Failed to load golden file '%s': %s", goldenFile, err.Error())
+		t.FailNow()
+	}
 	assert.Equal(t, expectedContents, actualContents)
 }
 
