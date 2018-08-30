@@ -33,7 +33,7 @@ func TestReadConfigFile(t *testing.T) {
 		expectedMap map[string]interface{}
 	}{
 		{
-			filepath.Join(getWorkDir(t), "testdata", "elasticsearch_sample.yml"),
+			filepath.Join("testdata", "elasticsearch_sample.yml"),
 			map[string]interface{}{
 				"path.data":    "/var/lib/elasticsearch",
 				"path.logs":    "/var/log/elasticsearch",
@@ -60,10 +60,10 @@ func TestConfigErrors(t *testing.T) {
 		filePath string
 	}{
 		{
-			filepath.Join(getWorkDir(t), "testdata", "elasticsearch_doesntexist.yml"),
+			filepath.Join("testdata", "elasticsearch_doesntexist.yml"),
 		},
 		{
-			filepath.Join(getWorkDir(t), "testdata", "elasticsearch_bad.yml"),
+			filepath.Join("testdata", "elasticsearch_bad.yml"),
 		},
 	}
 
@@ -79,7 +79,7 @@ func TestConfigErrors(t *testing.T) {
 func TestPopulateConfigInventory(t *testing.T) {
 	i, e := getTestingEntity(t)
 
-	dataPath := filepath.Join(getWorkDir(t), "testdata", "elasticsearch_sample.yml")
+	dataPath := filepath.Join("testdata", "elasticsearch_sample.yml")
 	goldenPath := dataPath + ".golden"
 
 	args.ConfigPath = dataPath
@@ -102,7 +102,7 @@ func TestPopulateConfigInventory(t *testing.T) {
 func TestPopulateConfigInventoryWithBadFilename(t *testing.T) {
 	_, e := getTestingEntity(t)
 
-	dataPath := filepath.Join(getWorkDir(t), "testdata", "elasticsearch_doesntexist.yml")
+	dataPath := filepath.Join("testdata", "elasticsearch_doesntexist.yml")
 	args.ConfigPath = dataPath
 
 	err := populateConfigInventory(e)
@@ -112,7 +112,7 @@ func TestPopulateConfigInventoryWithBadFilename(t *testing.T) {
 func TestParsePluginsAndModules(t *testing.T) {
 	i, e := getTestingEntity(t)
 
-	dataPath := filepath.Join(getWorkDir(t), "testdata", "good-node.json")
+	dataPath := filepath.Join("testdata", "good-node.json")
 	goldenPath := dataPath + ".golden"
 
 	statsFromFile, _ := ioutil.ReadFile(dataPath)
@@ -136,10 +136,10 @@ func TestParsePluginsAndModules(t *testing.T) {
 }
 
 func TestGetLocalNode(t *testing.T) {
-	goldenPath := filepath.Join(getWorkDir(t), "testdata", "good-nodes-local.json.golden")
+	goldenPath := filepath.Join("testdata", "good-nodes-local.json.golden")
 
 	fakeClient := mockClient{}
-	mockedReturnVal := filepath.Join(getWorkDir(t), "testdata", "good-nodes-local.json")
+	mockedReturnVal := filepath.Join("testdata", "good-nodes-local.json")
 	fakeClient.On("Request", "/_nodes/_local").Return(mockedReturnVal, nil).Once()
 
 	resultName, resultStats, _ := getLocalNode(&fakeClient)
@@ -171,7 +171,7 @@ func TestGetLocalNodeWithBadNodeResponse(t *testing.T) {
 
 func TestGetLocalNodeWithMultipleNodes(t *testing.T) {
 	fakeClient := mockClient{}
-	mockedReturnVal := filepath.Join(getWorkDir(t), "testdata", "bad-nodes-local.json")
+	mockedReturnVal := filepath.Join("testdata", "bad-nodes-local.json")
 	fakeClient.On("Request", "/_nodes/_local").Return(mockedReturnVal, nil).Once()
 
 	resultName, resultStats, err := getLocalNode(&fakeClient)
@@ -182,12 +182,12 @@ func TestGetLocalNodeWithMultipleNodes(t *testing.T) {
 
 func TestPopulateInventory(t *testing.T) {
 	setupTestArgs()
-	args.ConfigPath = filepath.Join(getWorkDir(t), "testdata", "elasticsearch_sample.yml")
+	args.ConfigPath = filepath.Join("testdata", "elasticsearch_sample.yml")
 
-	goldenPath := filepath.Join(getWorkDir(t), "testdata", "good-inventory.json.golden")
+	goldenPath := filepath.Join("testdata", "good-inventory.json.golden")
 
 	fakeClient := mockClient{}
-	mockedReturnVal := filepath.Join(getWorkDir(t), "testdata", "good-nodes-local.json")
+	mockedReturnVal := filepath.Join("testdata", "good-nodes-local.json")
 	fakeClient.On("Request", "/_nodes/_local").Return(mockedReturnVal, nil).Once()
 
 	i := getTestingIntegration(t)
@@ -207,15 +207,15 @@ func TestPopulateInventory(t *testing.T) {
 }
 
 func TestParseProcessStatsWithIncorrectTypes(t *testing.T) {
-	testProcessStats(t, filepath.Join(getWorkDir(t), "testdata", "bad-process-stats.json"))
+	testProcessStats(t, filepath.Join("testdata", "bad-process-stats.json"))
 }
 
 func TestParseProcessStatsWithEmptyStats(t *testing.T) {
-	testProcessStats(t, filepath.Join(getWorkDir(t), "testdata", "empty-process-stats.json"))
+	testProcessStats(t, filepath.Join("testdata", "empty-process-stats.json"))
 }
 
 func TestParseProcessStatsWithMissingProcessStats(t *testing.T) {
-	testProcessStats(t, filepath.Join(getWorkDir(t), "testdata", "missing-process-stats.json"))
+	testProcessStats(t, filepath.Join("testdata", "missing-process-stats.json"))
 }
 
 func testProcessStats(t *testing.T, filePath string) {

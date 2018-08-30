@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"io/ioutil"
-	"os"
 	"path/filepath"
 	"testing"
 
@@ -13,21 +12,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var testWorkDir string
-
-func getWorkDir(t *testing.T) string {
-	var err error
-	if testWorkDir == "" {
-		testWorkDir, err = os.Getwd()
-	}
-
-	if err != nil {
-		t.Errorf("Unable to get working directory: %s", err.Error())
-	}
-
-	return testWorkDir
-}
-
 type testClient struct {
 	endpointMapping    map[string]string
 	ReturnRequestError bool
@@ -35,7 +19,7 @@ type testClient struct {
 
 func (c *testClient) init(filename string, endpoint string, t *testing.T) {
 	c.endpointMapping = map[string]string{
-		endpoint: filepath.Join(getWorkDir(t), "testdata", filename),
+		endpoint: filepath.Join("testdata", filename),
 	}
 }
 
@@ -74,7 +58,7 @@ func TestPopulateNodesMetrics(t *testing.T) {
 
 	populateNodesMetrics(i, client)
 
-	sourceFile := filepath.Join(getWorkDir(t), "testdata", "nodeStatsMetricsResult.json")
+	sourceFile := filepath.Join("testdata", "nodeStatsMetricsResult.json")
 	goldenFile, actualContents := createGoldenFile(i, sourceFile)
 	expectedContents, err := ioutil.ReadFile(goldenFile)
 	if err != nil {
@@ -103,7 +87,7 @@ func TestPopulateClusterMetrics(t *testing.T) {
 
 	populateClusterMetrics(i, client)
 
-	sourceFile := filepath.Join(getWorkDir(t), "testData", "clusterStatsMetricsResult.json")
+	sourceFile := filepath.Join("testdata", "clusterStatsMetricsResult.json")
 
 	goldenFile, actualContents := createGoldenFile(i, sourceFile)
 	expectedContents, err := ioutil.ReadFile(goldenFile)
@@ -135,7 +119,7 @@ func TestPopulateCommonMetrics(t *testing.T) {
 
 	populateCommonMetrics(i, client)
 
-	sourceFile := filepath.Join(getWorkDir(t), "testData", "commonMetricsResult.json")
+	sourceFile := filepath.Join("testdata", "commonMetricsResult.json")
 	goldenFile, actualContents := createGoldenFile(i, sourceFile)
 	expectedContents, err := ioutil.ReadFile(goldenFile)
 	if err != nil {
@@ -165,12 +149,12 @@ func TestPopulateIndicesMetrics(t *testing.T) {
 	client.init("indicesMetricsResult.json", indicesStatsEndpoint, t)
 
 	commonStruct := new(CommonMetrics)
-	commonData, _ := ioutil.ReadFile(filepath.Join(getWorkDir(t), "testdata", "indicesMetricsResult_Common.json"))
+	commonData, _ := ioutil.ReadFile(filepath.Join("testdata", "indicesMetricsResult_Common.json"))
 	json.Unmarshal(commonData, commonStruct)
 
 	populateIndicesMetrics(i, client, commonStruct)
 
-	sourceFile := filepath.Join(getWorkDir(t), "testData", "indicesMetricsResult.json")
+	sourceFile := filepath.Join("testdata", "indicesMetricsResult.json")
 	goldenFile, actualContents := createGoldenFile(i, sourceFile)
 
 	for j := range i.Entities {
