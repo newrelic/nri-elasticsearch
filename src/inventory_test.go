@@ -12,8 +12,6 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-var NodeTestFile = filepath.Join("testdata", "good-nodes-local.json")
-
 type mockClient struct {
 	mock.Mock
 }
@@ -92,7 +90,11 @@ func TestPopulateConfigInventory(t *testing.T) {
 
 	writeGoldenFile(t, goldenPath, actual)
 
-	expected, _ := ioutil.ReadFile(goldenPath)
+	expected, err := ioutil.ReadFile(goldenPath)
+	if err != nil {
+		t.Errorf("Failed to read golden file '%s': %s", goldenPath, err.Error())
+		t.FailNow()
+	}
 
 	assert.Equal(t, expected, actual)
 }
@@ -124,7 +126,11 @@ func TestParsePluginsAndModules(t *testing.T) {
 
 	writeGoldenFile(t, goldenPath, actualJSON)
 
-	expectedJSON, _ := ioutil.ReadFile(goldenPath)
+	expectedJSON, err := ioutil.ReadFile(goldenPath)
+	if err != nil {
+		t.Errorf("Failed to read golden file '%s': %s", goldenPath, err.Error())
+		t.FailNow()
+	}
 
 	assert.Equal(t, expectedJSON, actualJSON)
 }
@@ -142,7 +148,11 @@ func TestGetLocalNode(t *testing.T) {
 	actualString, _ := json.Marshal(resultStats)
 	writeGoldenFile(t, goldenPath, actualString)
 
-	expectedJSON, _ := ioutil.ReadFile(goldenPath)
+	expectedJSON, err := ioutil.ReadFile(goldenPath)
+	if err != nil {
+		t.Errorf("Failed to read golden file '%s': %s", goldenPath, err.Error())
+		t.FailNow()
+	}
 
 	assert.Equal(t, string(expectedJSON), string(actualString))
 	fakeClient.AssertExpectations(t)
@@ -186,7 +196,11 @@ func TestPopulateInventory(t *testing.T) {
 	actualJSON, _ := i.MarshalJSON()
 	writeGoldenFile(t, goldenPath, actualJSON)
 
-	expectedJSON, _ := ioutil.ReadFile(goldenPath)
+	expectedJSON, err := ioutil.ReadFile(goldenPath)
+	if err != nil {
+		t.Errorf("Failed to read golden file '%s': %s", goldenPath, err.Error())
+		t.FailNow()
+	}
 
 	assert.Equal(t, expectedJSON, actualJSON)
 	fakeClient.AssertExpectations(t)
@@ -218,7 +232,11 @@ func testProcessStats(t *testing.T, filePath string) {
 	actualJSON, _ := i.MarshalJSON()
 	writeGoldenFile(t, goldenPath, actualJSON)
 
-	expectedJSON, _ := ioutil.ReadFile(goldenPath)
+	expectedJSON, err := ioutil.ReadFile(goldenPath)
+	if err != nil {
+		t.Errorf("Failed to read golden file '%s': %s", goldenPath, err.Error())
+		t.FailNow()
+	}
 
 	assert.Equal(t, expectedJSON, actualJSON)
 }

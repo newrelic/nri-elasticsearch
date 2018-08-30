@@ -17,7 +17,7 @@ type testClient struct {
 	ReturnRequestError bool
 }
 
-func (c *testClient) init(filename string, endpoint string) {
+func (c *testClient) init(filename string, endpoint string, t *testing.T) {
 	c.endpointMapping = map[string]string{
 		endpoint: filepath.Join("testdata", filename),
 	}
@@ -54,13 +54,17 @@ func createGoldenFile(i *integration.Integration, sourceFile string) (string, []
 func TestPopulateNodesMetrics(t *testing.T) {
 	i := getTestingIntegration(t)
 	client := createNewTestClient()
-	client.init("nodeStatsMetricsResult.json", nodeStatsEndpoint)
+	client.init("nodeStatsMetricsResult.json", nodeStatsEndpoint, t)
 
 	populateNodesMetrics(i, client)
 
-	sourceFile := "testdata/nodeStatsMetricsResult.json"
+	sourceFile := filepath.Join("testdata", "nodeStatsMetricsResult.json")
 	goldenFile, actualContents := createGoldenFile(i, sourceFile)
-	expectedContents, _ := ioutil.ReadFile(goldenFile)
+	expectedContents, err := ioutil.ReadFile(goldenFile)
+	if err != nil {
+		t.Errorf("Failed to load golden file '%s': %s", goldenFile, err.Error())
+		t.FailNow()
+	}
 
 	assert.Equal(t, 1, len(i.Entities))
 	assert.Equal(t, 1, len(i.Entities[0].Metrics))
@@ -79,13 +83,18 @@ func TestPopulateNodesMetrics_Error(t *testing.T) {
 func TestPopulateClusterMetrics(t *testing.T) {
 	i := getTestingIntegration(t)
 	client := createNewTestClient()
-	client.init("clusterStatsMetricsResult.json", clusterEndpoint)
+	client.init("clusterStatsMetricsResult.json", clusterEndpoint, t)
 
 	populateClusterMetrics(i, client)
 
-	sourceFile := "testData/clusterStatsMetricsResult.json"
+	sourceFile := filepath.Join("testdata", "clusterStatsMetricsResult.json")
+
 	goldenFile, actualContents := createGoldenFile(i, sourceFile)
-	expectedContents, _ := ioutil.ReadFile(goldenFile)
+	expectedContents, err := ioutil.ReadFile(goldenFile)
+	if err != nil {
+		t.Errorf("Failed to load golden file '%s': %s", goldenFile, err.Error())
+		t.FailNow()
+	}
 
 	actualLength := len(i.Entities[0].Metrics[0].Metrics)
 	expectedLength := 11
@@ -106,13 +115,17 @@ func TestPopulateClusterMetrics_Error(t *testing.T) {
 func TestPopulateCommonMetrics(t *testing.T) {
 	i := getTestingIntegration(t)
 	client := createNewTestClient()
-	client.init("commonMetricsResult.json", commonStatsEndpoint)
+	client.init("commonMetricsResult.json", commonStatsEndpoint, t)
 
 	populateCommonMetrics(i, client)
 
-	sourceFile := "testData/commonMetricsResult.json"
+	sourceFile := filepath.Join("testdata", "commonMetricsResult.json")
 	goldenFile, actualContents := createGoldenFile(i, sourceFile)
-	expectedContents, _ := ioutil.ReadFile(goldenFile)
+	expectedContents, err := ioutil.ReadFile(goldenFile)
+	if err != nil {
+		t.Errorf("Failed to load golden file '%s': %s", goldenFile, err.Error())
+		t.FailNow()
+	}
 
 	actualLength := len(i.Entities[0].Metrics[0].Metrics)
 	expectedLength := 36
@@ -133,7 +146,7 @@ func TestPopulateCommonMetrics_Error(t *testing.T) {
 func TestPopulateIndicesMetrics(t *testing.T) {
 	i := getTestingIntegration(t)
 	client := createNewTestClient()
-	client.init("indicesMetricsResult.json", indicesStatsEndpoint)
+	client.init("indicesMetricsResult.json", indicesStatsEndpoint, t)
 
 	commonStruct := new(CommonMetrics)
 	commonData, _ := ioutil.ReadFile(filepath.Join("testdata", "indicesMetricsResult_Common.json"))
@@ -141,7 +154,7 @@ func TestPopulateIndicesMetrics(t *testing.T) {
 
 	populateIndicesMetrics(i, client, commonStruct)
 
-	sourceFile := "testData/indicesMetricsResult.json"
+	sourceFile := filepath.Join("testdata", "indicesMetricsResult.json")
 	goldenFile, actualContents := createGoldenFile(i, sourceFile)
 
 	for j := range i.Entities {
@@ -151,7 +164,11 @@ func TestPopulateIndicesMetrics(t *testing.T) {
 		assert.Equal(t, expectedLength, actualLength)
 	}
 
-	expectedContents, _ := ioutil.ReadFile(goldenFile)
+	expectedContents, err := ioutil.ReadFile(goldenFile)
+	if err != nil {
+		t.Errorf("Failed to load golden file '%s': %s", goldenFile, err.Error())
+		t.FailNow()
+	}
 	assert.Equal(t, expectedContents, actualContents)
 }
 
