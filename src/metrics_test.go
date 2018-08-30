@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"encoding/json"
 	"errors"
 	"io/ioutil"
@@ -84,6 +85,9 @@ func TestPopulateClusterMetrics(t *testing.T) {
 	populateClusterMetrics(i, client)
 
 	sourceFile := filepath.Join("testData", "clusterStatsMetricsResult.json")
+	// TODO remove, for testing purposes only
+	fmt.Println(filepath.Abs(sourceFile))
+	
 	goldenFile, actualContents := createGoldenFile(i, sourceFile)
 	expectedContents, _ := ioutil.ReadFile(goldenFile)
 
