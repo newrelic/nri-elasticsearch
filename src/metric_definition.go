@@ -38,48 +38,48 @@ type PrimariesFlush struct {
 // PrimariesGet struct
 type PrimariesGet struct {
 	Current             *int `json:"current" metric_name:"primaries.get.requestsCurrent" source_type:"gauge"`
-	ExistsTimeInMillis  *int `json:"exists_time_in_millis" metric_name:"primaries.get.documentsExistInMiliseconds" source_type:"gauge"`
+	ExistsTimeInMillis  *int `json:"exists_time_in_millis" metric_name:"primaries.get.documentsExistInMilliseconds" source_type:"gauge"`
 	ExistsTotal         *int `json:"exists_total" metric_name:"primaries.get.documentsExist" source_type:"gauge"`
-	MissingTimeInMillis *int `json:"missing_time_in_millis" metric_name:"primaries.get.documentsMissingInMiliseconds" source_type:"gauge"`
+	MissingTimeInMillis *int `json:"missing_time_in_millis" metric_name:"primaries.get.documentsMissingInMilliseconds" source_type:"gauge"`
 	MissingTotal        *int `json:"missing_total" metric_name:"primaries.get.documentsMissing" source_type:"gauge"`
-	TimeInMillis        *int `json:"time_in_millis" metric_name:"primaries.get.requestsInMiliseconds" source_type:"gauge"`
+	TimeInMillis        *int `json:"time_in_millis" metric_name:"primaries.get.requestsInMilliseconds" source_type:"gauge"`
 	Total               *int `json:"total" metric_name:"primaries.get.requests" source_type:"gauge"`
 }
 
 // PrimariesIndexing struct
 type PrimariesIndexing struct {
 	DeleteCurrent      *int `json:"delete_current" metric_name:"primaries.index.docsCurrentlyDeleted" source_type:"gauge"`
-	DeleteTimeInMillis *int `json:"delete_time_in_millis" metric_name:"primaries.index.docsCurrentlyDeletedInMiliseconds" source_type:"gauge"`
+	DeleteTimeInMillis *int `json:"delete_time_in_millis" metric_name:"primaries.index.docsCurrentlyDeletedInMilliseconds" source_type:"gauge"`
 	DeleteTotal        *int `json:"delete_total" metric_name:"primaries.index.docsDeleted" source_type:"gauge"`
 	IndexCurrent       *int `json:"index_current" metric_name:"primaries.index.docsCurrentlyIndexing" source_type:"gauge"`
-	IndexTimeInMillis  *int `json:"index_time_in_millis" metric_name:"primaries.index.docsCurrentlyIndexingInMiliseconds" source_type:"gauge"`
+	IndexTimeInMillis  *int `json:"index_time_in_millis" metric_name:"primaries.index.docsCurrentlyIndexingInMilliseconds" source_type:"gauge"`
 	IndexTotal         *int `json:"index_total" metric_name:"primaries.index.docsTotal" source_type:"gauge"`
 }
 
 // PrimariesMerges struct
 type PrimariesMerges struct {
 	Current            *int `json:"current" metric_name:"primaries.merges.current" source_type:"gauge"`
-	CurrentDocs        *int `json:"current_docs" metric_name:"primaries.merges.docsSegementsCurrentlyMerged" source_type:"gauge"`
-	CurrentSizeInBytes *int `json:"current_size_in_bytes" metric_name:"primaries.merges.segementsCurrentlyMergedInBytes" source_type:"gauge"`
-	Total              *int `json:"total" metric_name:"primaries.merges.segementsTotal" source_type:"gauge"`
+	CurrentDocs        *int `json:"current_docs" metric_name:"primaries.merges.docsSegmentsCurrentlyMerged" source_type:"gauge"`
+	CurrentSizeInBytes *int `json:"current_size_in_bytes" metric_name:"primaries.merges.segmentsCurrentlyMergedInBytes" source_type:"gauge"`
+	Total              *int `json:"total" metric_name:"primaries.merges.segmentsTotal" source_type:"gauge"`
 	TotalDocs          *int `json:"total_docs" metric_name:"primaries.merges.docsTotal" source_type:"gauge"`
 	TotalSizeInBytes   *int `json:"total_size_in_bytes" metric_name:"primaries.merges.segmentsTotalInBytes" source_type:"gauge"`
-	TotalTimeInMillis  *int `json:"total_time_in_millis" metric_name:"primaries.merges.segmentsTotalInMiliseconds" source_type:"gauge"`
+	TotalTimeInMillis  *int `json:"total_time_in_millis" metric_name:"primaries.merges.segmentsTotalInMilliseconds" source_type:"gauge"`
 }
 
 // PrimariesRefresh struct
 type PrimariesRefresh struct {
 	Total             *int `json:"total" metric_name:"primaries.indexRefreshesTotal" source_type:"gauge"`
-	TotalTimeInMillis *int `json:"total_time_in_millis" metric_name:"primaries.indexRefreshesTotalInMiliseconds" source_type:"gauge"`
+	TotalTimeInMillis *int `json:"total_time_in_millis" metric_name:"primaries.indexRefreshesTotalInMilliseconds" source_type:"gauge"`
 }
 
 // PrimariesSearch struct
 type PrimariesSearch struct {
 	FetchCurrent      *int `json:"fetch_current" metric_name:"primaries.queryFetches" source_type:"gauge"`
-	FetchTimeInMillis *int `json:"fetch_time_in_millis" metric_name:"primaries.queryFetchesInMiliseconds" source_type:"gauge"`
+	FetchTimeInMillis *int `json:"fetch_time_in_millis" metric_name:"primaries.queryFetchesInMilliseconds" source_type:"gauge"`
 	FetchTotal        *int `json:"fetch_total" metric_name:"primaries.queryFetchesTotal" source_type:"gauge"`
 	QueryCurrent      *int `json:"query_current" metric_name:"primaries.queryActive" source_type:"gauge"`
-	QueryTimeInMillis *int `json:"query_time_in_millis" metric_name:"primaries.queriesInMiliseconds" source_type:"gauge"`
+	QueryTimeInMillis *int `json:"query_time_in_millis" metric_name:"primaries.queriesInMilliseconds" source_type:"gauge"`
 	QueryTotal        *int `json:"query_total" metric_name:"primaries.queriesTotal" source_type:"gauge"`
 }
 
@@ -132,7 +132,7 @@ type IndexStats struct {
 	Health           *string `json:"health" metric_name:"index.health" source_type:"attribute"`
 	DocsCount        *string `json:"docs.count" metric_name:"index.docs" source_type:"gauge"`
 	DocsDeleted      *string `json:"docs.deleted" metric_name:"index.docsDeleted" source_type:"gauge"`
-	PrimaryShards    *string `json:"pri" metric_name:"index.primaryShareds" source_type:"gauge"`
+	PrimaryShards    *string `json:"pri" metric_name:"index.primaryShards" source_type:"gauge"`
 	ReplicaShards    *string `json:"rep" metric_name:"index.replicaShards" source_type:"gauge"`
 	PrimaryStoreSize *int    `metric_name:"index.primaryStoreSizeInBytes" source_type:"gauge"`
 	StoreSize        *int    `metric_name:"index.storeSizeInBytes" source_type:"gauge"`
@@ -199,24 +199,24 @@ type IndicesStore struct {
 // IndicesIndexing struct
 type IndicesIndexing struct {
 	IndexTotal           *int `json:"index_total" metric_name:"indexing.documentsIndexed" source_type:"gauge"`
-	IndexTimeInMillis    *int `json:"index_time_in_millis" metric_name:"indexing.timeIndexingDocumentsInMiliseconds" source_type:"gauge"`
+	IndexTimeInMillis    *int `json:"index_time_in_millis" metric_name:"indexing.timeIndexingDocumentsInMilliseconds" source_type:"gauge"`
 	DeleteCurrent        *int `json:"delete_current" metric_name:"indexing.docsCurrentlyDeleted" source_type:"gauge"`
-	DeleteTimeInMillis   *int `json:"delete_time_in_millis" metric_name:"indexing.timeDeletingDocumentsInMiliseconds" source_type:"gauge"`
+	DeleteTimeInMillis   *int `json:"delete_time_in_millis" metric_name:"indexing.timeDeletingDocumentsInMilliseconds" source_type:"gauge"`
 	DeleteTotal          *int `json:"delete_total" metric_name:"indexing.totalDocumentsDeleted" source_type:"gauge"`
 	IndexCurrent         *int `json:"index_current" metric_name:"indexing.documentsCurrentlyIndexing" source_type:"gauge"`
 	IndexFailed          *int `json:"index_failed" metric_name:"indices.indexingOperationsFailed" source_type:"gauge"`
-	ThrottleTimeInMillis *int `json:"throttle_time_in_millis" metric_name:"indices.indexingWaitedThrottlingInMiliseconds" source_type:"gauge"`
+	ThrottleTimeInMillis *int `json:"throttle_time_in_millis" metric_name:"indices.indexingWaitedThrottlingInMilliseconds" source_type:"gauge"`
 }
 
 // IndicesGet struct
 type IndicesGet struct {
 	Current             *int `json:"current" metric_name:"get.currentRequestsRunning" source_type:"gauge"`
-	ExistsTimeInMillis  *int `json:"exists_time_in_millis" metric_name:"get.requestsDocumentExistsInMiliseconds" source_type:"gauge"`
+	ExistsTimeInMillis  *int `json:"exists_time_in_millis" metric_name:"get.requestsDocumentExistsInMilliseconds" source_type:"gauge"`
 	ExistsTotal         *int `json:"exists_total" metric_name:"get.requestsDcoumentExists" source_type:"gauge"`
-	MissingTimeInMillis *int `json:"missing_time_in_millis" metric_name:"get.requestsDocumentMissingInMiliseconds" source_type:"gauge"`
+	MissingTimeInMillis *int `json:"missing_time_in_millis" metric_name:"get.requestsDocumentMissingInMilliseconds" source_type:"gauge"`
 	MissingTotal        *int `json:"missing_total" metric_name:"get.requestsDcoumentMissing" source_type:"gauge"`
-	TimeInMillis        *int `json:"time_in_millis" metric_name:"get.timeGetRequestsInMiliseconds" source_type:"gauge"`
-	Total               *int `json:"total" metric_name:"get.totalGetReqeuests" source_type:"gauge"`
+	TimeInMillis        *int `json:"time_in_millis" metric_name:"get.timeGetRequestsInMilliseconds" source_type:"gauge"`
+	Total               *int `json:"total" metric_name:"get.totalGetRequests" source_type:"gauge"`
 }
 
 // IndicesSearch struct
@@ -230,12 +230,12 @@ type IndicesSearch struct {
 // IndicesMerges struct
 type IndicesMerges struct {
 	Current            *int `json:"current" metric_name:"merges.currentActive" source_type:"gauge"`
-	CurrentDocs        *int `json:"current_docs" metric_name:"merges.docsSegementsMerging" source_type:"gauge"`
-	CurrentSizeInBytes *int `json:"current_size_in_bytes" metric_name:"merges.sizeSegementsMergingInBytes" source_type:"gauge"`
+	CurrentDocs        *int `json:"current_docs" metric_name:"merges.docsSegmentsMerging" source_type:"gauge"`
+	CurrentSizeInBytes *int `json:"current_size_in_bytes" metric_name:"merges.sizeSegmentsMergingInBytes" source_type:"gauge"`
 	Total              *int `json:"total" metric_name:"merges.segmentMerges" source_type:"gauge"`
 	TotalDocs          *int `json:"total_docs" metric_name:"merges.docsSegmentMerges" source_type:"gauge"`
 	TotalSizeInBytes   *int `json:"total_size_in_bytes" metric_name:"merges.mergedSegmentsInBytes" source_type:"gauge"`
-	TotalTimeInMillis  *int `json:"total_time_in_millis" metric_name:"merges.totalSegmentMergingInMiliseconds" source_type:"gauge"`
+	TotalTimeInMillis  *int `json:"total_time_in_millis" metric_name:"merges.totalSegmentMergingInMilliseconds" source_type:"gauge"`
 }
 
 // IndicesRefresh struct
@@ -247,7 +247,7 @@ type IndicesRefresh struct {
 // IndicesFlush struct
 type IndicesFlush struct {
 	Total             *int `json:"total" metric_name:"flush.indexRefreshesTotal" source_type:"gauge"`
-	TotalTimeInMillis *int `json:"total_time_in_millis" metric_name:"flush.indexRefreshesTotalInMiliseconds" source_type:"gauge"`
+	TotalTimeInMillis *int `json:"total_time_in_millis" metric_name:"flush.indexRefreshesTotalInMilliseconds" source_type:"gauge"`
 }
 
 // IndicesQueryCache struct
@@ -281,7 +281,7 @@ type IndicesTranslog struct {
 
 // IndicesRequestCache struct
 type IndicesRequestCache struct {
-	Evictions         *int `json:"evictions" metric_name:"indices.requestCacheEvicitons" source_type:"gauge"`
+	Evictions         *int `json:"evictions" metric_name:"indices.requestCacheEvictions" source_type:"gauge"`
 	HitCount          *int `json:"hit_count" metric_name:"indices.requestCacheHits" source_type:"gauge"`
 	MemorySizeInBytes *int `json:"memory_size_in_bytes" metric_name:"indices.requestCacheMemoryInBytes" source_type:"gauge"`
 	MissCount         *int `json:"miss_count" metric_name:"indices.requestCacheMisses" source_type:"gauge"`
@@ -291,7 +291,7 @@ type IndicesRequestCache struct {
 type IndicesRecovery struct {
 	CurrentAsSource      *int `json:"current_as_source" metric_name:"indices.recoveryOngoingShardSource" source_type:"gauge"` //
 	CurrentAsTarget      *int `json:"current_as_target" metric_name:"indices.recoveryOngoingShardTarget" source_type:"gauge"`
-	ThrottleTimeInMillis *int `json:"throttle_time_in_millis" metric_name:"indices.recoveryWaitedThrottlingInMiliseconds" source_type:"gauge"` //
+	ThrottleTimeInMillis *int `json:"throttle_time_in_millis" metric_name:"indices.recoveryWaitedThrottlingInMilliseconds" source_type:"gauge"` //
 }
 
 // IndicesIDCache struct
@@ -376,10 +376,10 @@ type NodeJvm struct {
 // JvmGc struct
 type JvmGc struct {
 	CollectionCount                   *int          `json:"collection_count" metric_name:"jvm.gc.collections" source_type:"gauge"`
-	CollectionTime                    *int          `json:"collection_time" metric_name:"jvm.gc.collectionsInMiliseconds" source_type:"gauge"`
-	ConcurrentMarkSweepCollectionTime *int          `json:"concurrent_mark_sweep_collection_time" metric_name:"jvm.gc.concurrentMarkSweepInMiliseconds" source_type:"gauge"`
+	CollectionTime                    *int          `json:"collection_time" metric_name:"jvm.gc.collectionsInMilliseconds" source_type:"gauge"`
+	ConcurrentMarkSweepCollectionTime *int          `json:"concurrent_mark_sweep_collection_time" metric_name:"jvm.gc.concurrentMarkSweepInMilliseconds" source_type:"gauge"`
 	ConcurrentMarkSweepCount          *int          `json:"concurrent_mark_sweep_count" metric_name:"jvm.gc.concurrentMarkSweep" source_type:"gauge"`
-	ParNewCollectionTime              *int          `json:"par_new_collection_time" metric_name:"jvm.gc.parallelNewCollectionsInMiliseconds" source_type:"gauge"`
+	ParNewCollectionTime              *int          `json:"par_new_collection_time" metric_name:"jvm.gc.parallelNewCollectionsInMilliseconds" source_type:"gauge"`
 	ParNewCount                       *int          `json:"par_new_count" metric_name:"jvm.gc.parallelNewCollections" source_type:"gauge"`
 	Collectors                        *GcCollectors `json:"collectors"`
 }
@@ -392,13 +392,13 @@ type GcCollectors struct {
 
 // CollectorsOld struct
 type CollectorsOld struct {
-	CollectionTimeInMillis *int `json:"collection_time_in_millis" metric_name:"jvm.gc.majorCollectionsOldGenerationObjectsInMiliseconds" source_type:"gauge"`
+	CollectionTimeInMillis *int `json:"collection_time_in_millis" metric_name:"jvm.gc.majorCollectionsOldGenerationObjectsInMilliseconds" source_type:"gauge"`
 	CollectionCount        *int `json:"collection_count" metric_name:"jvm.gc.majorCollectionsOldGenerationObjects" source_type:"gauge"`
 }
 
 // CollectorsYoung struct
 type CollectorsYoung struct {
-	CollectionTimeInMillis *int `json:"collection_time_in_millis" metric_name:"jvm.gc.majorCollectionsYoungGenerationObjectsInMiliseconds" source_type:"gauge"`
+	CollectionTimeInMillis *int `json:"collection_time_in_millis" metric_name:"jvm.gc.majorCollectionsYoungGenerationObjectsInMilliseconds" source_type:"gauge"`
 	CollectionCount        *int `json:"collection_count" metric_name:"jvm.gc.majorCollectionsYoungGenerationObjects" source_type:"gauge"`
 }
 
