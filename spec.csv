@@ -121,7 +121,7 @@ elasticsearch,refresh.total,gauge,true,The number of index refreshes
 elasticsearch,refresh.totalInMilliseconds,gauge,true,The time spent on index refreshes
 elasticsearch,searchFetchCurrentlyRunning,gauge,true,The number of search fetches currently running
 elasticsearch,searchFetches,gauge,true,The number of search fetches
-elasticsearch,shards.Initializing,gauge,true,The number of shards that are currently initializing
+elasticsearch,shards.initializing,gauge,true,The number of shards that are currently initializing
 elasticsearch,shards.relocating,gauge,true,The number of shards that are reloacting from one node to another
 elasticsearch,shards.unassigned,gauge,true,The number of shards that are unassigned to a node
 elasticsearch,sizeStoreInBytes,gauge,true,The size in bytes of the storeshown in bytes
