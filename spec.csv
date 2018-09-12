@@ -1,0 +1,216 @@
+integration,metric_name,metric_type,metric_enabled,metric_description
+elasticsearch,shards.primaryActive,gauge,true,The number of active primary shards in the cluster
+elasticsearch,activeSearches,gauge,true,The number of active searches
+elasticsearch,activeSearchesInMilliseconds,gauge,true,The time spent on the search fetch
+elasticsearch,shards.active,gauge,true,The number of active shards in the cluster
+elasticsearch,breakers.estimatedSizeFieldDataCircuitBreakerInBytes,gauge,true,The estimated size in bytes of the field data circuit breakershown in bytes
+elasticsearch,breakers.estimatedSizeParentCircuitBreakerInBytes,gauge,true,The estimated size in bytes of the parent circuit breakershown in bytes
+elasticsearch,breakers.estimatedSizeRequestCircuitBreakerInBytes,gauge,true,The estimated size in bytes of the request circuit breakershown in bytes
+elasticsearch,breakers.fieldDataCircuitBreakerTripped,gauge,true,The number of times the field data circuit breaker has tripped
+elasticsearch,breakers.parentCircuitBreakerTripped,gauge,true,The number of times the parent circuit breaker has tripped
+elasticsearch,breakers.requestCircuitBreakerTripped,gauge,true,The number of times the request circuit breaker has tripped
+elasticsearch,cache.cacheSizeIDInBytes,gauge,true,The size of the id cache shown in bytes
+elasticsearch,cluster.dataNodes,gauge,true,The number of data nodes in the cluster
+elasticsearch,cluster.nodes,gauge,true,The number of nodes in the cluster
+elasticsearch,cluster.status,gauge,true,"The elasticsearch cluster health as a number: red = 0, yellow = 1, green = 2"
+elasticsearch,currentActiveQueries,gauge,true,The number of currently active queries
+elasticsearch,currentActiveQueriesInMilliseconds,gauge,true,The time spent on queries
+elasticsearch,flush.indexFlushDisk,gauge,true,The number of index flushes to disk since start
+elasticsearch,flush.timeFlushIndexDiskInSeconds,gauge,true,The time spent flushing the index to disk
+elasticsearch,fs.bytesAvailableJVMInBytes,gauge,true,Bytes available to this Java virtual machine on this file storeshown in bytes
+elasticsearch,fs.bytesReadsInBytes,gauge,true,The total bytes read from the file storeshown in bytes
+elasticsearch,fs.bytesUserIoOperationsInBytes,gauge,true,The total bytes used for all I/O operations on the file storeshown in bytes
+elasticsearch,fs.iOOperations,gauge,true,The total I/O operations on the file store
+elasticsearch,fs.reads,gauge,true,The total number of reads from the file store
+elasticsearch,fs.totalSizeInBytes,gauge,true,The total size in bytes of the file storeshown in bytes
+elasticsearch,fs.unallocatedBytesInBYtes,gauge,true,The total number of unallocated bytes in the file storeshown in bytes
+elasticsearch,fs.writesInBytes,gauge,true,The total bytes written to the file storeshown in bytes
+elasticsearch,fs.writesInBytes,gauge,true,The total number of writes to the file store
+elasticsearch,get.currentRequestsRunning,gauge,true,The number of get requests currently running
+elasticsearch,get.requestsDcoumentExists,gauge,true,The number of get requests where the document existed
+elasticsearch,get.requestsDcoumentMissing,gauge,true,The number of get requests where the document was missing
+elasticsearch,get.requestsDocumentExistsInMilliseconds,gauge,true,The time spent on get requests where the document existed
+elasticsearch,get.requestsDocumentMissingInMilliseconds,gauge,true,The time spent on get requests where the document was missing
+elasticsearch,get.timeGetRequestsInMilliseconds,gauge,true,The time spent on get requests
+elasticsearch,get.totalGetRequests,gauge,true,The number of get requests
+elasticsearch,http.currentOpenConnections,gauge,true,The number of current open HTTP connections
+elasticsearch,http.openedConnections,gauge,true,The number of opened HTTP connections
+elasticsearch,index.docs,gauge,true,The number of documents in the index
+elasticsearch,index.docsDeleted,gauge,true,The number of deleted documents in the index
+elasticsearch,index.health,gauge,true,The status of the index
+elasticsearch,index.primaryShards,gauge,true,The number of primary shards in the index
+elasticsearch,index.primaryStoreSizeInBytes,gauge,true,The store size of primary shards in the index
+elasticsearch,index.replicaShards,gauge,true,The number of replica shards in the index
+elasticsearch,index.storeSizeInBytes,gauge,true,The store size of primary and replica shards in the index shown in bytes
+elasticsearch,indexing.docsCurrentlyDeleted,gauge,true,The number of documents currently being deleted from an index
+elasticsearch,indexing.documentsCurrentlyIndexing,gauge,true,The number of documents currently being indexed to an index
+elasticsearch,indexing.documentsIndexed,gauge,true,The number of documents indexed to an index
+elasticsearch,indexing.timeDeletingDocumentsInMilliseconds,gauge,true,The time spent deleting documents from an index
+elasticsearch,indexing.timeIndexingDocumentsInMilliseconds,gauge,true,The time spent indexing documents to an index
+elasticsearch,indexing.totalDocumentsDeleted,gauge,true,The number of documents deleted from an index
+elasticsearch,indices.indexingOperationsFailed,gauge,true,The number of failed indexing operations
+elasticsearch,indices.indexingWaitedThrottlingInMilliseconds,gauge,true,The time indexing waited due to throttling
+elasticsearch,indices.memoryQueryCacheInBytes,gauge,true,The memory used by the query cacheshown in bytes
+elasticsearch,indices.numberIndices,gauge,true,The number of indices in the cluster
+elasticsearch,indices.queryCacheEvictions,gauge,true,The number of query cache evictions
+elasticsearch,indices.queryCacheHits,gauge,true,The number of query cache hits
+elasticsearch,indices.queryCacheMisses,gauge,true,The number of query cache misses
+elasticsearch,indices.recoveryOngoingShardSource,gauge,true,The number of ongoing recoveries for which a shard serves as a source
+elasticsearch,indices.recoveryOngoingShardTarget,gauge,true,The number of ongoing recoveries for which a shard serves as a target
+elasticsearch,indices.recoveryWaitedThrottlingInMilliseconds,gauge,true,The total time recoveries waited due to throttling.	
+elasticsearch,indices.requestCacheEvictions,gauge,true,The number of request cache evictions
+elasticsearch,indices.requestCacheHits,gauge,true,The number of request cache hits
+elasticsearch,indices.requestCacheMemoryInBytes,gauge,true,The memory used by the request cacheshown in bytes
+elasticsearch,indices.requestCacheMisses,gauge,true,The number of request cache misses
+elasticsearch,indices.segmentsIndexShard,gauge,true,The number of segments in an index shard
+elasticsearch,indices.segmentsMaxMemoryIndexWriterInBytes,gauge,true,The maximum memory used by the index writer shown in bytes
+elasticsearch,indices.segmentsMemoryUsedDocValuesInBytes,gauge,true,The memory used by doc values shown in bytes
+elasticsearch,indices.segmentsMemoryUsedFixedBitSetInBytes,gauge,true,The memory used by fixed bit set shown in bytes
+elasticsearch,indices.segmentsMemoryUsedIndexSegmentsInBytes,gauge,true,The memory used by index segments shown in bytes
+elasticsearch,indices.segmentsMemoryUsedIndexWriterInBytes,gauge,true,The memory used by the index writer shown in bytes
+elasticsearch,indices.segmentsMemoryUsedNormsInBytes,gauge,true,The memory used by norm sshown in bytes
+elasticsearch,indices.segmentsMemoryUsedSegmentVersionMapInBytes,gauge,true,The memory used by the segment version map shown in bytes
+elasticsearch,indices.segmentsMemoryUsedStoredFieldsInBytes,gauge,true,The memory used by stored fields shown in bytes
+elasticsearch,indices.segmentsMemoryUsedTermsInBytes,gauge,true,The memory used by terms shown in bytes
+elasticsearch,indices.segmentsMemoryUsedTermVectorsInBytes,gauge,true,The memory used by term vectors shown in bytes
+elasticsearch,indices.translogOperations,gauge,true,The number of operations in the transaction log
+elasticsearch,indices.translogOperationsInBytes,gauge,true,The size of the transaction logshown in bytes
+elasticsearch,merges.currentActive,gauge,true,The number of currently active segment merges
+elasticsearch,merges.docsSegmentsMerging,gauge,true,The number of documents across segments currently being merged
+elasticsearch,merges.docsSegmentMerges,gauge,true,The number of documents across all merged segments
+elasticsearch,merges.mergedSegmentsInBytes,gauge,true,The size of all merged segmentsshown in bytes
+elasticsearch,merges.segmentMerges,gauge,true,The number of segment merges
+elasticsearch,merges.sizeSegmentsMergingInBytes,gauge,true,The size of the segments currently being mergedshown in bytes
+elasticsearch,merges.totalSegmentMergingInMilliseconds,gauge,true,The time spent on segment merging
+elasticsearch,openFD,gauge,true,"The number of opened file descriptors associated with the current process, or -1 if not supported"
+elasticsearch,primaries.docsDeleted,gauge,true,The number of documents deleted from the primary shards
+elasticsearch,primaries.docsnumber,gauge,true,The number of documents in the primary shards
+elasticsearch,primaries.flushesTotal,gauge,true,The number of index flushes to disk from the primary shards since start
+elasticsearch,primaries.flushTotalTimeInMilliseconds,gauge,true,The time spent flushing the index to disk from the primary shards
+elasticsearch,primaries.get.documentsExist,gauge,true,The number of get requests on primary shards where the document existed
+elasticsearch,primaries.get.documentsExistInMilliseconds,gauge,true,The time spent on get requests from the primary shards where the document existed
+elasticsearch,primaries.get.documentsMissing,gauge,true,The number of get requests from the primary shards where the document was missing
+elasticsearch,primaries.get.documentsMissingInMilliseconds,gauge,true,The time spent on get requests from the primary shards where the document was missing
+elasticsearch,primaries.get.requests,gauge,true,The number of get requests from the primary shards
+elasticsearch,primaries.get.requestsCurrent,gauge,true,The number of get requests currently running on the primary shards
+elasticsearch,primaries.get.requestsInMilliseconds,gauge,true,The time spent on get requests from the primary shards
+elasticsearch,primaries.index.docsCurrentlyDeleted,gauge,true,The number of documents currently being deleted from an index on the primary shards
+elasticsearch,primaries.index.docsCurrentlyDeletedInMilliseconds,gauge,true,The time spent deleting documents from an index on the primary shards
+elasticsearch,primaries.index.docsCurrentlyIndexing,gauge,true,The number of documents currently being indexed to an index on the primary shards
+elasticsearch,primaries.index.docsCurrentlyIndexingInMilliseconds,gauge,true,The time spent indexing documents to an index on the primary shards
+elasticsearch,primaries.index.docsDeleted,gauge,true,The number of documents deleted from an index on the primary shards
+elasticsearch,primaries.index.docsTotal,gauge,true,The number of documents indexed to an index on the primary shards
+elasticsearch,primaries.indexRefreshesTotal,gauge,true,The number of index refreshes on the primary shards
+elasticsearch,primaries.indexRefreshesTotalInMilliseconds,gauge,true,The time spent on index refreshes on the primary shards
+elasticsearch,primaries.merges.current,gauge,true,The number of currently active segment merges on the primary shards
+elasticsearch,primaries.merges.docsSegmentsCurrentlyMerged,gauge,true,The number of documents across segments currently being merged on the primary shards
+elasticsearch,primaries.merges.docsTotal,gauge,true,The number of documents across all merged segments on the primary shards
+elasticsearch,primaries.merges.SegmentsCurrentlyMergedInBytes,gauge,true,The size of the segments currently being merged on the primary shardsshown in bytes
+elasticsearch,primaries.merges.SegmentsTotal,gauge,true,The number of segment merges on the primary shards
+elasticsearch,primaries.merges.segmentsTotalInBytes,gauge,true,The size of all merged segments on the primary shardsshown in bytes
+elasticsearch,primaries.merges.segmentsTotalInMilliseconds,gauge,true,The time spent on segment merging on the primary shards
+elasticsearch,primaries.queriesInMilliseconds,gauge,true,The time spent querying on the primary shards
+elasticsearch,primaries.queriesTotal,gauge,true,The number of queries to the primary shards
+elasticsearch,primaries.queryActive,gauge,true,The number of currently active queries on the primary shards
+elasticsearch,primaries.queryFetches,gauge,true,The number of query fetches currently running on the primary shards
+elasticsearch,primaries.queryFetchesInMilliseconds,gauge,true,The time spent on query fetches on the primary shards
+elasticsearch,primaries.queryFetchesTotal,gauge,true,The number of query fetches on the primary shards
+elasticsearch,primaries.sizeInBytes,gauge,true,The size of all the primary shardsshown in bytes
+elasticsearch,queriesTotal,gauge,true,The number of queries
+elasticsearch,refresh.total,gauge,true,The number of index refreshes
+elasticsearch,refresh.totalInMilliseconds,gauge,true,The time spent on index refreshes
+elasticsearch,searchFetchCurrentlyRunning,gauge,true,The number of search fetches currently running
+elasticsearch,searchFetches,gauge,true,The number of search fetches
+elasticsearch,shards.initializing,gauge,true,The number of shards that are currently initializing
+elasticsearch,shards.relocating,gauge,true,The number of shards that are reloacting from one node to another
+elasticsearch,shards.unassigned,gauge,true,The number of shards that are unassigned to a node
+elasticsearch,sizeStoreInBytes,gauge,true,The size in bytes of the storeshown in bytes
+elasticsearch,transport.connectionsOpened,gauge,true,The number of connections opened for cluster communication
+elasticsearch,transport.packetsReceived,gauge,true,The number of packets received in cluster communication
+elasticsearch,transport.packetsReceivedInBytes,gauge,true,The size of data received in cluster communicationshown in bytes
+elasticsearch,transport.packetsSent,gauge,true,The number of packets sent in cluster communication
+elasticsearch,transport.packetsSentInBytes,gauge,true,The size of data sent in cluster communicationshown in bytes
+elasticsearch,jvm.gc.collections,gauge,true,The number of garbage collections run by the JVM
+elasticsearch,jvm.gc.collectionsInMilliseconds,gauge,true,The time spent on garbage collection in the JVM
+elasticsearch,jvm.gc.majorCollectionsOldGenerationObjectsInMilliseconds,gauge,true,The time spent in major GCs in the JVM that collect old generation objects
+elasticsearch,jvm.gc.majorCollectionsOldGenerationObjects,gauge,true,The number of major GCs in the JVM that collect old generation objects
+elasticsearch,jvm.gc.majorCollectionsYoungGenerationObjectsInMilliseconds,gauge,true,The time spent in minor GCs in the JVM that collects young generation objects
+elasticsearch,jvm.gc.majorCollectionsYoungGenerationObjects,gauge,true,The number of minor GCs in the JVM that collects young generation objects
+elasticsearch,jvm.gc.concurrentMarkSweepInMilliseconds,gauge,true,"The time spent on ""concurrent mark & sweep"" GCs in the JVM"
+elasticsearch,jvm.gc.concurrentMarkSweep,gauge,true,"The number of ""concurrent mark & sweep"" GCs in the JVM"
+elasticsearch,jvm.gc.parallelNewCollectionsInMilliseconds,gauge,true,"The time spent on ""parallel new"" GCs in the JVM"
+elasticsearch,jvm.gc.parallelNewCollections,gauge,true,"The number of ""parallel new"" GCs in the JVM"
+elasticsearch,jvm.mem.heapCommittedInBytes,gauge,true,The amount of memory guaranteed to be available to the JVM heapshown in bytes
+elasticsearch,jvm.mem.heapUsed,gauge,true,The amount of memory currently used by the JVM heap as a value between 0 and 1
+elasticsearch,jvm.mem.heapMaxInBytes,gauge,true,The maximum amount of memory that can be used by the JVM heapshown in bytes
+elasticsearch,jvm.mem.heapUsedInBytes,gauge,true,The amount of memory in bytes currently used by the JVM heapshown in bytes
+elasticsearch,jvm.mem.nonHeapCommittedInBytes,gauge,true,The amount of memory guaranteed to be available to JVM non-heapshown in bytes
+elasticsearch,jvm.mem.nonHeapUsedInBytes,gauge,true,The amount of memory in bytes currently used by the JVM non-heapshown in bytes
+elasticsearch,jvm.mem.usedYoungGenerationHeapInBytes,gauge,true,The amount of memory in bytes currently used by the Young Generation heap.shown in bytes
+elasticsearch,jvm.mem.maxYoungGenerationHeapInBytes,gauge,true,The maximum amount of memory that can be used by the Young Generation heapshown in bytes
+elasticsearch,jvm.mem.usedOldGenerationHeapInBytes,gauge,true,The amount of memory in bytes currently used by the Old Generation heapshown in bytes
+elasticsearch,jvm.mem.maxOldGenerationHeapInBytes,gauge,true,The maximum amount of memory that can be used by the Old Generation heapshown in bytes
+elasticsearch,jvm.mem.usedSurvivorSpaceInBytes,gauge,true,The amount of memory in bytes currently used by the Survivor Spaceshown in bytes
+elasticsearch,jvm.mem.maxSurvivorSpaceInBYtes,gauge,true,The maximum amount of memory that can be used by the Survivor Spaceshown in bytes
+elasticsearch,jvm.ThreadsActive,gauge,true,The number of active threads in the JVM
+elasticsearch,jvm.ThreadsPeak,gauge,true,The peak number of threads used by the JVM
+elasticsearch,threadpool.bulkActive,gauge,true,The number of active threads in the bulk pool
+elasticsearch,threadpool.bulk.Aueue,gauge,true,The number of queued threads in the bulk pool
+elasticsearch,threadpool.bulkThreads,gauge,true,The number of threads in the bulk pool
+elasticsearch,threadpool.bulkRejected,gauge,true,The number of rejected threads in the bulk pool
+elasticsearch,threadpoolActivefetchShardStarted,gauge,true,The number of active threads in the fetch shard started pool
+elasticsearch,threadpool.fetchShardStartedThreads,gauge,true,The number of threads in the fetch shard started pool
+elasticsearch,threadpool.fetchShardStartedQueue,gauge,true,The number of queued threads in the fetch shard started pool
+elasticsearch,threadpool.fetchShardStartedRejected,gauge,true,The number of rejected threads in the fetch shard started pool
+elasticsearch,threadpool.fetchShardStoreActive,gauge,true,The number of active threads in the fetch shard store pool
+elasticsearch,threadpool.fetchShardStoreThreads,gauge,true,The number of threads in the fetch shard store pool
+elasticsearch,threadpool.fetchShardStoreQueue,gauge,true,The number of queued threads in the fetch shard store pool
+elasticsearch,threadpool.fetchShardStoreRejected,gauge,true,The number of rejected threads in the fetch shard store pool
+elasticsearch,threadpool.flushActive,gauge,true,The number of active threads in the flush Queue
+elasticsearch,threadpool.flushQueue,gauge,true,The number of queued threads in the flush pool
+elasticsearch,threadpool.flushThreads,gauge,true,The number of threads in the flush pool
+elasticsearch,threadpool.flushRejected,gauge,true,The number of rejected threads in the flush pool
+elasticsearch,threadpool.forceMergeActive,gauge,true,The number of active threads for force merge operations
+elasticsearch,threadpool.forceMergeThreads,gauge,true,The number of threads for force merge operations
+elasticsearch,threadpool.forceMergeQueue,gauge,true,The number of queued threads for force merge operations
+elasticsearch,threadpool.forceMergeRejected,gauge,true,The number of rejected threads for force merge operations
+elasticsearch,threadpool.genericActive,gauge,true,The number of active threads in the generic pool
+elasticsearch,threadpool.genericQueue,gauge,true,The number of queued threads in the generic pool
+elasticsearch,threadpool.genericThreads,gauge,true,The number of threads in the generic pool
+elasticsearch,threadpool.genericRejected,gauge,true,The number of rejected threads in the generic pool
+elasticsearch,threadpool.getActive,gauge,true,The number of active threads in the get pool
+elasticsearch,threadpool.getQueue,gauge,true,The number of queued threads in the get pool
+elasticsearch,threadpool.getThreads,gauge,true,The number of threads in the get pool
+elasticsearch,threadpool.getRejected,gauge,true,The number of rejected threads in the get pool
+elasticsearch,threadpool.indexActive,gauge,true,The number of active threads in the index pool
+elasticsearch,threadpool.indexQueue,gauge,true,The number of queued threads in the index pool
+elasticsearch,threadpool.indexThreads,gauge,true,The number of threads in the index pool
+elasticsearch,threadpool.indexRejected,gauge,true,The number of rejected threads in the index pool
+elasticsearch,threadpool.listenerActive,gauge,true,The number of active threads in the listener pool
+elasticsearch,threadpool.listenerQueue,gauge,true,The number of queued threads in the listener pool
+elasticsearch,threadpool.listenerThreads,gauge,true,The number of threads in the listener pool
+elasticsearch,threadpool.listenerRejected,gauge,true,The number of rejected threads in the listener pool
+elasticsearch,threadpool.managementActive,gauge,true,The number of active threads in the management pool
+elasticsearch,threadpool.managementQueue,gauge,true,The number of queued threads in the management pool
+elasticsearch,threadpool.managementThreads,gauge,true,The number of threads in the management pool
+elasticsearch,threadpool.managementRejected,gauge,true,The number of rejected threads in the management pool
+elasticsearch,threadpool.mergeActive,gauge,true,The number of active threads in the merge pool
+elasticsearch,threadpool.mergeQueue,gauge,true,The number of queued threads in the merge pool
+elasticsearch,threadpool.mergeThreads,gauge,true,The number of threads in the merge pool
+elasticsearch,threadpool.mergeRejected,gauge,true,The number of rejected threads in the merge pool
+elasticsearch,threadpool.percolateActive,gauge,true,The number of active threads in the percolate pool
+elasticsearch,threadpool.percolateQueue,gauge,true,The number of queued threads in the percolate pool
+elasticsearch,threadpool.percolateThreads,gauge,true,The number of threads in the percolate pool
+elasticsearch,threadpool.percolateRejected,gauge,true,The number of rejected threads in the percolate pool
+elasticsearch,threadpool.refreshActive,gauge,true,The number of active threads in the refresh pool
+elasticsearch,threadpool.refreshQueue,gauge,true,The number of queued threads in the refresh pool
+elasticsearch,threadpool.refreshThreads,gauge,true,The number of threads in the refresh pool
+elasticsearch,threadpool.refreshRejected,gauge,true,The number of rejected threads in the refresh pool
+elasticsearch,threadpool.searchActive,gauge,true,The number of active threads in the search pool
+elasticsearch,threadpool.searchQueue,gauge,true,The number of queued threads in the search pool
+elasticsearch,threadpool.searchThreads,gauge,true,The number of threads in the search pool
+elasticsearch,threadpool.searchRejected,gauge,true,The number of rejected threads in the search pool
+elasticsearch,threadpool.snapshotActive,gauge,true,The number of active threads in the snapshot pool
+elasticsearch,threadpool.snapshotQueue,gauge,true,The number of queued threads in the snapshot pool
+elasticsearch,threadpool.snapshotThreads,gauge,true,The number of threads in the snapshot pool
+elasticsearch,threadpool.snapshotRejected,gauge,true,The number of rejected threads in the snapshot pool
