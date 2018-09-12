@@ -120,8 +120,8 @@ type ClusterResponse struct {
 	Status              *string `json:"status" metric_name:"cluster.status" source_type:"attribute"`
 	NumberOfNodes       *int    `json:"number_of_nodes" metric_name:"cluster.nodes" source_type:"gauge"`
 	NumberOfDataNodes   *int    `json:"number_of_data_nodes" metric_name:"cluster.dataNodes" source_type:"gauge"`
-	ActivePrimaryShards *int    `json:"active_primary_shards" metric_name:"activePrimaryShardsCluster" source_type:"gauge"`
-	ActiveShards        *int    `json:"active_shards" metric_name:"activeShardsCluster" source_type:"gauge"`
+	ActivePrimaryShards *int    `json:"active_primary_shards" metric_name:"shards.primaryActive" source_type:"gauge"`
+	ActiveShards        *int    `json:"active_shards" metric_name:"shards.active" source_type:"gauge"`
 	RelocatingShards    *int    `json:"relocating_shards" metric_name:"shards.relocating" source_type:"gauge"`
 	InitializingShards  *int    `json:"initializing_shards" metric_name:"shards.initializing" source_type:"gauge"`
 	UnassignedShards    *int    `json:"unassigned_shards" metric_name:"shards.unassigned" source_type:"gauge"`
