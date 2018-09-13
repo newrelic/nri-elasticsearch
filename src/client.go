@@ -20,6 +20,9 @@ const (
 // HTTPClient represents a single connection to an Elasticsearch host
 type HTTPClient struct {
 	baseURL string
+	useAuth bool
+	username string
+	password string
 	client  *http.Client
 }
 
@@ -39,6 +42,9 @@ func NewClient(hostnameOverride string) (*HTTPClient, error) {
 
 	return &HTTPClient{
 		client: httpClient,
+		useAuth: args.Username != "" || args.Password != "",
+		username: args.Username,
+		password: args.Password,
 		baseURL: func() string {
 			protocol := "http"
 			if args.UseSSL {
@@ -58,7 +64,15 @@ func NewClient(hostnameOverride string) (*HTTPClient, error) {
 // Request takes an endpoint, makes a GET request to that endpoint,
 // and parses the response JSON into a map, which it returns.
 func (c *HTTPClient) Request(endpoint string, v interface{}) error {
-	response, err := c.client.Get(c.baseURL + endpoint)
+	request, err := http.NewRequest("GET", c.baseURL + endpoint, nil)
+	if err != nil {
+		return err
+	}
+	if c.useAuth {
+		request.SetBasicAuth(c.username, c.password)
+	}
+
+	response, err := c.client.Do(request)
 	if err != nil {
 		return err
 	}
