@@ -115,6 +115,8 @@ func TestPopulateClusterMetrics_Error(t *testing.T) {
 func TestPopulateCommonMetrics(t *testing.T) {
 	i := getTestingIntegration(t)
 	client := createNewTestClient()
+	args.IncludeIndices = true
+	args.IncludePrimaries = true
 	client.init("commonMetricsResult.json", commonStatsEndpoint, t)
 
 	populateCommonMetrics(i, client)
