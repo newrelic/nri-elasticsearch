@@ -13,5 +13,7 @@ instances:
       use_ssl <true or false to use SSL. If true Certificate bundle must be supplied>
       ca_bundle_dir: <directory for certificate authority bundle, must be included if use_ssl is true>
       ca_bundle_file: <file for certificate authority bundle, must be included if use_ssl is true>
+      collect_indices <true or false to collect indices metrics. If true collect indices, else do not>
+      collect_primaries <true or false to collect primaries metrics. If true collect primaries, else do not>
     labels:
       role: elasticsearch
