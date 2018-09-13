@@ -19,8 +19,8 @@ type argumentList struct {
 	CABundleDir      string `default:"" help:"Alternative Certificate Authority bundle directory"`
 	Timeout          int    `default:"30" help:"Timeout for an API call"`
 	ConfigPath       string `default:"/etc/elasticsearch/elasticsearch.yml" help:"Path to the ElasticSearch configuration .yml file."`
-	IncludeIndices   bool   `default:"true" help:"Signals whether to collect indices metrics or not"`
-	IncludePrimaries bool   `default:"true" help:"Signals whether to collect primaries metrics or not"`
+	CollectIndices   bool   `default:"true" help:"Signals whether to collect indices metrics or not"`
+	CollectPrimaries bool   `default:"true" help:"Signals whether to collect primaries metrics or not"`
 }
 
 const (
