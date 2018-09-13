@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"time"
 
@@ -29,6 +30,15 @@ type HTTPClient struct {
 // Client interface that assists in mocking for tests
 type Client interface {
 	Request(string, interface{}) error
+}
+
+type errorResponse struct {
+	Error *errorBody `json:"error"`
+}
+
+type errorBody struct {
+	Type   *string `json:"type"`
+	Reason *string `json:"reason"`
 }
 
 // NewClient creates a new Elasticsearch http client.
@@ -78,10 +88,35 @@ func (c *HTTPClient) Request(endpoint string, v interface{}) error {
 	}
 	defer checkErr(response.Body.Close)
 
+	err = c.checkStatusCode(response)
+	if err != nil {
+		return err
+	}
+
 	err = json.NewDecoder(response.Body).Decode(v)
 	if err != nil {
 		return err
 	}
 
 	return nil
+}
+
+func (c *HTTPClient) checkStatusCode(response *http.Response) error {
+	if response.StatusCode == 200 {
+		return nil
+	}
+
+	// try parsing error in body, otherwise return generic error
+	responseBytes, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return fmt.Errorf("status code %v - could not parse body from response: %v", response.StatusCode, err)
+	}
+
+	var errResponse errorResponse
+	err = json.Unmarshal(responseBytes, &errResponse)
+	if err != nil {
+		return fmt.Errorf("status code %v - could not parse error information from response: %v", response.StatusCode, err)
+	}
+
+	return fmt.Errorf("status code %v - received error of type '%s' from Elasticsearch: %s", response.StatusCode, *errResponse.Error.Type, *errResponse.Error.Reason)
 }

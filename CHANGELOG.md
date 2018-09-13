@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Implemented client authentication
 - Implemented toggles for primaries and indices 
+- Added status code and error checking to client requests
 
 ## 0.1.0 - 2018-08-28
 ### Added

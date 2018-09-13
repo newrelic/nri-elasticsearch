@@ -97,3 +97,22 @@ func TestAuthRequest(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, true, *testResult.OK)
 }
+
+func TestBadStatusCode(t *testing.T) {
+	testServer := httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+		res.WriteHeader(401)
+		res.Write([]byte("{\"error\":{\"type\":\"exception\",\"reason\":\"this is an error\"}}"))
+	}))
+	defer func() { testServer.Close() }()
+
+	client := &HTTPClient{
+		client:   testServer.Client(),
+		useAuth:  true,
+		username: "testUser",
+		password: "testPass",
+		baseURL:  testServer.URL,
+	}
+
+	err := client.Request("/endpoint", nil)
+	assert.Error(t, err)
+}
