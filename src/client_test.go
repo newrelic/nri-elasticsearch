@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"testing"
 	"net/http"
 	"net/http/httptest"
+	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -82,14 +82,14 @@ func TestAuthRequest(t *testing.T) {
 	defer func() { testServer.Close() }()
 
 	client := &HTTPClient{
-		client: testServer.Client(),
-		useAuth: true,
+		client:   testServer.Client(),
+		useAuth:  true,
 		username: "testUser",
 		password: "testPass",
-		baseURL: testServer.URL,
+		baseURL:  testServer.URL,
 	}
 
-	testResult := struct{
+	testResult := struct {
 		OK *bool `json:"ok"`
 	}{}
 
