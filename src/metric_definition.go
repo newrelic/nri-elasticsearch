@@ -157,7 +157,6 @@ type NodeCounts struct {
 type Node struct {
 	Name       *string         `json:"name"`
 	Host       *string         `json:"host"`
-	IP         *string         `json:"ip"`
 	Indices    *NodeIndices    `json:"indices"`
 	Breakers   *NodeBreakers   `json:"breakers"`
 	Process    *NodeProcess    `json:"process"`
