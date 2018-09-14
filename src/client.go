@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"time"
 
@@ -19,13 +20,25 @@ const (
 
 // HTTPClient represents a single connection to an Elasticsearch host
 type HTTPClient struct {
-	baseURL string
-	client  *http.Client
+	baseURL  string
+	useAuth  bool
+	username string
+	password string
+	client   *http.Client
 }
 
 // Client interface that assists in mocking for tests
 type Client interface {
 	Request(string, interface{}) error
+}
+
+type errorResponse struct {
+	Error *errorBody `json:"error"`
+}
+
+type errorBody struct {
+	Type   *string `json:"type"`
+	Reason *string `json:"reason"`
 }
 
 // NewClient creates a new Elasticsearch http client.
@@ -38,7 +51,10 @@ func NewClient(hostnameOverride string) (*HTTPClient, error) {
 	}
 
 	return &HTTPClient{
-		client: httpClient,
+		client:   httpClient,
+		useAuth:  args.Username != "" || args.Password != "",
+		username: args.Username,
+		password: args.Password,
 		baseURL: func() string {
 			protocol := "http"
 			if args.UseSSL {
@@ -58,11 +74,24 @@ func NewClient(hostnameOverride string) (*HTTPClient, error) {
 // Request takes an endpoint, makes a GET request to that endpoint,
 // and parses the response JSON into a map, which it returns.
 func (c *HTTPClient) Request(endpoint string, v interface{}) error {
-	response, err := c.client.Get(c.baseURL + endpoint)
+	request, err := http.NewRequest("GET", c.baseURL+endpoint, nil)
+	if err != nil {
+		return err
+	}
+	if c.useAuth {
+		request.SetBasicAuth(c.username, c.password)
+	}
+
+	response, err := c.client.Do(request)
 	if err != nil {
 		return err
 	}
 	defer checkErr(response.Body.Close)
+
+	err = c.checkStatusCode(response)
+	if err != nil {
+		return err
+	}
 
 	err = json.NewDecoder(response.Body).Decode(v)
 	if err != nil {
@@ -70,4 +99,24 @@ func (c *HTTPClient) Request(endpoint string, v interface{}) error {
 	}
 
 	return nil
+}
+
+func (c *HTTPClient) checkStatusCode(response *http.Response) error {
+	if response.StatusCode == 200 {
+		return nil
+	}
+
+	// try parsing error in body, otherwise return generic error
+	responseBytes, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return fmt.Errorf("status code %v - could not parse body from response: %v", response.StatusCode, err)
+	}
+
+	var errResponse errorResponse
+	err = json.Unmarshal(responseBytes, &errResponse)
+	if err != nil {
+		return fmt.Errorf("status code %v - could not parse error information from response: %v", response.StatusCode, err)
+	}
+
+	return fmt.Errorf("status code %v - received error of type '%s' from Elasticsearch: %s", response.StatusCode, *errResponse.Error.Type, *errResponse.Error.Reason)
 }

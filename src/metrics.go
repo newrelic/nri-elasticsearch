@@ -27,9 +27,11 @@ func populateMetrics(i *integration.Integration, client Client) {
 		log.Error("There was an error populating metrics for common metrics: %v", err)
 	}
 
-	err = populateIndicesMetrics(i, client, commonResponse)
-	if err != nil {
-		log.Error("There was an error populating metrics for indices: %v", err)
+	if args.CollectIndices {
+		err = populateIndicesMetrics(i, client, commonResponse)
+		if err != nil {
+			log.Error("There was an error populating metrics for indices: %v", err)
+		}
 	}
 }
 
@@ -77,7 +79,11 @@ func populateCommonMetrics(i *integration.Integration, client Client) (*CommonMe
 		return nil, err
 	}
 
-	return commonResponse, setMetricsResponse(i, commonResponse.All, "commonMetrics", "common")
+	if args.CollectPrimaries {
+		err = setMetricsResponse(i, commonResponse.All, "commonMetrics", "common")
+	}
+
+	return commonResponse, err
 }
 
 func populateIndicesMetrics(i *integration.Integration, client Client, commonStats *CommonMetrics) error {
