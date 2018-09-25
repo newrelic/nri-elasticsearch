@@ -42,9 +42,9 @@ type errorBody struct {
 }
 
 // NewClient creates a new Elasticsearch http client.
-// The hostnameOverride parameter specifies a hostname that the client should connect to.
+// The hostname parameter specifies the hostname that the client should connect to.
 // Passing in an empty string causes the client to use the hostname specified in the command-line args. (default behavior)
-func NewClient(hostnameOverride string) (*HTTPClient, error) {
+func NewClient(hostname string) (*HTTPClient, error) {
 	httpClient, err := nrHttp.New(args.CABundleFile, args.CABundleDir, time.Duration(args.Timeout)*time.Second)
 	if err != nil {
 		return nil, err
@@ -60,12 +60,6 @@ func NewClient(hostnameOverride string) (*HTTPClient, error) {
 			if args.UseSSL {
 				protocol = "https"
 			}
-
-			hostname := args.Hostname
-			if hostnameOverride != "" {
-				hostname = hostnameOverride
-			}
-
 			return fmt.Sprintf("%s://%s:%d", protocol, hostname, args.Port)
 		}(),
 	}, nil
