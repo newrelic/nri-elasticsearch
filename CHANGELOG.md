@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.1.3 - 2018-09-25
+### Added
+- Added local hostname argument to allow for overriding "localhost" as the host from which to collect inventory data.
+
 ## 0.1.2 - 2018-09-14
 ### Changed
 - Removed IP field from Node struct. It was not required as part of collection and could cause an error as the value could be a single string or an array of strings.

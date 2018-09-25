@@ -6,6 +6,7 @@ instances:
     arguments:
       config_path: <absolute path to the ElasticSearch configuration .yml file. (default "/etc/elasticsearch/elasticsearch.yml")>
       hostname: <hostname or IP where Elasticsearch Node is running. (default "localhost")>
+      local_hostname: <hostname or IP of the Elasticsearch node from which to collect inventory data. (default "localhost")>
       username: <username for accessing Elasticsearch Node>
       password: <password for the given user.>
       port: <port on which Elasticsearch Node is listening. (default 9200)>

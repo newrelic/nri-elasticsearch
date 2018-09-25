@@ -11,6 +11,7 @@ import (
 type argumentList struct {
 	sdkArgs.DefaultArgumentList
 	Hostname         string `default:"localhost" help:"Hostname or IP where Elasticsearch Node is running."`
+	LocalHostname    string `default:"localhost" help:"Hostname or IP of the Elasticsearch node from which to collect inventory."`
 	Port             int    `default:"9200" help:"Port on which Elasticsearch Node is listening."`
 	Username         string `default:"" help:"Username for accessing Elasticsearch Node"`
 	Password         string `default:"" help:"Password for the given user."`
@@ -25,7 +26,7 @@ type argumentList struct {
 
 const (
 	integrationName    = "com.newrelic.elasticsearch"
-	integrationVersion = "0.1.2"
+	integrationVersion = "0.1.3"
 )
 
 var (
@@ -38,7 +39,7 @@ func main() {
 	logErrorAndExit(err)
 
 	// Create a client for metrics
-	metricsClient, err := NewClient("")
+	metricsClient, err := NewClient(args.Hostname)
 	logErrorAndExit(err)
 
 	if args.All() || args.Metrics {
@@ -47,7 +48,7 @@ func main() {
 
 	// Create a client for inventory. Inventory needs to make REST calls against
 	// localhost to get information relative to this node only.
-	inventoryClient, err := NewClient("localhost")
+	inventoryClient, err := NewClient(args.LocalHostname)
 	logErrorAndExit(err)
 
 	if args.All() || args.Inventory {
