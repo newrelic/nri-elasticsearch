@@ -43,12 +43,6 @@ func BenchmarkCommonMetrics100000(b *testing.B) {
 	benchmarkCommonMetrics(i, b, 1000000)
 }
 
-func BenchmarkCommonMetrics1000000(b *testing.B) {
-	b.StopTimer()
-	i, _ := integration.New("Test", "0.0.1")
-	benchmarkCommonMetrics(i, b, 10000000)
-}
-
 func benchmarkCommonMetrics(i *integration.Integration, b *testing.B, numIndices int) {
 	commonMetricsStruct := generateCommonMetricsStruct(numIndices)
 

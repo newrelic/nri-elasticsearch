@@ -17,6 +17,24 @@ func BenchmarkNodeMetrics10(b *testing.B) {
 	benchmarkNodeMetrics(i, b, 10)
 }
 
+func BenchmarkNodeMetrics100(b *testing.B) {
+	b.StopTimer()
+	i, _ := integration.New("Test", "0.0.1")
+	benchmarkNodeMetrics(i, b, 100)
+}
+
+func BenchmarkNodeMetrics1000(b *testing.B) {
+	b.StopTimer()
+	i, _ := integration.New("Test", "0.0.1")
+	benchmarkNodeMetrics(i, b, 1000)
+}
+
+func BenchmarkNodeMetrics10000(b *testing.B) {
+	b.StopTimer()
+	i, _ := integration.New("Test", "0.0.1")
+	benchmarkNodeMetrics(i, b, 10000)
+}
+
 func benchmarkNodeMetrics(i *integration.Integration, b *testing.B, numNodes int) {
 	nodesMetricsStruct := generateNodeMetricsStruct(numNodes)
 
