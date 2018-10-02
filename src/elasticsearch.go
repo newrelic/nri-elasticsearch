@@ -22,6 +22,7 @@ type argumentList struct {
 	ConfigPath       string `default:"/etc/elasticsearch/elasticsearch.yml" help:"Path to the ElasticSearch configuration .yml file."`
 	CollectIndices   bool   `default:"true" help:"Signals whether to collect indices metrics or not"`
 	CollectPrimaries bool   `default:"true" help:"Signals whether to collect primaries metrics or not"`
+	IndicesRegexes   string `default:"" help: "JSON array of index names from which to collect metrics."`
 }
 
 const (

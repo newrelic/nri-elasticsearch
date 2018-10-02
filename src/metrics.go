@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 
 	"github.com/newrelic/infra-integrations-sdk/data/metric"
@@ -76,6 +77,7 @@ func populateCommonMetrics(i *integration.Integration, client Client) (*CommonMe
 	commonResponse := new(CommonMetrics)
 	err := client.Request(commonStatsEndpoint, &commonResponse)
 	if err != nil {
+		println(err.Error())
 		return nil, err
 	}
 
@@ -94,14 +96,26 @@ func populateIndicesMetrics(i *integration.Integration, client Client, commonSta
 		return err
 	}
 
-	setIndicesStatsMetricsResponse(i, indicesStats, commonStats)
+	var indexRegex *regexp.Regexp
+	if len(args.IndicesRegexes) == 0 {
+		indexRegex, err = regexp.Compile(args.IndicesRegexes)
+		if err != nil {
+			return err
+		}
+	}
+
+	setIndicesStatsMetricsResponse(i, indicesStats, commonStats, indexRegex)
 	return nil
 }
 
-func setIndicesStatsMetricsResponse(integration *integration.Integration, indexResponse []*IndexStats, commonResponse *CommonMetrics) {
+func setIndicesStatsMetricsResponse(integration *integration.Integration, indexResponse []*IndexStats, commonResponse *CommonMetrics, indexRegex *regexp.Regexp) {
+
 	for _, object := range indexResponse {
 		if object.Name == nil {
 			log.Error("Can't set metric response, missing index name")
+			continue
+		} else if indexRegex != nil && !indexRegex.MatchString(*object.Name) {
+			log.Error("Can't set metric response, index does not match regex")
 			continue
 		}
 
