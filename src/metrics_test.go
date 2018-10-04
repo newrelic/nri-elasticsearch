@@ -202,6 +202,7 @@ func TestSetIndicesStatsMetricsResponse_TooManyIndices(t *testing.T) {
 
 	setIndicesStatsMetricsResponse(i, indexResponse, commonResponse, nil)
 
+	// should not collect any entities since there are more than 100 of them.
 	assert.Equal(t, 0, len(i.Entities))
 }
 
