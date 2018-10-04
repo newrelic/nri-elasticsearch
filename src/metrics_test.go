@@ -45,9 +45,9 @@ func createGoldenFile(i *integration.Integration, sourceFile string) (string, []
 	goldenFile := sourceFile + ".golden"
 	actualContents, _ := i.Entities[0].Metrics[0].MarshalJSON()
 
-	if *update {
-		ioutil.WriteFile(goldenFile, actualContents, 0644)
-	}
+	// if *update {
+	ioutil.WriteFile(goldenFile, actualContents, 0644)
+	// }
 	return goldenFile, actualContents
 }
 
@@ -213,4 +213,26 @@ func TestPopulateIndicesMetrics_Error(t *testing.T) {
 	i := getTestingIntegration(t)
 	err := populateIndicesMetrics(i, mockClient, new(CommonMetrics))
 	assert.Error(t, err, "should be an error")
+}
+
+func TestIndicesRegex(t *testing.T) {
+	args.IndicesRegex = "twitter"
+	i := getTestingIntegration(t)
+	client := createNewTestClient()
+	client.init("indicesMetricsResult.json", indicesStatsEndpoint, t)
+
+	commonStruct := new(CommonMetrics)
+	commonData, _ := ioutil.ReadFile(filepath.Join("testdata", "indicesMetricsResult_Common.json"))
+	json.Unmarshal(commonData, commonStruct)
+
+	populateIndicesMetrics(i, client, commonStruct)
+
+	actualLength := len(i.Entities)
+	expectedLength := 1
+	actualName := i.Entities[0].Metadata.Name
+	expectedName := "twitter"
+	assert.Equal(t, expectedLength, actualLength)
+	assert.Equal(t, expectedName, actualName)
+
+	args.IndicesRegex = ""
 }
