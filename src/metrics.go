@@ -105,10 +105,9 @@ func populateIndicesMetrics(i *integration.Integration, client Client, commonSta
 	return nil
 }
 
-func buildRegex() (*regexp.Regexp, error) {
-	var indexRegex *regexp.Regexp
-	if len(args.IndicesRegex) == 0 {
-		indexRegex, err := regexp.Compile(args.IndicesRegex)
+func buildRegex() (indexRegex *regexp.Regexp, err error) {
+	if args.IndicesRegex != "" {
+		indexRegex, err = regexp.Compile(args.IndicesRegex)
 		if err != nil {
 			return indexRegex, err
 		}
