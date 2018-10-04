@@ -2,12 +2,15 @@ package main
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 
 	"github.com/newrelic/infra-integrations-sdk/data/metric"
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
 )
+
+const indexLimit = 100
 
 // populateMetrics wrapper to call each of the individual populate functions
 func populateMetrics(i *integration.Integration, client Client) {
@@ -94,39 +97,79 @@ func populateIndicesMetrics(i *integration.Integration, client Client, commonSta
 		return err
 	}
 
-	setIndicesStatsMetricsResponse(i, indicesStats, commonStats)
+	indexRegex, err := buildRegex()
+	if err != nil {
+		return err
+	}
+
+	setIndicesStatsMetricsResponse(i, indicesStats, commonStats, indexRegex)
 	return nil
 }
 
-func setIndicesStatsMetricsResponse(integration *integration.Integration, indexResponse []*IndexStats, commonResponse *CommonMetrics) {
+func buildRegex() (indexRegex *regexp.Regexp, err error) {
+	if args.IndicesRegex != "" {
+		indexRegex, err = regexp.Compile(args.IndicesRegex)
+		if err != nil {
+			return indexRegex, err
+		}
+	}
+	return indexRegex, nil
+}
+
+func setIndicesStatsMetricsResponse(integration *integration.Integration, indexResponse []*IndexStats, commonResponse *CommonMetrics, indexRegex *regexp.Regexp) {
+	type indexStatsObject struct {
+		name  string
+		stats *IndexStats
+	}
+	indicesToCollect := make([]indexStatsObject, 0, len(indexResponse))
+
 	for _, object := range indexResponse {
 		if object.Name == nil {
 			log.Error("Can't set metric response, missing index name")
 			continue
 		}
 
-		// cross reference with common stats
-		var index *Index
-		for indexName, indexStats := range commonResponse.Indices {
-			if indexName == *object.Name {
-				index = indexStats
-				break
-			}
+		if indexRegex != nil && !indexRegex.MatchString(*object.Name) {
+			log.Debug("Can't set metric response, index does not match regex")
+			continue
 		}
 
-		if index == nil {
-			log.Error("Couldn't match index name in common index stats response")
-			return
+		// cross reference with common stats
+		index, err := getIndexFromCommon(*object.Name, commonResponse.Indices)
+		if err != nil {
+			log.Error("Couldn't match index name in common index stats response: %v", err)
+			continue
 		}
 
 		// populate fields from stats
 		object.PrimaryStoreSize = index.Primaries.Store.Size
 		object.StoreSize = index.Totals.Store.Size
 
-		if err := setMetricsResponse(integration, object, *object.Name, "index"); err != nil {
+		indicesToCollect = append(indicesToCollect, indexStatsObject{
+			*object.Name,
+			object,
+		})
+	}
+
+	// enforce index limit
+	if length := len(indicesToCollect); length > indexLimit {
+		log.Error("Could not collect index metrics: attempting to collect %d indices which exceeds the maximum of %d. Use the index regex configuration parameter to limit collection size.", length, indexLimit)
+		return
+	}
+
+	for _, index := range indicesToCollect {
+		if err := setMetricsResponse(integration, index.stats, index.name, "index"); err != nil {
 			log.Error("There was an error setting metrics for indices metrics: %v", err)
 		}
 	}
+}
+
+func getIndexFromCommon(indexName string, indexList map[string]*Index) (*Index, error) {
+	indexStats, ok := indexList[indexName]
+	if !ok {
+		return nil, fmt.Errorf("index '%s' not contained in list", indexName)
+	}
+	return indexStats, nil
 }
 
 // setMetricsResponse creates an entity and a metric set for the

@@ -174,6 +174,38 @@ func TestPopulateIndicesMetrics(t *testing.T) {
 	assert.Equal(t, expectedContents, actualContents)
 }
 
+func TestSetIndicesStatsMetricsResponse_TooManyIndices(t *testing.T) {
+	i := getTestingIntegration(t)
+	indexResponse := make([]*IndexStats, 101)
+	indexName := "test-index"
+	for i := 0; i < 101; i++ {
+		indexResponse[i] = &IndexStats{
+			Name: &indexName,
+		}
+	}
+	commonResponse := &CommonMetrics{
+		Indices: map[string]*Index{
+			"test-index": {
+				Primaries: &IndexPrimaryStats{
+					Store: &IndexPrimaryStore{
+						Size: new(int),
+					},
+				},
+				Totals: &IndexTotalStats{
+					Store: &IndexTotalStore{
+						Size: new(int),
+					},
+				},
+			},
+		},
+	}
+
+	setIndicesStatsMetricsResponse(i, indexResponse, commonResponse, nil)
+
+	// should not collect any entities since there are more than 100 of them.
+	assert.Equal(t, 0, len(i.Entities))
+}
+
 func TestPopulateIndicesMetrics_Error(t *testing.T) {
 	mockClient := createNewTestClient()
 	mockClient.ReturnRequestError = true
@@ -181,4 +213,26 @@ func TestPopulateIndicesMetrics_Error(t *testing.T) {
 	i := getTestingIntegration(t)
 	err := populateIndicesMetrics(i, mockClient, new(CommonMetrics))
 	assert.Error(t, err, "should be an error")
+}
+
+func TestIndicesRegex(t *testing.T) {
+	args.IndicesRegex = "twitter"
+	i := getTestingIntegration(t)
+	client := createNewTestClient()
+	client.init("indicesMetricsResult.json", indicesStatsEndpoint, t)
+
+	commonStruct := new(CommonMetrics)
+	commonData, _ := ioutil.ReadFile(filepath.Join("testdata", "indicesMetricsResult_Common.json"))
+	json.Unmarshal(commonData, commonStruct)
+
+	populateIndicesMetrics(i, client, commonStruct)
+
+	actualLength := len(i.Entities)
+	expectedLength := 1
+	actualName := i.Entities[0].Metadata.Name
+	expectedName := "twitter"
+	assert.Equal(t, expectedLength, actualLength)
+	assert.Equal(t, expectedName, actualName)
+
+	args.IndicesRegex = ""
 }
