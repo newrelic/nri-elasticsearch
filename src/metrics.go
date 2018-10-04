@@ -79,7 +79,6 @@ func populateCommonMetrics(i *integration.Integration, client Client) (*CommonMe
 	commonResponse := new(CommonMetrics)
 	err := client.Request(commonStatsEndpoint, &commonResponse)
 	if err != nil {
-		println(err.Error())
 		return nil, err
 	}
 
