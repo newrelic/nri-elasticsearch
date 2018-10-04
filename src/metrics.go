@@ -96,26 +96,33 @@ func populateIndicesMetrics(i *integration.Integration, client Client, commonSta
 		return err
 	}
 
-	var indexRegex *regexp.Regexp
-	if len(args.IndicesRegexes) == 0 {
-		indexRegex, err = regexp.Compile(args.IndicesRegexes)
-		if err != nil {
-			return err
-		}
+	indexRegex, err := buildRegex()
+	if err != nil {
+		return err
 	}
 
 	setIndicesStatsMetricsResponse(i, indicesStats, commonStats, indexRegex)
 	return nil
 }
 
-func setIndicesStatsMetricsResponse(integration *integration.Integration, indexResponse []*IndexStats, commonResponse *CommonMetrics, indexRegex *regexp.Regexp) {
+func buildRegex() (*regexp.Regexp, error) {
+	var indexRegex *regexp.Regexp
+	if len(args.IndicesRegex) == 0 {
+		indexRegex, err := regexp.Compile(args.IndicesRegex)
+		if err != nil {
+			return indexRegex, err
+		}
+	}
+	return indexRegex, nil
+}
 
+func setIndicesStatsMetricsResponse(integration *integration.Integration, indexResponse []*IndexStats, commonResponse *CommonMetrics, indexRegex *regexp.Regexp) {
 	for _, object := range indexResponse {
 		if object.Name == nil {
 			log.Error("Can't set metric response, missing index name")
 			continue
 		} else if indexRegex != nil && !indexRegex.MatchString(*object.Name) {
-			log.Error("Can't set metric response, index does not match regex")
+			log.Debug("Can't set metric response, index does not match regex")
 			continue
 		}
 
