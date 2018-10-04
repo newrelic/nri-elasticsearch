@@ -119,7 +119,7 @@ func buildRegex() (indexRegex *regexp.Regexp, err error) {
 
 func setIndicesStatsMetricsResponse(integration *integration.Integration, indexResponse []*IndexStats, commonResponse *CommonMetrics, indexRegex *regexp.Regexp) {
 	type indexStatsObject struct {
-		name string
+		name  string
 		stats *IndexStats
 	}
 	indicesToCollect := make([]indexStatsObject, 0, len(indexResponse))
@@ -128,8 +128,8 @@ func setIndicesStatsMetricsResponse(integration *integration.Integration, indexR
 		if object.Name == nil {
 			log.Error("Can't set metric response, missing index name")
 			continue
-		} 
-		
+		}
+
 		if indexRegex != nil && !indexRegex.MatchString(*object.Name) {
 			log.Debug("Can't set metric response, index does not match regex")
 			continue
