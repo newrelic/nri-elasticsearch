@@ -153,7 +153,7 @@ func setIndicesStatsMetricsResponse(integration *integration.Integration, indexR
 
 	// enforce index limit
 	if length := len(indicesToCollect); length > indexLimit {
-		log.Error("Could not collect index metrics: attempting to collect %d indices which exceeds the maximum of %d. Use the index whitelist configuration parameter to limit collection size.", length, indexLimit)
+		log.Error("Could not collect index metrics: attempting to collect %d indices which exceeds the maximum of %d. Use the index regex configuration parameter to limit collection size.", length, indexLimit)
 		return
 	}
 
