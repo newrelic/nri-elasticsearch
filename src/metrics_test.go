@@ -185,7 +185,7 @@ func TestSetIndicesStatsMetricsResponse_TooManyIndices(t *testing.T) {
 	}
 	commonResponse := &CommonMetrics{
 		Indices: map[string]*Index{
-			"test-index": &Index{
+			"test-index": {
 				Primaries: &IndexPrimaryStats{
 					Store: &IndexPrimaryStore{
 						Size: new(int),
