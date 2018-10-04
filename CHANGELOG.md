@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.2.0 - 2018-10-04
+### Added
+- Added index regex configuration parameter to allow limiting which indices are collected
+- Added a hard limit on the number of indices to collect (100)
+
 ## 0.1.3 - 2018-09-25
 ### Added
 - Added local hostname argument to allow for overriding "localhost" as the host from which to collect inventory data.
