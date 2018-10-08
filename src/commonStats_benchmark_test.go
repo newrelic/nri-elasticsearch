@@ -50,7 +50,6 @@ func benchmarkCommonMetrics(i *integration.Integration, b *testing.B, numIndices
 
 	mux := http.NewServeMux()
 	server := httptest.NewServer(mux)
-	println(server.URL)
 	client, _ := NewClient("")
 	client.baseURL = server.URL
 
