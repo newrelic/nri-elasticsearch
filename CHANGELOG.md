@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.2.1 - 2018-10-23
+### Added
+- 
+### Fixed
+- Incorrect YAML in config file
+
 ## 0.2.0 - 2018-10-04
 ### Added
 - Added index regex configuration parameter to allow limiting which indices are collected
