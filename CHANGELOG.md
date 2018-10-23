@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## 0.2.1 - 2018-10-23
 ### Added
-- 
+- Additional descriptions for config parameters
 ### Fixed
 - Incorrect YAML in config file
 
