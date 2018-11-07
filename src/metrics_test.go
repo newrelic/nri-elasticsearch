@@ -176,9 +176,9 @@ func TestPopulateIndicesMetrics(t *testing.T) {
 
 func TestSetIndicesStatsMetricsResponse_TooManyIndices(t *testing.T) {
 	i := getTestingIntegration(t)
-	indexResponse := make([]*IndexStats, 101)
+	indexResponse := make([]*IndexStats, 501)
 	indexName := "test-index"
-	for i := 0; i < 101; i++ {
+	for i := 0; i < 501; i++ {
 		indexResponse[i] = &IndexStats{
 			Name: &indexName,
 		}
