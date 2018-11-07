@@ -10,7 +10,7 @@ import (
 	"github.com/newrelic/infra-integrations-sdk/log"
 )
 
-const indexLimit = 100
+const indexLimit = 500
 
 // populateMetrics wrapper to call each of the individual populate functions
 func populateMetrics(i *integration.Integration, client Client) {
