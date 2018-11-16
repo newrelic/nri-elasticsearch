@@ -27,7 +27,7 @@ type argumentList struct {
 
 const (
 	integrationName    = "com.newrelic.elasticsearch"
-	integrationVersion = "0.2.2"
+	integrationVersion = "1.0.0"
 )
 
 var (
