@@ -85,7 +85,7 @@ func TestPopulateClusterMetrics(t *testing.T) {
 	client := createNewTestClient()
 	client.init("clusterStatsMetricsResult.json", clusterEndpoint, t)
 
-	populateClusterMetrics(i, client)
+	populateClusterMetrics(i, client, "")
 
 	sourceFile := filepath.Join("testdata", "clusterStatsMetricsResult.json")
 
@@ -108,7 +108,7 @@ func TestPopulateClusterMetrics_Error(t *testing.T) {
 	mockClient.ReturnRequestError = true
 
 	i := getTestingIntegration(t)
-	err := populateClusterMetrics(i, mockClient)
+	err := populateClusterMetrics(i, mockClient, "")
 	assert.Error(t, err, "should be an error")
 }
 

@@ -38,3 +38,5 @@ Session.vim
 # VSCode
 .vscode
 debug
+ #GoLand
+.idea 
