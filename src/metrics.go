@@ -13,13 +13,13 @@ import (
 const indexLimit = 500
 
 // populateMetrics wrapper to call each of the individual populate functions
-func populateMetrics(i *integration.Integration, client Client) {
+func populateMetrics(i *integration.Integration, client Client, env string) {
 	err := populateNodesMetrics(i, client)
 	if err != nil {
 		log.Error("There was an error populating metrics for nodes: %v", err)
 	}
 
-	err = populateClusterMetrics(i, client)
+	err = populateClusterMetrics(i, client, env)
 	if err != nil {
 		log.Error("There was an error populating metrics for clusters: %v", err)
 	}
@@ -60,7 +60,7 @@ func setNodesMetricsResponse(integration *integration.Integration, resp *NodeRes
 	}
 }
 
-func populateClusterMetrics(i *integration.Integration, client Client) error {
+func populateClusterMetrics(i *integration.Integration, client Client, env string) error {
 	log.Info("Collecting cluster metrics.")
 	clusterResponse := new(ClusterResponse)
 	err := client.Request(clusterEndpoint, &clusterResponse)
@@ -70,6 +70,9 @@ func populateClusterMetrics(i *integration.Integration, client Client) error {
 
 	if clusterResponse.Name == nil {
 		return fmt.Errorf("cannot set metric response, missing cluster name")
+	}
+	if env != "" {
+		*clusterResponse.Name = *clusterResponse.Name + ":" + env
 	}
 	return setMetricsResponse(i, clusterResponse, *clusterResponse.Name, "cluster")
 }
