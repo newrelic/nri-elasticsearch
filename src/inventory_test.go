@@ -38,6 +38,15 @@ func TestReadConfigFile(t *testing.T) {
 				"path.data":    "/var/lib/elasticsearch",
 				"path.logs":    "/var/log/elasticsearch",
 				"network.host": "0.0.0.0",
+				"xpack": map[interface{}]interface{}{
+					"security": map[interface{}]interface{}{
+						"authc": "ssl",
+					},
+				},
+				"items": []interface{}{
+					"one",
+					2,
+				},
 			},
 		},
 	}
@@ -49,7 +58,7 @@ func TestReadConfigFile(t *testing.T) {
 			t.Errorf("couldn't read config file: %v", err)
 		} else {
 			if expected := reflect.DeepEqual(tc.expectedMap, resultMap); !expected {
-				t.Errorf("maps didn't match")
+				t.Errorf("Expected %+v got %+v", tc.expectedMap, resultMap)
 			}
 		}
 	}
@@ -86,7 +95,10 @@ func TestPopulateConfigInventory(t *testing.T) {
 
 	populateConfigInventory(e)
 
-	actual, _ := i.MarshalJSON()
+	actual, err := i.MarshalJSON()
+	if err != nil {
+		t.Fatalf("Failed to create json: %s", err.Error())
+	}
 
 	writeGoldenFile(t, goldenPath, actual)
 

@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.1.0 - 2018-11-28
+### Added
+- ClusterEnvironment argument to help further identify clusters
+### Fixed
+- Issue when loading a config yaml file that had nested objects. Theses objects are ignored for inventory data.
+
 ## 1.0.1 - 2018-11-20
 ### Changed
 - Added host and IP to Nodes as additional attributes
