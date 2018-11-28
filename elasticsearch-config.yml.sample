@@ -4,6 +4,7 @@ instances:
   - name: elasticsearch
     command: <"all" or "inventory">
     arguments:
+      cluster_environment: <A way to further specify which cluster we are gathering data for, example: 'staging'>
       config_path: <absolute path to the ElasticSearch configuration .yml file. (default "/etc/elasticsearch/elasticsearch.yml")>
       hostname: <hostname or IP where Elasticsearch Node is running. (default "localhost")>
       local_hostname: <(Optional) Hostname or IP of the Elasticsearch node from which to collect inventory data. (default "localhost"). Should only be set if you do not wish to collect inventory data against localhost>

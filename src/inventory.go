@@ -66,6 +66,16 @@ func populateConfigInventory(entity *integration.Entity) error {
 	}
 
 	for key, value := range configYaml {
+		// special case to look for nested types
+		switch value.(type) {
+		case map[interface{}]interface{}:
+			log.Debug("Unsupported data type '%T' for yaml key %s", value, key)
+			continue
+		case []interface{}:
+			log.Debug("Unsupported data type '%T' for yaml key %s", value, key)
+			continue
+		}
+
 		err = entity.SetInventoryItem("config/"+key, "value", value)
 		if err != nil {
 			log.Error("Could not set inventory item: %v", err)
