@@ -5,12 +5,6 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## 1.2.0 - 2018-11-29
-### Added
-- Cluster name is now attached to allow entities within a cluster
-### Changed
-- Nodes are no identified by hostname/IP rather than ID
-
 ## 1.1.0 - 2018-11-28
 ### Added
 - ClusterEnvironment argument to help further identify clusters

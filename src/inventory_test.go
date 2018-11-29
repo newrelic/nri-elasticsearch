@@ -155,7 +155,7 @@ func TestGetLocalNode(t *testing.T) {
 	fakeClient.On("Request", "/_nodes/_local").Return(mockedReturnVal, nil).Once()
 
 	resultName, resultStats, _ := getLocalNode(&fakeClient)
-	assert.Equal(t, "10.77.10.83", resultName)
+	assert.Equal(t, "z9ZPp87vT92qG1cRVRIcMQ", resultName)
 
 	actualString, _ := json.Marshal(resultStats)
 	writeGoldenFile(t, goldenPath, actualString)
