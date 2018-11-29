@@ -12,6 +12,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+var testClusterName = "goTestCluster"
+
 type testClient struct {
 	endpointMapping    map[string]string
 	ReturnRequestError bool
@@ -56,7 +58,7 @@ func TestPopulateNodesMetrics(t *testing.T) {
 	client := createNewTestClient()
 	client.init("nodeStatsMetricsResult.json", nodeStatsEndpoint, t)
 
-	populateNodesMetrics(i, client)
+	populateNodesMetrics(i, client, &testClusterName)
 
 	sourceFile := filepath.Join("testdata", "nodeStatsMetricsResult.json")
 	goldenFile, actualContents := createGoldenFile(i, sourceFile)
@@ -76,7 +78,7 @@ func TestPopulateNodesMetrics_Error(t *testing.T) {
 	mockClient.ReturnRequestError = true
 
 	i := getTestingIntegration(t)
-	err := populateNodesMetrics(i, mockClient)
+	err := populateNodesMetrics(i, mockClient, &testClusterName)
 	assert.Error(t, err, "should be an error")
 }
 
@@ -108,7 +110,7 @@ func TestPopulateClusterMetrics_Error(t *testing.T) {
 	mockClient.ReturnRequestError = true
 
 	i := getTestingIntegration(t)
-	err := populateClusterMetrics(i, mockClient, "")
+	_, err := populateClusterMetrics(i, mockClient, "")
 	assert.Error(t, err, "should be an error")
 }
 
@@ -119,7 +121,7 @@ func TestPopulateCommonMetrics(t *testing.T) {
 	args.CollectPrimaries = true
 	client.init("commonMetricsResult.json", commonStatsEndpoint, t)
 
-	populateCommonMetrics(i, client)
+	populateCommonMetrics(i, client, &testClusterName)
 
 	sourceFile := filepath.Join("testdata", "commonMetricsResult.json")
 	goldenFile, actualContents := createGoldenFile(i, sourceFile)
@@ -130,7 +132,7 @@ func TestPopulateCommonMetrics(t *testing.T) {
 	}
 
 	actualLength := len(i.Entities[0].Metrics[0].Metrics)
-	expectedLength := 36
+	expectedLength := 37
 
 	assert.Equal(t, expectedContents, actualContents)
 	assert.Equal(t, expectedLength, actualLength)
@@ -141,7 +143,7 @@ func TestPopulateCommonMetrics_Error(t *testing.T) {
 	mockClient.ReturnRequestError = true
 
 	i := getTestingIntegration(t)
-	_, err := populateCommonMetrics(i, mockClient)
+	_, err := populateCommonMetrics(i, mockClient, &testClusterName)
 	assert.Error(t, err, "should be an error")
 }
 
@@ -154,7 +156,7 @@ func TestPopulateIndicesMetrics(t *testing.T) {
 	commonData, _ := ioutil.ReadFile(filepath.Join("testdata", "indicesMetricsResult_Common.json"))
 	json.Unmarshal(commonData, commonStruct)
 
-	populateIndicesMetrics(i, client, commonStruct)
+	populateIndicesMetrics(i, client, commonStruct, &testClusterName)
 
 	sourceFile := filepath.Join("testdata", "indicesMetricsResult.json")
 	goldenFile, actualContents := createGoldenFile(i, sourceFile)
@@ -162,7 +164,7 @@ func TestPopulateIndicesMetrics(t *testing.T) {
 	for j := range i.Entities {
 		resultStruct := i.Entities[j].Metrics[0].Metrics
 		actualLength := len(resultStruct)
-		expectedLength := 10
+		expectedLength := 11
 		assert.Equal(t, expectedLength, actualLength)
 	}
 
@@ -200,7 +202,7 @@ func TestSetIndicesStatsMetricsResponse_TooManyIndices(t *testing.T) {
 		},
 	}
 
-	setIndicesStatsMetricsResponse(i, indexResponse, commonResponse, nil)
+	setIndicesStatsMetricsResponse(i, indexResponse, commonResponse, &testClusterName, nil)
 
 	// should not collect any entities since there are more than 100 of them.
 	assert.Equal(t, 0, len(i.Entities))
@@ -211,7 +213,7 @@ func TestPopulateIndicesMetrics_Error(t *testing.T) {
 	mockClient.ReturnRequestError = true
 
 	i := getTestingIntegration(t)
-	err := populateIndicesMetrics(i, mockClient, new(CommonMetrics))
+	err := populateIndicesMetrics(i, mockClient, new(CommonMetrics), &testClusterName)
 	assert.Error(t, err, "should be an error")
 }
 
@@ -225,7 +227,7 @@ func TestIndicesRegex(t *testing.T) {
 	commonData, _ := ioutil.ReadFile(filepath.Join("testdata", "indicesMetricsResult_Common.json"))
 	json.Unmarshal(commonData, commonStruct)
 
-	populateIndicesMetrics(i, client, commonStruct)
+	populateIndicesMetrics(i, client, commonStruct, &testClusterName)
 
 	actualLength := len(i.Entities)
 	expectedLength := 1
