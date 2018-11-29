@@ -53,7 +53,7 @@ func parseLocalNode(nodeStats *LocalNodeResponse) (string, *LocalNode, error) {
 	nodes := nodeStats.Nodes
 	if len(nodes) == 1 {
 		for k := range nodes {
-			return *nodes[k].Host, nodes[k], nil
+			return k, nodes[k], nil
 		}
 	}
 	return "", nil, errors.New("could not identify local node")

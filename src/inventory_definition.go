@@ -7,7 +7,6 @@ type LocalNodeResponse struct {
 
 // LocalNode is the node API object
 type LocalNode struct {
-	Host    *string           `json:"host"`
 	Process *LocalNodeProcess `json:"process"`
 	Ingest  *LocalNodeIngest  `json:"ingest"`
 	Plugins []*LocalNodeAddon `json:"plugins"`
