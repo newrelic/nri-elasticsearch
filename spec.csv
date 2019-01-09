@@ -12,7 +12,7 @@ elasticsearch,breakers.requestCircuitBreakerTripped,gauge,true,The number of tim
 elasticsearch,cache.cacheSizeIDInBytes,gauge,true,The size of the id cache shown in bytes
 elasticsearch,cluster.dataNodes,gauge,true,The number of data nodes in the cluster
 elasticsearch,cluster.nodes,gauge,true,The number of nodes in the cluster
-elasticsearch,cluster.status,gauge,true,"The elasticsearch cluster health as a number: red = 0, yellow = 1, green = 2"
+elasticsearch,cluster.status,gauge,true,"The elasticsearch cluster health: red, yellow, or green"
 elasticsearch,currentActiveQueries,gauge,true,The number of currently active queries
 elasticsearch,currentActiveQueriesInMilliseconds,gauge,true,The time spent on queries
 elasticsearch,flush.indexFlushDisk,gauge,true,The number of index flushes to disk since start
@@ -37,7 +37,7 @@ elasticsearch,http.currentOpenConnections,gauge,true,The number of current open 
 elasticsearch,http.openedConnections,gauge,true,The number of opened HTTP connections
 elasticsearch,index.docs,gauge,true,The number of documents in the index
 elasticsearch,index.docsDeleted,gauge,true,The number of deleted documents in the index
-elasticsearch,index.health,gauge,true,The status of the index
+elasticsearch,index.health,gauge,true,"The status of the index: read, yellow, or green"
 elasticsearch,index.primaryShards,gauge,true,The number of primary shards in the index
 elasticsearch,index.primaryStoreSizeInBytes,gauge,true,The store size of primary shards in the index
 elasticsearch,index.replicaShards,gauge,true,The number of replica shards in the index
@@ -134,14 +134,14 @@ elasticsearch,jvm.gc.collections,gauge,true,The number of garbage collections ru
 elasticsearch,jvm.gc.collectionsInMilliseconds,gauge,true,The time spent on garbage collection in the JVM
 elasticsearch,jvm.gc.majorCollectionsOldGenerationObjectsInMilliseconds,gauge,true,The time spent in major GCs in the JVM that collect old generation objects
 elasticsearch,jvm.gc.majorCollectionsOldGenerationObjects,gauge,true,The number of major GCs in the JVM that collect old generation objects
-elasticsearch,jvm.gc.majorCollectionsYoungGenerationObjectsInMilliseconds,gauge,true,The time spent in minor GCs in the JVM that collects young generation objects
-elasticsearch,jvm.gc.majorCollectionsYoungGenerationObjects,gauge,true,The number of minor GCs in the JVM that collects young generation objects
+elasticsearch,jvm.gc.minorCollectionsYoungGenerationObjectsInMilliseconds,gauge,true,The time spent in minor GCs in the JVM that collects young generation objects
+elasticsearch,jvm.gc.minorCollectionsYoungGenerationObjects,gauge,true,The number of minor GCs in the JVM that collects young generation objects
 elasticsearch,jvm.gc.concurrentMarkSweepInMilliseconds,gauge,true,"The time spent on ""concurrent mark & sweep"" GCs in the JVM"
 elasticsearch,jvm.gc.concurrentMarkSweep,gauge,true,"The number of ""concurrent mark & sweep"" GCs in the JVM"
 elasticsearch,jvm.gc.parallelNewCollectionsInMilliseconds,gauge,true,"The time spent on ""parallel new"" GCs in the JVM"
 elasticsearch,jvm.gc.parallelNewCollections,gauge,true,"The number of ""parallel new"" GCs in the JVM"
 elasticsearch,jvm.mem.heapCommittedInBytes,gauge,true,The amount of memory guaranteed to be available to the JVM heapshown in bytes
-elasticsearch,jvm.mem.heapUsed,gauge,true,The amount of memory currently used by the JVM heap as a value between 0 and 1
+elasticsearch,jvm.mem.heapUsed,gauge,true,The percentage of memory currently used by the JVM heap as a value between 0 and 1
 elasticsearch,jvm.mem.heapMaxInBytes,gauge,true,The maximum amount of memory that can be used by the JVM heapshown in bytes
 elasticsearch,jvm.mem.heapUsedInBytes,gauge,true,The amount of memory in bytes currently used by the JVM heapshown in bytes
 elasticsearch,jvm.mem.nonHeapCommittedInBytes,gauge,true,The amount of memory guaranteed to be available to JVM non-heapshown in bytes
@@ -158,7 +158,7 @@ elasticsearch,threadpool.bulkActive,gauge,true,The number of active threads in t
 elasticsearch,threadpool.bulk.Aueue,gauge,true,The number of queued threads in the bulk pool
 elasticsearch,threadpool.bulkThreads,gauge,true,The number of threads in the bulk pool
 elasticsearch,threadpool.bulkRejected,gauge,true,The number of rejected threads in the bulk pool
-elasticsearch,threadpoolActivefetchShardStarted,gauge,true,The number of active threads in the fetch shard started pool
+elasticsearch,threadpool.activeFetchShardStarted,gauge,true,The number of active threads in the fetch shard started pool
 elasticsearch,threadpool.fetchShardStartedThreads,gauge,true,The number of threads in the fetch shard started pool
 elasticsearch,threadpool.fetchShardStartedQueue,gauge,true,The number of queued threads in the fetch shard started pool
 elasticsearch,threadpool.fetchShardStartedRejected,gauge,true,The number of rejected threads in the fetch shard started pool

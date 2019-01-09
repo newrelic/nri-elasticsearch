@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.0.0 - 2019-1-9
+### Changed
+- Updated some metric names and fixed some descriptions in the spec.csv
+
 ## 1.2.0 - 2018-11-29
 ### Added
 - Cluster name is now attached to allow entities within a cluster

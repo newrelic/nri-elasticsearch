@@ -398,14 +398,14 @@ type CollectorsOld struct {
 
 // CollectorsYoung struct
 type CollectorsYoung struct {
-	CollectionTimeInMillis *int `json:"collection_time_in_millis" metric_name:"jvm.gc.majorCollectionsYoungGenerationObjectsInMilliseconds" source_type:"gauge"`
-	CollectionCount        *int `json:"collection_count" metric_name:"jvm.gc.majorCollectionsYoungGenerationObjects" source_type:"gauge"`
+	CollectionTimeInMillis *int `json:"collection_time_in_millis" metric_name:"jvm.gc.minorCollectionsYoungGenerationObjectsInMilliseconds" source_type:"gauge"`
+	CollectionCount        *int `json:"collection_count" metric_name:"jvm.gc.minorCollectionsYoungGenerationObjects" source_type:"gauge"`
 }
 
 // JvmMem struct
 type JvmMem struct {
 	HeapCommittedInBytes    *int      `json:"heap_committed_in_bytes" metric_name:"jvm.mem.heapCommittedInBytes" source_type:"gauge"`
-	HeapInUse               *int      `json:"heap_in_use" metric_name:"jvm.mem.heapUsed" source_type:"gauge"`
+	HeapInUse               *int      `json:"heap_used_percent" metric_name:"jvm.mem.heapUsed" source_type:"gauge"`
 	HeapMaxInBytes          *int      `json:"heap_max_in_bytes" metric_name:"jvm.mem.heapMaxInBytes" source_type:"gauge"`
 	HeapUsedInBytes         *int      `json:"heap_used_in_bytes" metric_name:"jvm.mem.heapUsedInBytes" source_type:"gauge"`
 	NonHeapCommittedInBytes *int      `json:"non_heap_committed_in_bytes" metric_name:"jvm.mem.nonHeapCommittedInBytes" source_type:"gauge"`
@@ -473,7 +473,7 @@ type ThreadPoolBulk struct {
 
 // ThreadPoolFetchShardStarted struct
 type ThreadPoolFetchShardStarted struct {
-	Active   *int `json:"active" metric_name:"threadpoolActivefetchShardStarted" source_type:"gauge"`
+	Active   *int `json:"active" metric_name:"threadpool.activeFetchShardStarted" source_type:"gauge"`
 	Queue    *int `json:"queue" metric_name:"threadpool.fetchShardStartedThreads" source_type:"gauge"`
 	Threads  *int `json:"threads" metric_name:"threadpool.fetchShardStartedQueue" source_type:"gauge"`
 	Rejected *int `json:"rejected" metric_name:"threadpool.fetchShardStartedRejected" source_type:"gauge"`
