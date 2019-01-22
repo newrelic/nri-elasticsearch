@@ -1,0 +1,7 @@
+entity type,inventory source, inventory path
+node,config/elasticsearch,config/*
+node,config/elasticsearch,config/process
+node,config/elasticsearch,config/ingest
+cluster,,
+common,,
+index,,
