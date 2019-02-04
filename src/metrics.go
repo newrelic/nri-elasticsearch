@@ -54,7 +54,7 @@ func populateNodesMetrics(i *integration.Integration, client Client, clusterName
 // setNodesMetricsResponse calls setMetricsResponse for each node in the response
 func setNodesMetricsResponse(integration *integration.Integration, resp *NodeResponse, clusterName *string) {
 	for node := range resp.Nodes {
-		err := setMetricsResponse(integration, resp.Nodes[node], *resp.Nodes[node].Host, "node", clusterName)
+		err := setMetricsResponse(integration, resp.Nodes[node], *resp.Nodes[node].Name, "node", clusterName)
 		if err != nil {
 			log.Error("There was an error setting metrics for node metrics on %s: %v", node, err)
 		}
