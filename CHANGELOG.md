@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 3.0.0 - 2019-02-04
+### Changed
+- Updated definition version
+- Changed nodes to use their name rather than their host as displayName
+
 ## 2.0.0 - 2019-01-09
 ### Changed
 - Updated some metric names and fixed some descriptions in the spec.csv
