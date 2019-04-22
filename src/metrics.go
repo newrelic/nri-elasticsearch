@@ -177,15 +177,14 @@ func getIndexFromCommon(indexName string, indexList map[string]*Index) (*Index, 
 // setMetricsResponse creates an entity and a metric set for the
 // type of response and calls MarshalMetrics using that response
 func setMetricsResponse(i *integration.Integration, resp interface{}, name string, namespace string, clusterName string) error {
-  entityIDAttrs := []integration.IDAttribute{
-    {Key: "clusterName", Value: clusterName},
-  }
-  if args.ClusterEnvironment != "" {
-    entityIDAttrs = append(entityIDAttrs, integration.IDAttribute{Key: "env", Value: args.ClusterEnvironment})
-  }
+	entityIDAttrs := []integration.IDAttribute{
+		{Key: "clusterName", Value: clusterName},
+	}
+	if args.ClusterEnvironment != "" {
+		entityIDAttrs = append(entityIDAttrs, integration.IDAttribute{Key: "env", Value: args.ClusterEnvironment})
+	}
 
-
-  entity, err := i.EntityReportedVia(fmt.Sprintf("%s:%d", args.Hostname, args.Port), name, namespace, entityIDAttrs...)
+	entity, err := i.EntityReportedVia(fmt.Sprintf("%s:%d", args.Hostname, args.Port), name, namespace, entityIDAttrs...)
 	if err != nil {
 		return err
 	}
