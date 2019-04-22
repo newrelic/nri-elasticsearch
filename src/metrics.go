@@ -54,7 +54,7 @@ func populateNodesMetrics(i *integration.Integration, client Client, clusterName
 // setNodesMetricsResponse calls setMetricsResponse for each node in the response
 func setNodesMetricsResponse(integration *integration.Integration, resp *NodeResponse, clusterName *string) {
 	for node := range resp.Nodes {
-		err := setMetricsResponse(integration, resp.Nodes[node], *resp.Nodes[node].Name, "node", clusterName)
+		err := setMetricsResponse(integration, resp.Nodes[node], *resp.Nodes[node].Name, "es-node", clusterName)
 		if err != nil {
 			log.Error("There was an error setting metrics for node metrics on %s: %v", node, err)
 		}
@@ -77,7 +77,7 @@ func populateClusterMetrics(i *integration.Integration, client Client, env strin
 		*clusterResponse.Name = *clusterResponse.Name + ":" + env
 	}
 
-	return clusterResponse.Name, setMetricsResponse(i, clusterResponse, *clusterResponse.Name, "cluster", nil)
+	return clusterResponse.Name, setMetricsResponse(i, clusterResponse, *clusterResponse.Name, "es-cluster", nil)
 }
 
 func populateCommonMetrics(i *integration.Integration, client Client, clusterName *string) (*CommonMetrics, error) {
@@ -89,7 +89,7 @@ func populateCommonMetrics(i *integration.Integration, client Client, clusterNam
 	}
 
 	if args.CollectPrimaries {
-		err = setMetricsResponse(i, commonResponse.All, "commonMetrics", "common", clusterName)
+		err = setMetricsResponse(i, commonResponse.All, "commonMetrics", "es-common", clusterName)
 	}
 
 	return commonResponse, err
@@ -164,7 +164,7 @@ func setIndicesStatsMetricsResponse(integration *integration.Integration, indexR
 	}
 
 	for _, index := range indicesToCollect {
-		if err := setMetricsResponse(integration, index.stats, index.name, "index", clusterName); err != nil {
+		if err := setMetricsResponse(integration, index.stats, index.name, "es-index", clusterName); err != nil {
 			log.Error("There was an error setting metrics for indices metrics: %v", err)
 		}
 	}
@@ -202,5 +202,5 @@ func setMetricsResponse(integration *integration.Integration, resp interface{}, 
 }
 
 func getSampleName(entityType string) string {
-	return fmt.Sprintf("Elasticsearch%sSample", strings.Title(entityType))
+	return fmt.Sprintf("Elasticsearch%sSample", strings.Title(strings.TrimPrefix(entityType, "es-")))
 }
