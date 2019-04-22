@@ -39,7 +39,7 @@ func populateMetrics(i *integration.Integration, client Client, env string) {
 	}
 }
 
-func populateNodesMetrics(i *integration.Integration, client Client, clusterName *string) error {
+func populateNodesMetrics(i *integration.Integration, client Client, clusterName string) error {
 	log.Info("Collecting node metrics")
 	nodeResponse := new(NodeResponse)
 	err := client.Request(nodeStatsEndpoint, &nodeResponse)
@@ -52,7 +52,7 @@ func populateNodesMetrics(i *integration.Integration, client Client, clusterName
 }
 
 // setNodesMetricsResponse calls setMetricsResponse for each node in the response
-func setNodesMetricsResponse(integration *integration.Integration, resp *NodeResponse, clusterName *string) {
+func setNodesMetricsResponse(integration *integration.Integration, resp *NodeResponse, clusterName string) {
 	for node := range resp.Nodes {
 		err := setMetricsResponse(integration, resp.Nodes[node], *resp.Nodes[node].Name, "es-node", clusterName)
 		if err != nil {
@@ -61,26 +61,22 @@ func setNodesMetricsResponse(integration *integration.Integration, resp *NodeRes
 	}
 }
 
-func populateClusterMetrics(i *integration.Integration, client Client, env string) (*string, error) {
+func populateClusterMetrics(i *integration.Integration, client Client, env string) (string, error) {
 	log.Info("Collecting cluster metrics.")
 	clusterResponse := new(ClusterResponse)
 	err := client.Request(clusterEndpoint, &clusterResponse)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
 	if clusterResponse.Name == nil {
-		return nil, errors.New("cannot set metric response, missing cluster name")
+		return "", errors.New("cannot set metric response, missing cluster name")
 	}
 
-	if env != "" {
-		*clusterResponse.Name = *clusterResponse.Name + ":" + env
-	}
-
-	return clusterResponse.Name, setMetricsResponse(i, clusterResponse, *clusterResponse.Name, "es-cluster", nil)
+	return *clusterResponse.Name, setMetricsResponse(i, clusterResponse, *clusterResponse.Name, "es-cluster", *clusterResponse.Name)
 }
 
-func populateCommonMetrics(i *integration.Integration, client Client, clusterName *string) (*CommonMetrics, error) {
+func populateCommonMetrics(i *integration.Integration, client Client, clusterName string) (*CommonMetrics, error) {
 	log.Info("Collecting common metrics.")
 	commonResponse := new(CommonMetrics)
 	err := client.Request(commonStatsEndpoint, &commonResponse)
@@ -95,7 +91,7 @@ func populateCommonMetrics(i *integration.Integration, client Client, clusterNam
 	return commonResponse, err
 }
 
-func populateIndicesMetrics(i *integration.Integration, client Client, commonStats *CommonMetrics, clusterName *string) error {
+func populateIndicesMetrics(i *integration.Integration, client Client, commonStats *CommonMetrics, clusterName string) error {
 	log.Info("Collecting indices metrics")
 	indicesStats := make([]*IndexStats, 0)
 	err := client.Request(indicesStatsEndpoint, &indicesStats)
@@ -122,7 +118,7 @@ func buildRegex() (indexRegex *regexp.Regexp, err error) {
 	return indexRegex, nil
 }
 
-func setIndicesStatsMetricsResponse(integration *integration.Integration, indexResponse []*IndexStats, commonResponse *CommonMetrics, clusterName *string, indexRegex *regexp.Regexp) {
+func setIndicesStatsMetricsResponse(integration *integration.Integration, indexResponse []*IndexStats, commonResponse *CommonMetrics, clusterName string, indexRegex *regexp.Regexp) {
 	type indexStatsObject struct {
 		name  string
 		stats *IndexStats
@@ -180,23 +176,26 @@ func getIndexFromCommon(indexName string, indexList map[string]*Index) (*Index, 
 
 // setMetricsResponse creates an entity and a metric set for the
 // type of response and calls MarshalMetrics using that response
-func setMetricsResponse(integration *integration.Integration, resp interface{}, name string, namespace string, clusterName *string) error {
-	entity, err := integration.Entity(name, namespace)
+func setMetricsResponse(i *integration.Integration, resp interface{}, name string, namespace string, clusterName string) error {
+  entityIDAttrs := []integration.IDAttribute{
+    {Key: "clusterName", Value: clusterName},
+  }
+  if args.ClusterEnvironment != "" {
+    entityIDAttrs = append(entityIDAttrs, integration.IDAttribute{Key: "env", Value: args.ClusterEnvironment})
+  }
+
+
+	entity, err := i.Entity(name, namespace, entityIDAttrs...)
 	if err != nil {
 		return err
 	}
 
-	idAttributes := []metric.Attribute{
+	msAttributes := []metric.Attribute{
 		{Key: "displayName", Value: entity.Metadata.Name},
 		{Key: "entityName", Value: entity.Metadata.Namespace + ":" + entity.Metadata.Name},
 	}
 
-	// If clusterName is non empty apply it
-	if clusterName != nil {
-		idAttributes = append(idAttributes, metric.Attribute{Key: "clusterName", Value: *clusterName})
-	}
-
-	metricSet := entity.NewMetricSet(getSampleName(namespace), idAttributes...)
+	metricSet := entity.NewMetricSet(getSampleName(namespace), msAttributes...)
 
 	return metricSet.MarshalMetrics(resp)
 }
