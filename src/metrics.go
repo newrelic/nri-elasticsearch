@@ -185,7 +185,7 @@ func setMetricsResponse(i *integration.Integration, resp interface{}, name strin
   }
 
 
-	entity, err := i.Entity(name, namespace, entityIDAttrs...)
+  entity, err := i.EntityReportedVia(fmt.Sprintf("%s:%d", args.Hostname, args.Port), name, namespace, entityIDAttrs...)
 	if err != nil {
 		return err
 	}

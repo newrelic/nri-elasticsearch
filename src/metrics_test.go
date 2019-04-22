@@ -99,7 +99,7 @@ func TestPopulateClusterMetrics(t *testing.T) {
 	}
 
 	actualLength := len(i.Entities[0].Metrics[0].Metrics)
-	expectedLength := 11
+	expectedLength := 12
 
 	assert.Equal(t, expectedContents, actualContents)
 	assert.Equal(t, expectedLength, actualLength)
@@ -132,7 +132,7 @@ func TestPopulateCommonMetrics(t *testing.T) {
 	}
 
 	actualLength := len(i.Entities[0].Metrics[0].Metrics)
-	expectedLength := 36
+	expectedLength := 37
 
 	assert.Equal(t, expectedContents, actualContents)
 	assert.Equal(t, expectedLength, actualLength)
@@ -164,7 +164,7 @@ func TestPopulateIndicesMetrics(t *testing.T) {
 	for j := range i.Entities {
 		resultStruct := i.Entities[j].Metrics[0].Metrics
 		actualLength := len(resultStruct)
-		expectedLength := 10
+		expectedLength := 11
 		assert.Equal(t, expectedLength, actualLength)
 	}
 
