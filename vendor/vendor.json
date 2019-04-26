@@ -5,56 +5,56 @@
 		{
 			"checksumSHA1": "CSPbwbyzqA6sfORicn4HFtIhF/c=",
 			"path": "github.com/davecgh/go-spew/spew",
-			"revision": "8991bc29aa16c548c550c7ff78260e27b9ab7c73",
-			"revisionTime": "2018-02-21T22:46:20Z"
+			"revision": "d8f796af33cc11cb798c1aaeb27a4ebc5099927d",
+			"revisionTime": "2018-08-30T19:11:22Z"
 		},
 		{
-			"checksumSHA1": "XdtijzwGRz6BNBgsd/J+d/fvN9k=",
+			"checksumSHA1": "ZfId5ZYn7jmL0xTxooHcxrLlXoA=",
 			"path": "github.com/newrelic/infra-integrations-sdk/args",
-			"revision": "2b1397219c6f51fee3ddcfb3e48cf5b5adc1e467",
-			"revisionTime": "2018-08-13T12:48:16Z"
+			"revision": "1d56d083ff58c63604755586fe1a65036a064de7",
+			"revisionTime": "2019-04-25T14:09:40Z"
 		},
 		{
 			"checksumSHA1": "KaZLSd/JUZz/mqfW3jFd1j2QdWA=",
 			"path": "github.com/newrelic/infra-integrations-sdk/data/event",
-			"revision": "2b1397219c6f51fee3ddcfb3e48cf5b5adc1e467",
-			"revisionTime": "2018-08-13T12:48:16Z"
+			"revision": "1d56d083ff58c63604755586fe1a65036a064de7",
+			"revisionTime": "2019-04-25T14:09:40Z"
 		},
 		{
 			"checksumSHA1": "EOoxXGqFDPkCvj7wec2S5kCXY2I=",
 			"path": "github.com/newrelic/infra-integrations-sdk/data/inventory",
-			"revision": "2b1397219c6f51fee3ddcfb3e48cf5b5adc1e467",
-			"revisionTime": "2018-08-13T12:48:16Z"
+			"revision": "1d56d083ff58c63604755586fe1a65036a064de7",
+			"revisionTime": "2019-04-25T14:09:40Z"
 		},
 		{
-			"checksumSHA1": "bsQrXQwKK7ZK3HgWQzkMu2zt4jA=",
+			"checksumSHA1": "B7mdbYyNHbBY4/x65J4zvUXn0Wk=",
 			"path": "github.com/newrelic/infra-integrations-sdk/data/metric",
-			"revision": "2b1397219c6f51fee3ddcfb3e48cf5b5adc1e467",
-			"revisionTime": "2018-08-13T12:48:16Z"
+			"revision": "1d56d083ff58c63604755586fe1a65036a064de7",
+			"revisionTime": "2019-04-25T14:09:40Z"
 		},
 		{
 			"checksumSHA1": "TOAGNG0RrWwayYA+ArmTetH8ha4=",
 			"path": "github.com/newrelic/infra-integrations-sdk/http",
-			"revision": "2b1397219c6f51fee3ddcfb3e48cf5b5adc1e467",
-			"revisionTime": "2018-08-13T12:48:16Z"
+			"revision": "1d56d083ff58c63604755586fe1a65036a064de7",
+			"revisionTime": "2019-04-25T14:09:40Z"
 		},
 		{
-			"checksumSHA1": "iYqZm+K1690zh7ihc+yDbKftd9g=",
+			"checksumSHA1": "DdUizp/J5c7mAFZg2hoz4rRPOYM=",
 			"path": "github.com/newrelic/infra-integrations-sdk/integration",
-			"revision": "2b1397219c6f51fee3ddcfb3e48cf5b5adc1e467",
-			"revisionTime": "2018-08-13T12:48:16Z"
+			"revision": "1d56d083ff58c63604755586fe1a65036a064de7",
+			"revisionTime": "2019-04-25T14:09:40Z"
 		},
 		{
 			"checksumSHA1": "6/DhD+/LhC/k3NaLgkpd6iE8b5E=",
 			"path": "github.com/newrelic/infra-integrations-sdk/log",
-			"revision": "2b1397219c6f51fee3ddcfb3e48cf5b5adc1e467",
-			"revisionTime": "2018-08-13T12:48:16Z"
+			"revision": "1d56d083ff58c63604755586fe1a65036a064de7",
+			"revisionTime": "2019-04-25T14:09:40Z"
 		},
 		{
-			"checksumSHA1": "Bmaab3vN4SGpT+/8L7Ouj365z6o=",
+			"checksumSHA1": "BsHp62Etporko0d+4GpVxrP2qtw=",
 			"path": "github.com/newrelic/infra-integrations-sdk/persist",
-			"revision": "2b1397219c6f51fee3ddcfb3e48cf5b5adc1e467",
-			"revisionTime": "2018-08-13T12:48:16Z"
+			"revision": "1d56d083ff58c63604755586fe1a65036a064de7",
+			"revisionTime": "2019-04-25T14:09:40Z"
 		},
 		{
 			"checksumSHA1": "ljd3FhYRJ91cLZz3wsH9BQQ2JbA=",
@@ -65,8 +65,8 @@
 		{
 			"checksumSHA1": "LuFv4/jlrmFNnDb/5SCSEPAM9vU=",
 			"path": "github.com/pmezard/go-difflib/difflib",
-			"revision": "792786c7400a136282c1664665ae0a8db921c6c2",
-			"revisionTime": "2016-01-10T10:55:54Z"
+			"revision": "5d4384ee4fb2527b0a1256a821ebfc92f91efefc",
+			"revisionTime": "2018-12-26T10:54:42Z"
 		},
 		{
 			"checksumSHA1": "XHH8+1ESYdBoyKSD4FXwdy1liUk=",
@@ -81,10 +81,10 @@
 			"revisionTime": "2018-05-06T18:05:49Z"
 		},
 		{
-			"checksumSHA1": "c6pbpF7eowwO59phRTpF8cQ80Z0=",
+			"checksumSHA1": "IIsn0Wdi5rHU8xca+FzDd+YeYlc=",
 			"path": "github.com/stretchr/testify/assert",
-			"revision": "f35b8ab0b5a2cef36673838d662e249dd9c94686",
-			"revisionTime": "2018-05-06T18:05:49Z"
+			"revision": "34c6fa2dc70986bccbbffcc6130f6920a924b075",
+			"revisionTime": "2019-03-04T09:57:49Z"
 		},
 		{
 			"checksumSHA1": "fg3TzS9/QK3wZbzei3Z6O8XPLHg=",
@@ -97,6 +97,12 @@
 			"path": "github.com/stretchr/testify/mock",
 			"revision": "f35b8ab0b5a2cef36673838d662e249dd9c94686",
 			"revisionTime": "2018-05-06T18:05:49Z"
+		},
+		{
+			"checksumSHA1": "IL+W0JvlL7zRZFsSVHiX2hectIs=",
+			"path": "github.com/stretchr/testify/require",
+			"revision": "34c6fa2dc70986bccbbffcc6130f6920a924b075",
+			"revisionTime": "2019-03-04T09:57:49Z"
 		},
 		{
 			"checksumSHA1": "ZSWoOPUNRr5+3dhkLK3C4cZAQPk=",

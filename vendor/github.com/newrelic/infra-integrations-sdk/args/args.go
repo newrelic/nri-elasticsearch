@@ -14,16 +14,35 @@ import (
 // DefaultArgumentList includes the minimal set of necessary arguments for an integration.
 // If all data flags (Inventory, Metrics and Events) are false, all of them are published.
 type DefaultArgumentList struct {
-	Verbose   bool `default:"false" help:"Print more information to logs."`
-	Pretty    bool `default:"false" help:"Print pretty formatted JSON."`
-	Metrics   bool `default:"false" help:"Publish metrics data."`
-	Inventory bool `default:"false" help:"Publish inventory data."`
-	Events    bool `default:"false" help:"Publish events data."`
+	Verbose        bool   `default:"false" help:"Print more information to logs."`
+	Pretty         bool   `default:"false" help:"Print pretty formatted JSON."`
+	Metrics        bool   `default:"false" help:"Publish metrics data."`
+	Inventory      bool   `default:"false" help:"Publish inventory data."`
+	Events         bool   `default:"false" help:"Publish events data."`
+	Metadata       bool   `default:"false" help:"Add customer defined key-value attributes to the samples."`
+	NriAddHostname bool   `default:"false" help:"Add hostname attribute to the samples."`
+	NriCluster     string `default:"" help:"Optional. Cluster name"`
+	NriService     string `default:"" help:"Optional. Service name"`
 }
 
 // All returns if all data should be published
 func (d *DefaultArgumentList) All() bool {
 	return !d.Inventory && !d.Metrics && !d.Events
+}
+
+// HasMetrics returns if metrics should be published
+func (d *DefaultArgumentList) HasMetrics() bool {
+	return d.Metrics || d.All()
+}
+
+// HasEvents returns if events should be published
+func (d *DefaultArgumentList) HasEvents() bool {
+	return d.Events || d.All()
+}
+
+// HasInventory returns if inventory should be published
+func (d *DefaultArgumentList) HasInventory() bool {
+	return d.Inventory || d.All()
 }
 
 // HTTPClientArgumentList are meant to be used as flags from a custom integrations. With this you could

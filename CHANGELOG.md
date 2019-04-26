@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.0.0 - 2019-04-22
+### Changed
+- Prefixed namespace to provide better uniqueness
+- Cluster name and environment are now identity attributes
+### Added
+- Added a reporting endpoint to the entities
+
+
 ## 3.0.0 - 2019-02-04
 ### Changed
 - Updated definition version
