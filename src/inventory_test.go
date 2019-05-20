@@ -260,3 +260,15 @@ func writeGoldenFile(t *testing.T, goldenPath string, data []byte) {
 		assert.NoError(t, err)
 	}
 }
+
+func Test_parseNodeIngests_Nil(t *testing.T) {
+	_, e := getTestingEntity(t)
+  nodeName := "test"
+  testNode := LocalNode{
+    Name: &nodeName,
+    Ingest: nil,
+  }
+
+  types := parseNodeIngests(e, &testNode)
+  assert.Equal(t, []string{}, types)
+}

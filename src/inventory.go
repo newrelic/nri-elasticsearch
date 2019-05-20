@@ -168,6 +168,11 @@ func parsePluginsAndModules(entity *integration.Entity, stats *LocalNode) {
 }
 
 func parseNodeIngests(entity *integration.Entity, stats *LocalNode) []string {
+  if stats.Ingest == nil || stats.Ingest.Processors == nil {
+    log.Error("No ingest stats defined for node. Skipping processor list collection", stats.Name)
+    return []string{}
+  }
+
 	processorList := stats.Ingest.Processors
 	typeList := []string{}
 
