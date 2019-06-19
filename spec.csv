@@ -27,8 +27,8 @@ elasticsearch,fs.unallocatedBytesInBYtes,gauge,true,The total number of unalloca
 elasticsearch,fs.writesInBytes,gauge,true,The total bytes written to the file storeshown in bytes
 elasticsearch,fs.writesInBytes,gauge,true,The total number of writes to the file store
 elasticsearch,get.currentRequestsRunning,gauge,true,The number of get requests currently running
-elasticsearch,get.requestsDcoumentExists,gauge,true,The number of get requests where the document existed
-elasticsearch,get.requestsDcoumentMissing,gauge,true,The number of get requests where the document was missing
+elasticsearch,get.requestsDocumentExists,gauge,true,The number of get requests where the document existed
+elasticsearch,get.requestsDocumentMissing,gauge,true,The number of get requests where the document was missing
 elasticsearch,get.requestsDocumentExistsInMilliseconds,gauge,true,The time spent on get requests where the document existed
 elasticsearch,get.requestsDocumentMissingInMilliseconds,gauge,true,The time spent on get requests where the document was missing
 elasticsearch,get.timeGetRequestsInMilliseconds,gauge,true,The time spent on get requests
@@ -155,7 +155,7 @@ elasticsearch,jvm.mem.maxSurvivorSpaceInBYtes,gauge,true,The maximum amount of m
 elasticsearch,jvm.ThreadsActive,gauge,true,The number of active threads in the JVM
 elasticsearch,jvm.ThreadsPeak,gauge,true,The peak number of threads used by the JVM
 elasticsearch,threadpool.bulkActive,gauge,true,The number of active threads in the bulk pool
-elasticsearch,threadpool.bulk.Aueue,gauge,true,The number of queued threads in the bulk pool
+elasticsearch,threadpool.bulkQueue,gauge,true,The number of queued threads in the bulk pool
 elasticsearch,threadpool.bulkThreads,gauge,true,The number of threads in the bulk pool
 elasticsearch,threadpool.bulkRejected,gauge,true,The number of rejected threads in the bulk pool
 elasticsearch,threadpool.activeFetchShardStarted,gauge,true,The number of active threads in the fetch shard started pool

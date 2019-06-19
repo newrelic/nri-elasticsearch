@@ -212,9 +212,9 @@ type IndicesIndexing struct {
 type IndicesGet struct {
 	Current             *int `json:"current" metric_name:"get.currentRequestsRunning" source_type:"gauge"`
 	ExistsTimeInMillis  *int `json:"exists_time_in_millis" metric_name:"get.requestsDocumentExistsInMilliseconds" source_type:"gauge"`
-	ExistsTotal         *int `json:"exists_total" metric_name:"get.requestsDcoumentExists" source_type:"gauge"`
+	ExistsTotal         *int `json:"exists_total" metric_name:"get.requestsDocumentExists" source_type:"gauge"`
 	MissingTimeInMillis *int `json:"missing_time_in_millis" metric_name:"get.requestsDocumentMissingInMilliseconds" source_type:"gauge"`
-	MissingTotal        *int `json:"missing_total" metric_name:"get.requestsDcoumentMissing" source_type:"gauge"`
+	MissingTotal        *int `json:"missing_total" metric_name:"get.requestsDocumentMissing" source_type:"gauge"`
 	TimeInMillis        *int `json:"time_in_millis" metric_name:"get.timeGetRequestsInMilliseconds" source_type:"gauge"`
 	Total               *int `json:"total" metric_name:"get.totalGetRequests" source_type:"gauge"`
 }
@@ -466,7 +466,7 @@ type NodeThreadPool struct {
 // ThreadPoolBulk struct
 type ThreadPoolBulk struct {
 	Active   *int `json:"active" metric_name:"threadpool.bulkActive" source_type:"gauge"`
-	Queue    *int `json:"queue" metric_name:"threadpool.bulk.Aueue" source_type:"gauge"`
+	Queue    *int `json:"queue" metric_name:"threadpool.bulkQueue" source_type:"gauge"`
 	Threads  *int `json:"threads" metric_name:"threadpool.bulkThreads" source_type:"gauge"`
 	Rejected *int `json:"rejected" metric_name:"threadpool.bulkRejected" source_type:"gauge"`
 }
