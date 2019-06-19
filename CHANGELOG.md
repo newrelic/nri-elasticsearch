@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.0.2 - 2019-06-19
+### Fixed
+- Misspelling "Dcoument" and "Aueue"
+- Added missing metric activeSearchesInMilliseconds 
+
 ## 4.0.1 - 2019-05-20
 ### Fixed
 - Segfault on blank node ingests
