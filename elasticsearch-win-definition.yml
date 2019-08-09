@@ -1,0 +1,17 @@
+name: com.newrelic.elasticsearch
+description: Reports status and metrics for elasticsearch service
+protocol_version: 2
+os: windows
+
+commands:
+  all:
+    command:
+      - .\bin\nr-elasticsearch.exe
+    prefix: config/elasticsearch
+    interval: 15
+  inventory:
+    command:
+      - .\bin\nr-elasticsearch.exe
+      - --inventory
+    prefix: config/elasticsearch
+    interval: 15
