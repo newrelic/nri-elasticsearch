@@ -7,6 +7,7 @@
 _obj
 _test
 bin
+obj
 
 # Architecture specific extensions/prefixes
 *.[568vq]
@@ -24,7 +25,10 @@ _testmain.go
 *.test
 *.prof
 *.DS_STORE
+*.syso
+*.wxs
 
+versioninfo.json
 /integrations/*/bin/
 coverage.xml
 target/
@@ -38,5 +42,8 @@ Session.vim
 # VSCode
 .vscode
 debug
+conf.yaml
+Makefile-deploy.mk
+
  #GoLand
 .idea 
