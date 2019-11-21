@@ -6,12 +6,12 @@ os: linux
 commands:
   all:
     command:
-      - ./bin/nr-elasticsearch
+      - ./bin/nri-elasticsearch
     prefix: config/elasticsearch
     interval: 15
   inventory:
     command:
-      - ./bin/nr-elasticsearch
+      - ./bin/nri-elasticsearch
       - --inventory
     prefix: config/elasticsearch
     interval: 15

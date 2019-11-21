@@ -6,12 +6,12 @@ os: windows
 commands:
   all:
     command:
-      - .\bin\nr-elasticsearch.exe
+      - .\bin\nri-elasticsearch.exe
     prefix: config/elasticsearch
     interval: 15
   inventory:
     command:
-      - .\bin\nr-elasticsearch.exe
+      - .\bin\nri-elasticsearch.exe
       - --inventory
     prefix: config/elasticsearch
     interval: 15
