@@ -1,0 +1,30 @@
+  elasticsearch-config.yml: |
+    ---
+    # Run auto discovery to find pods with label "app=elasticsearch"
+    # https://docs.newrelic.com/docs/integrations/host-integrations/installation/container-auto-discovery
+    discovery:
+      command:
+        # Run NRI Discovery for Kubernetes
+        # https://github.com/newrelic/nri-discovery-kubernetes
+        exec: /var/db/newrelic-infra/nri-discovery-kubernetes
+        match:
+          label.app: elasticsearch
+    integrations:
+      - name:
+        env:
+          CLUSTER_ENVIRONMENT: <A way to further specify which cluster we are gathering data for, example: from the pods label called "cluster_name" it would be '${discovery.label.cluster_name}'>
+          # Use the discovered IP as the host address
+          HOSTNAME: ${discovery.ip}
+          # Set the elasticsearch node name to the discovered pod name
+          LOCAL_HOSTNAME: ${discovery.podName}
+          USERNAME: <username for accessing Elasticsearch Node>
+          PASSWORD: <password for the given user.>
+          PORT: <(Optional) port on which Elasticsearch Node is listening. (default 9200)>
+          TIMEOUT: <(Optional) timeout in seconds for an API call (default 30)>
+          USE_SSL: <(Optional) true or false to use SSL. If true Certificate bundle must be supplied. (default false)>
+          CA_BUNDLE_DIR: <(Optional) Required if use_ssl is true. Directory for certificate authority bundle, must be included if use_ssl is true>
+          CA_BUNDLE_FILE: <(Optional) Required if use_ssl is true. File for certificate authority bundle, must be included if use_ssl is true>
+          INDICES_REGEX: <(Optional) Can be used to filter which indicies are collected. If left blank it will be ignored>
+          COLLECT_INDICES: <(Optional) true or false to collect indices metrics. If true collect indices, else do not. (default true)>
+          COLLECT_PRIMARIES: <(Optional) true or false to collect primaries metrics. If true collect primaries, else do not. (default true)>
+          METRICS: 1
