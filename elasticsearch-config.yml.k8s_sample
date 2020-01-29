@@ -10,7 +10,7 @@
         match:
           label.app: elasticsearch
     integrations:
-      - name:
+      - name: nri-elasticsearch
         env:
           CLUSTER_ENVIRONMENT: <A way to further specify which cluster we are gathering data for, example: from the pods label called "cluster_name" it would be '${discovery.label.cluster_name}'>
           # Use the discovered IP as the host address
