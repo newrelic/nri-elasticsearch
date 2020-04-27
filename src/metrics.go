@@ -53,11 +53,37 @@ func populateNodesMetrics(i *integration.Integration, client Client, clusterName
 
 // setNodesMetricsResponse calls setMetricsResponse for each node in the response
 func setNodesMetricsResponse(integration *integration.Integration, resp *NodeResponse, clusterName string) {
-	for node := range resp.Nodes {
-		err := setMetricsResponse(integration, resp.Nodes[node], *resp.Nodes[node].Name, "es-node", clusterName)
+	for _, node := range resp.Nodes {
+		node.IP = ipToString(node.RawIP)
+		err := setMetricsResponse(integration, *node, *node.Name, "es-node", clusterName)
 		if err != nil {
 			log.Error("There was an error setting metrics for node metrics on %s: %v", node, err)
 		}
+	}
+}
+
+func ipToString(ip interface{}) string {
+	switch v := ip.(type) {
+	case nil:
+		return ""
+	case string:
+		return v
+	case *string:
+		return *v
+	case []string:
+		return strings.Join(v, ",")
+	case []interface{}:
+		strArray := make([]string, len(v))
+		for i, elem := range v {
+			if str, ok := elem.(string); ok {
+				strArray[i] = str
+			} else {
+				return fmt.Sprintf("%#v", ip)
+			}
+		}
+		return strings.Join(strArray, ",")
+	default:
+		return fmt.Sprintf("%#v", ip)
 	}
 }
 

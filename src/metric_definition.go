@@ -157,7 +157,8 @@ type NodeCounts struct {
 type Node struct {
 	Name       *string         `json:"name"`
 	Host       *string         `json:"host" metric_name:"node.hostname" source_type:"attribute"`
-	IP         *string         `json:"ip" metric_name:"node.ipAddress" source_type:"attribute"`
+	RawIP      interface{}     `json:"ip"`
+	IP         string          `metric_name:"node.ipAddress" source_type:"attribute"`
 	Indices    *NodeIndices    `json:"indices"`
 	Breakers   *NodeBreakers   `json:"breakers"`
 	Process    *NodeProcess    `json:"process"`
@@ -361,10 +362,10 @@ type FsIoStats struct {
 // IoStatsTotal struct
 type IoStatsTotal struct {
 	Operations      *int `json:"operations" metric_name:"fs.iOOperations" source_type:"gauge"`
-	ReadKilobytes   *int `json:"read_kilobytes" metric_name:"fs.bytesReadsInBytes" source_type:"gauge"`
-	ReadOperations  *int `json:"read_operations" metric_name:"fs.reads" source_type:"gauge"`
-	WriteKilobytes  *int `json:"write_kilobytes" metric_name:"fs.writesInBytes" source_type:"gauge"`
-	WriteOperations *int `json:"write_operations" metric_name:"fs.writesInBytes" source_type:"gauge"`
+	ReadKilobytes   *int `json:"read_kilobytes" metric_name:"fs.dataWritten" source_type:"gauge"`
+	ReadOperations  *int `json:"read_operations" metric_name:"fs.readOperations" source_type:"gauge"`
+	WriteKilobytes  *int `json:"write_kilobytes" metric_name:"fs.dataWritten" source_type:"gauge"`
+	WriteOperations *int `json:"write_operations" metric_name:"fs.writeOperations" source_type:"gauge"`
 }
 
 // NodeJvm struct
