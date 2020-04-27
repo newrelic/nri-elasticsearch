@@ -5,9 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.3.0 (2020-04-27)
+### Changed
+- Updated the SDK to the latest version
+### Added
+- `ssl_alternative_hostname` argument to work around invalid hostname issues
+
 ## 4.2.0 (2019-11-18)
 ### Changed
 - Renamed the integration executable from nr-elasticsearch to nri-elasticsearch in order to be consistent with the package naming. **Important Note:** if you have any security module rules (eg. SELinux), alerts or automation that depends on the name of this binary, these will have to be updated.
+
 ## 4.1.1 - 2019-10-16
 ### Fixed
 - Windows installer GUIDs
@@ -19,12 +26,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## 4.0.2 - 2019-06-19
 ### Fixed
 - Misspelling "Dcoument" and "Aueue"
-- Added missing metric activeSearchesInMilliseconds 
+- Added missing metric activeSearchesInMilliseconds
 
 ## 4.0.1 - 2019-05-20
 ### Fixed
 - Segfault on blank node ingests
- 
+
 ## 4.0.0 - 2019-04-22
 ### Changed
 - Prefixed namespace to provide better uniqueness
@@ -88,7 +95,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## 0.1.1 - 2018-09-13
 ### Added
 - Implemented client authentication
-- Implemented toggles for primaries and indices 
+- Implemented toggles for primaries and indices
 - Added status code and error checking to client requests
 
 ## 0.1.0 - 2018-08-28
