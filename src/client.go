@@ -45,7 +45,14 @@ type errorBody struct {
 // The hostname parameter specifies the hostname that the client should connect to.
 // Passing in an empty string causes the client to use the hostname specified in the command-line args. (default behavior)
 func NewClient(hostname string) (*HTTPClient, error) {
-	httpClient, err := nrHttp.New(args.CABundleFile, args.CABundleDir, time.Duration(args.Timeout)*time.Second)
+	var httpClient *http.Client
+	var err error
+	if args.SSLAlternativeHostname == "" {
+		httpClient, err = nrHttp.New(args.CABundleFile, args.CABundleDir, time.Duration(args.Timeout)*time.Second)
+	} else {
+		httpClient, err = nrHttp.NewAcceptInvalidHostname(args.CABundleFile, args.CABundleDir, time.Duration(args.Timeout)*time.Second, args.SSLAlternativeHostname)
+	}
+
 	if err != nil {
 		return nil, err
 	}

@@ -6,7 +6,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/newrelic/infra-integrations-sdk/data/metric"
+	"github.com/newrelic/infra-integrations-sdk/data/attribute"
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
 )
@@ -215,7 +215,7 @@ func setMetricsResponse(i *integration.Integration, resp interface{}, name strin
 		return err
 	}
 
-	msAttributes := []metric.Attribute{
+	msAttributes := []attribute.Attribute{
 		{Key: "displayName", Value: entity.Metadata.Name},
 		{Key: "entityName", Value: entity.Metadata.Namespace + ":" + entity.Metadata.Name},
 	}
