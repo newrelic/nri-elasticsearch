@@ -26,11 +26,12 @@ type argumentList struct {
 	CollectIndices         bool   `default:"true" help:"Signals whether to collect indices metrics or not"`
 	CollectPrimaries       bool   `default:"true" help:"Signals whether to collect primaries metrics or not"`
 	IndicesRegex           string `default:"" help:"JSON array of index names from which to collect metrics"`
+	MasterOnly             bool   `default:"false" help:"Collect cluster metrics on the elected master only"`
 }
 
 const (
 	integrationName    = "com.newrelic.elasticsearch"
-	integrationVersion = "4.3.0"
+	integrationVersion = "4.3.1"
 )
 
 var (
