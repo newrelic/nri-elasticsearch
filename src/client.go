@@ -16,6 +16,7 @@ const (
 	commonStatsEndpoint        = "/_stats"
 	clusterEndpoint            = "/_cluster/health"
 	indicesStatsEndpoint       = "/_cat/indices?format=json"
+	electedMasterNodeEndpoint  = "/_cat/master?h=id"
 )
 
 // HTTPClient represents a single connection to an Elasticsearch host
