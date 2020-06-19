@@ -24,6 +24,7 @@ elasticsearch,fs.iOOperations,gauge,true,The total I/O operations on the file st
 elasticsearch,fs.reads,gauge,true,The total number of reads from the file store
 elasticsearch,fs.totalSizeInBytes,gauge,true,The total size in bytes of the file storeshown in bytes
 elasticsearch,fs.unallocatedBytesInBYtes,gauge,true,The total number of unallocated bytes in the file storeshown in bytes
+elasticsearch,fs.usedDiskPercent,gauge,true,The total percentage of free disk space on the node
 elasticsearch,fs.writesInBytes,gauge,true,The total bytes written to the file storeshown in bytes
 elasticsearch,fs.writesInBytes,gauge,true,The total number of writes to the file store
 elasticsearch,get.currentRequestsRunning,gauge,true,The number of get requests currently running
