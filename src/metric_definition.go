@@ -303,8 +303,9 @@ type IndicesIDCache struct {
 
 // NodeFs struct
 type NodeFs struct {
-	Total   *FsTotal   `json:"total"`
-	IoStats *FsIoStats `json:"io_stats"`
+	Total             *FsTotal             `json:"total"`
+	IoStats           *FsIoStats           `json:"io_stats"`
+	MostUsageEstimate *FsMostUsageEstimate `json:"most_usage_estimate"`
 }
 
 // NodeBreakers struct
@@ -352,6 +353,11 @@ type FsTotal struct {
 	TotalInBytes      *int `json:"total_in_bytes" metric_name:"fs.totalSizeInBytes" source_type:"gauge"`
 	FreeInBytes       *int `json:"free_in_bytes" metric_name:"fs.unallocatedBytesInBYtes" source_type:"gauge"`
 	DiskIoSizeInBytes *int `json:"disk_io_size_in_bytes" metric_name:"fs.bytesUserIoOperationsInBytes" source_type:"gauge"`
+}
+
+// FsMostUsageEstimate struct
+type FsMostUsageEstimate struct {
+	UsedDiskPercent *float64 `json:"used_disk_percent" metric_name:"fs.usedDiskPercent" source_type:"gauge"`
 }
 
 // FsIoStats struct
