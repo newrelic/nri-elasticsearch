@@ -46,4 +46,7 @@ conf.yaml
 Makefile-deploy.mk
 
  #GoLand
-.idea 
+.idea
+
+dist
+*.gpg
