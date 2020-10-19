@@ -11,8 +11,6 @@ import (
 	"github.com/newrelic/infra-integrations-sdk/log"
 )
 
-const indexLimit = 500
-
 // populateMetrics wrapper to call each of the individual populate functions
 func populateMetrics(i *integration.Integration, client Client, env string) {
 	clusterName, err := populateClusterMetrics(i, client, env)
@@ -177,12 +175,6 @@ func setIndicesStatsMetricsResponse(integration *integration.Integration, indexR
 			*object.Name,
 			object,
 		})
-	}
-
-	// enforce index limit
-	if length := len(indicesToCollect); length > indexLimit {
-		log.Error("Could not collect index metrics: attempting to collect %d indices which exceeds the maximum of %d. Use the index regex configuration parameter to limit collection size.", length, indexLimit)
-		return
 	}
 
 	for _, index := range indicesToCollect {
