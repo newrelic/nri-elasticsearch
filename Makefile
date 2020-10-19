@@ -10,7 +10,6 @@ GO_FILES     := $(shell find src -type f -name "*.go")
 GOTOOLS       = github.com/kardianos/govendor \
 		gopkg.in/alecthomas/gometalinter.v2 \
 		github.com/axw/gocov/gocov \
-		github.com/stretchr/testify/assert \
 		github.com/AlekSi/gocov-xml \
 
 all: build
