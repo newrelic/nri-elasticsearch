@@ -176,38 +176,6 @@ func TestPopulateIndicesMetrics(t *testing.T) {
 	assert.Equal(t, expectedContents, actualContents)
 }
 
-func TestSetIndicesStatsMetricsResponse_TooManyIndices(t *testing.T) {
-	i := getTestingIntegration(t)
-	indexResponse := make([]*IndexStats, 501)
-	indexName := "test-index"
-	for i := 0; i < 501; i++ {
-		indexResponse[i] = &IndexStats{
-			Name: &indexName,
-		}
-	}
-	commonResponse := &CommonMetrics{
-		Indices: map[string]*Index{
-			"test-index": {
-				Primaries: &IndexPrimaryStats{
-					Store: &IndexPrimaryStore{
-						Size: new(int),
-					},
-				},
-				Totals: &IndexTotalStats{
-					Store: &IndexTotalStore{
-						Size: new(int),
-					},
-				},
-			},
-		},
-	}
-
-	setIndicesStatsMetricsResponse(i, indexResponse, commonResponse, testClusterName, nil)
-
-	// should not collect any entities since there are more than 100 of them.
-	assert.Equal(t, 0, len(i.Entities))
-}
-
 func TestPopulateIndicesMetrics_Error(t *testing.T) {
 	mockClient := createNewTestClient()
 	mockClient.ReturnRequestError = true
