@@ -45,5 +45,15 @@ debug
 conf.yaml
 Makefile-deploy.mk
 
- #GoLand
-.idea 
+bin/
+dist/
+
+# Local development tools/files
+.idea
+.env
+.envrc
+*.gpg
+
+# build files
+src/versioninfo.json
+src/resource.syso
