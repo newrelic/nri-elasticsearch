@@ -145,5 +145,5 @@ jobs:
         uses: archive/github-actions-slack@master
         with:
           slack-bot-user-oauth-access-token: ${{ secrets.COREINT_SLACK_TOKEN }}
-          slack-channel: ${{ env.COREINT_SLACK_CHANNEL }}
+          slack-channel: ${{ secrets.COREINT_SLACK_CHANNEL }}
           slack-text: "❌ `${{ env.REPO_FULL_NAME }}`: prerelease pipeline failed."
