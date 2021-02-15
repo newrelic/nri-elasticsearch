@@ -83,7 +83,7 @@ archives:
       - nri-win
     name_template: "{{ .ProjectName }}-{{ .Arch }}.{{ .Version }}_dirty"
     files:
-      - elasticsearch-win-config.yml.sample
+      - elasticsearch-config.yml.sample
       - elasticsearch-win-definition.yml
     format: zip
 
