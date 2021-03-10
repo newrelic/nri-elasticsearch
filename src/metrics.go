@@ -117,6 +117,11 @@ func populateCommonMetrics(i *integration.Integration, client Client, clusterNam
 
 func populateIndicesMetrics(i *integration.Integration, client Client, commonStats *CommonMetrics, clusterName string) error {
 	log.Info("Collecting indices metrics")
+
+	if commonStats == nil {
+		return fmt.Errorf("Common Metrics stats cannot be null to compute Index Metrics")
+	}
+
 	indicesStats := make([]*IndexStats, 0)
 	err := client.Request(indicesStatsEndpoint, &indicesStats)
 	if err != nil {

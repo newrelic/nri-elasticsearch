@@ -185,6 +185,19 @@ func TestPopulateIndicesMetrics_Error(t *testing.T) {
 	assert.Error(t, err, "should be an error")
 }
 
+func TestPopulateIndicesMetrics_NilStats(t *testing.T) {
+	// Given a nil commonStats metrics and not nil indicesMetrics
+	client := createNewTestClient()
+	client.init("indicesMetricsResult.json", indicesStatsEndpoint, t)
+	i := getTestingIntegration(t)
+
+	// When executing populateIndicesMetrics
+	err := populateIndicesMetrics(i, client, nil, testClusterName)
+
+	// Then should be an error and not panic
+	assert.Error(t, err, "should be an error")
+}
+
 func TestIndicesRegex(t *testing.T) {
 	args.IndicesRegex = "twitter"
 	i := getTestingIntegration(t)
