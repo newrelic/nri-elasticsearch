@@ -87,17 +87,29 @@ func ipToString(ip interface{}) string {
 
 func populateClusterMetrics(i *integration.Integration, client Client, env string) (string, error) {
 	log.Info("Collecting cluster metrics.")
-	clusterResponse := new(ClusterResponse)
-	err := client.Request(clusterEndpoint, &clusterResponse)
+
+	clusterResponse, err := getClusterResponse(client)
 	if err != nil {
 		return "", err
 	}
+	err = setMetricsResponse(i, clusterResponse, *clusterResponse.Name, "es-cluster", *clusterResponse.Name)
+	if err != nil {
+		return "", err
+	}
+	return *clusterResponse.Name, nil
+}
 
-	if clusterResponse.Name == nil {
-		return "", errors.New("cannot set metric response, missing cluster name")
+func getClusterResponse(client Client) (*ClusterResponse, error) {
+	clusterResponse := new(ClusterResponse)
+	err := client.Request(clusterEndpoint, &clusterResponse)
+	if err != nil {
+		return nil, err
 	}
 
-	return *clusterResponse.Name, setMetricsResponse(i, clusterResponse, *clusterResponse.Name, "es-cluster", *clusterResponse.Name)
+	if clusterResponse.Name == nil {
+		return nil, errors.New("cannot set metric response, missing cluster name")
+	}
+	return clusterResponse, nil
 }
 
 func populateCommonMetrics(i *integration.Integration, client Client, clusterName string) (*CommonMetrics, error) {
@@ -200,14 +212,8 @@ func getIndexFromCommon(indexName string, indexList map[string]*Index) (*Index, 
 // setMetricsResponse creates an entity and a metric set for the
 // type of response and calls MarshalMetrics using that response
 func setMetricsResponse(i *integration.Integration, resp interface{}, name string, namespace string, clusterName string) error {
-	entityIDAttrs := []integration.IDAttribute{
-		{Key: "clusterName", Value: clusterName},
-	}
-	if args.ClusterEnvironment != "" {
-		entityIDAttrs = append(entityIDAttrs, integration.IDAttribute{Key: "env", Value: args.ClusterEnvironment})
-	}
 
-	entity, err := i.EntityReportedVia(fmt.Sprintf("%s:%d", args.Hostname, args.Port), name, namespace, entityIDAttrs...)
+	entity, err := getEntity(i, name, namespace, clusterName)
 	if err != nil {
 		return err
 	}
@@ -220,6 +226,23 @@ func setMetricsResponse(i *integration.Integration, resp interface{}, name strin
 	metricSet := entity.NewMetricSet(getSampleName(namespace), msAttributes...)
 
 	return metricSet.MarshalMetrics(resp)
+}
+
+// getEntity generates or retrives an entity if exist
+func getEntity(i *integration.Integration, name, namespace, clusterName string) (*integration.Entity, error) {
+	entityIDAttrs := []integration.IDAttribute{
+		{Key: "clusterName", Value: clusterName},
+	}
+	if args.ClusterEnvironment != "" {
+		entityIDAttrs = append(entityIDAttrs, integration.IDAttribute{Key: "env", Value: args.ClusterEnvironment})
+	}
+
+	entity, err := i.EntityReportedVia(fmt.Sprintf("%s:%d", args.Hostname, args.Port), name, namespace, entityIDAttrs...)
+	if err != nil {
+		return nil, err
+	}
+
+	return entity, nil
 }
 
 func getSampleName(entityType string) string {
