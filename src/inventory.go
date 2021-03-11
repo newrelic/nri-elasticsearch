@@ -21,7 +21,19 @@ func populateInventory(i *integration.Integration, client Client) {
 		return
 	}
 
-	localNodeEntity, err := i.Entity(localNodeName, "node")
+	clusterResponse, err := getClusterResponse(client)
+	if err != nil {
+		log.Error("Could not get cluster name: %v", err)
+		return
+	}
+
+	// This should retrive the entity of the node if was already generated during the metrics processing.
+	localNodeEntity, err := getEntity(i, localNodeName, "es-node", *clusterResponse.Name)
+	if err != nil {
+		log.Error("Could not get local node entity: %v", err)
+		return
+	}
+
 	if err != nil {
 		log.Error("Could not get local node entity: %v", err)
 		return
