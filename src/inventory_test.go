@@ -199,8 +199,10 @@ func TestPopulateInventory(t *testing.T) {
 	goldenPath := filepath.Join("testdata", "good-inventory.json.golden")
 
 	fakeClient := mockClient{}
-	mockedReturnVal := filepath.Join("testdata", "good-nodes-local.json")
-	fakeClient.On("Request", "/_nodes/_local").Return(mockedReturnVal, nil).Once()
+	mockedReturnValNode := filepath.Join("testdata", "good-nodes-local.json")
+	mockedReturnValCluster := filepath.Join("testdata", "clusterStatsMetricsResult.json")
+	fakeClient.On("Request", "/_nodes/_local").Return(mockedReturnValNode, nil).Once()
+	fakeClient.On("Request", "/_cluster/health").Return(mockedReturnValCluster, nil).Once()
 
 	i := getTestingIntegration(t)
 	populateInventory(i, &fakeClient)
