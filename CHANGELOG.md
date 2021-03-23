@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.3.4 (2021-03-23)
+### Changed
+- Add arm packages and binaries.
+
 ## 4.3.3 (2020-10-19)
 ### Changed
 - Removed the index limit
