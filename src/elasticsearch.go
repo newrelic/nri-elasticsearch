@@ -2,7 +2,10 @@
 package main
 
 import (
+	"fmt"
 	"os"
+	"runtime"
+	"strings"
 
 	sdkArgs "github.com/newrelic/infra-integrations-sdk/args"
 	"github.com/newrelic/infra-integrations-sdk/integration"
@@ -26,21 +29,36 @@ type argumentList struct {
 	CollectIndices         bool   `default:"true" help:"Signals whether to collect indices metrics or not"`
 	CollectPrimaries       bool   `default:"true" help:"Signals whether to collect primaries metrics or not"`
 	IndicesRegex           string `default:"" help:"A regex pattern that matches the index names to collect. Collects all if unspecified"`
+	ShowVersion            bool   `default:"false" help:"Print build information and exit"`
 }
 
 const (
-	integrationName    = "com.newrelic.elasticsearch"
-	integrationVersion = "4.3.3"
+	integrationName = "com.newrelic.elasticsearch"
 )
 
 var (
-	args argumentList
+	args               argumentList
+	integrationVersion = "0.0.0"
+	gitCommit          = ""
+	buildDate          = ""
 )
 
 func main() {
 	// Create Integration
 	i, err := integration.New(integrationName, integrationVersion, integration.Args(&args))
 	logErrorAndExit(err)
+
+	if args.ShowVersion {
+		fmt.Printf(
+			"New Relic %s integration Version: %s, Platform: %s, GoVersion: %s, GitCommit: %s, BuildDate: %s\n",
+			strings.Title(strings.Replace(integrationName, "com.newrelic.", "", 1)),
+			integrationVersion,
+			fmt.Sprintf("%s/%s", runtime.GOOS, runtime.GOARCH),
+			runtime.Version(),
+			gitCommit,
+			buildDate)
+		os.Exit(0)
+	}
 
 	// Create a client for metrics
 	metricsClient, err := NewClient(args.Hostname)
