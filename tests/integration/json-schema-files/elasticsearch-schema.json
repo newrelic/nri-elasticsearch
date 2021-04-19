@@ -1,0 +1,1589 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "type": "object",
+  "required": [
+    "name",
+    "protocol_version",
+    "integration_version",
+    "data"
+  ],
+  "properties": {
+    "name": {
+      "minLength": 1,
+      "pattern": "^com.newrelic.elasticsearch$",
+      "type": "string"
+    },
+    "protocol_version": {
+      "minLength": 1,
+      "pattern": "^3$",
+      "type": "string"
+    },
+    "integration_version": {
+      "minLength": 1,
+      "pattern": "^[0-9]+.[0-9]+.[0-9]+$",
+      "type": "string"
+    },
+    "data": {
+      "type": "array",
+      "minItems": 4,
+      "items": [
+        {
+          "type": "object",
+          "required": [
+            "entity",
+            "metrics",
+            "inventory",
+            "events"
+          ],
+          "properties": {
+            "entity": {
+              "type": "object",
+              "required": [
+                "name",
+                "type",
+                "id_attributes"
+              ],
+              "properties": {
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "type": {
+                  "minLength": 1,
+                  "pattern": "^es-cluster$",
+                  "type": "string"
+                },
+                "id_attributes": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "Key",
+                        "Value"
+                      ],
+                      "properties": {
+                        "Key": {
+                          "type": "string"
+                        },
+                        "Value": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "required": [
+                        "Key",
+                        "Value"
+                      ],
+                      "properties": {
+                        "Key": {
+                          "type": "string"
+                        },
+                        "Value": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "metrics": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "cluster.dataNodes",
+                  "cluster.nodes",
+                  "cluster.status",
+                  "displayName",
+                  "entityName",
+                  "event_type",
+                  "reportingEndpoint",
+                  "shards.active",
+                  "shards.initializing",
+                  "shards.primaryActive",
+                  "shards.relocating",
+                  "shards.unassigned"
+                ],
+                "properties": {
+                  "cluster.dataNodes": {
+                    "type": "integer"
+                  },
+                  "cluster.nodes": {
+                    "type": "integer"
+                  },
+                  "cluster.status": {
+                    "type": "string"
+                  },
+                  "displayName": {
+                    "type": "string"
+                  },
+                  "entityName": {
+                    "type": "string"
+                  },
+                  "event_type": {
+                    "type": "string"
+                  },
+                  "reportingEndpoint": {
+                    "type": "string"
+                  },
+                  "shards.active": {
+                    "type": "integer"
+                  },
+                  "shards.initializing": {
+                    "type": "integer"
+                  },
+                  "shards.primaryActive": {
+                    "type": "integer"
+                  },
+                  "shards.relocating": {
+                    "type": "integer"
+                  },
+                  "shards.unassigned": {
+                    "type": "integer"
+                  }
+                }
+              }
+            },
+            "inventory": {
+              "type": "object",
+              "required": []
+            },
+            "events": {
+              "type": "array"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "entity",
+            "metrics",
+            "inventory",
+            "events"
+          ],
+          "properties": {
+            "entity": {
+              "type": "object",
+              "required": [
+                "name",
+                "type",
+                "id_attributes"
+              ],
+              "properties": {
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "type": {
+                  "minLength": 1,
+                  "pattern": "^es-node$",
+                  "type": "string"
+                },
+                "id_attributes": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "Key",
+                        "Value"
+                      ],
+                      "properties": {
+                        "Key": {
+                          "type": "string"
+                        },
+                        "Value": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "required": [
+                        "Key",
+                        "Value"
+                      ],
+                      "properties": {
+                        "Key": {
+                          "type": "string"
+                        },
+                        "Value": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "metrics": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "activeSearches",
+                  "activeSearchesInMilliseconds",
+                  "breakers.estimatedSizeFieldDataCircuitBreakerInBytes",
+                  "breakers.estimatedSizeParentCircuitBreakerInBytes",
+                  "breakers.estimatedSizeRequestCircuitBreakerInBytes",
+                  "breakers.fieldDataCircuitBreakerTripped",
+                  "breakers.parentCircuitBreakerTripped",
+                  "breakers.requestCircuitBreakerTripped",
+                  "displayName",
+                  "entityName",
+                  "event_type",
+                  "flush.indexRefreshesTotal",
+                  "flush.indexRefreshesTotalInMilliseconds",
+                  "fs.bytesAvailableJVMInBytes",
+                  "fs.totalSizeInBytes",
+                  "fs.unallocatedBytesInBYtes",
+                  "get.currentRequestsRunning",
+                  "get.requestsDocumentExists",
+                  "get.requestsDocumentExistsInMilliseconds",
+                  "get.requestsDocumentMissing",
+                  "get.requestsDocumentMissingInMilliseconds",
+                  "get.timeGetRequestsInMilliseconds",
+                  "get.totalGetRequests",
+                  "http.currentOpenConnections",
+                  "http.openedConnections",
+                  "indexing.docsCurrentlyDeleted",
+                  "indexing.documentsCurrentlyIndexing",
+                  "indexing.documentsIndexed",
+                  "indexing.timeDeletingDocumentsInMilliseconds",
+                  "indexing.timeIndexingDocumentsInMilliseconds",
+                  "indexing.totalDocumentsDeleted",
+                  "indices.indexingOperationsFailed",
+                  "indices.indexingWaitedThrottlingInMilliseconds",
+                  "indices.memoryQueryCacheInBytes",
+                  "indices.numberIndices",
+                  "indices.queryCacheEvictions",
+                  "indices.queryCacheHits",
+                  "indices.queryCacheMisses",
+                  "indices.recoveryOngoingShardSource",
+                  "indices.recoveryOngoingShardTarget",
+                  "indices.recoveryWaitedThrottlingInMilliseconds",
+                  "indices.requestCacheEvictions",
+                  "indices.requestCacheHits",
+                  "indices.requestCacheMemoryInBytes",
+                  "indices.requestCacheMisses",
+                  "indices.segmentsIndexShard",
+                  "indices.segmentsMemoryUsedDocValuesInBytes",
+                  "indices.segmentsMemoryUsedFixedBitSetInBytes",
+                  "indices.segmentsMemoryUsedIndexSegmentsInBytes",
+                  "indices.segmentsMemoryUsedIndexWriterInBytes",
+                  "indices.segmentsMemoryUsedNormsInBytes",
+                  "indices.segmentsMemoryUsedSegmentVersionMapInBytes",
+                  "indices.segmentsMemoryUsedStoredFieldsInBytes",
+                  "indices.segmentsMemoryUsedTermVectorsInBytes",
+                  "indices.segmentsMemoryUsedTermsInBytes",
+                  "indices.translogOperations",
+                  "indices.translogOperationsInBytes",
+                  "jvm.ThreadsActive",
+                  "jvm.ThreadsPeak",
+                  "jvm.gc.majorCollectionsOldGenerationObjects",
+                  "jvm.gc.majorCollectionsOldGenerationObjectsInMilliseconds",
+                  "jvm.gc.minorCollectionsYoungGenerationObjects",
+                  "jvm.gc.minorCollectionsYoungGenerationObjectsInMilliseconds",
+                  "jvm.mem.heapCommittedInBytes",
+                  "jvm.mem.heapMaxInBytes",
+                  "jvm.mem.heapUsed",
+                  "jvm.mem.heapUsedInBytes",
+                  "jvm.mem.maxOldGenerationHeapInBytes",
+                  "jvm.mem.maxSurvivorSpaceInBYtes",
+                  "jvm.mem.maxYoungGenerationHeapInBytes",
+                  "jvm.mem.nonHeapCommittedInBytes",
+                  "jvm.mem.nonHeapUsedInBytes",
+                  "jvm.mem.usedOldGenerationHeapInBytes",
+                  "jvm.mem.usedSurvivorSpaceInBytes",
+                  "jvm.mem.usedYoungGenerationHeapInBytes",
+                  "merges.currentActive",
+                  "merges.docsSegmentMerges",
+                  "merges.docsSegmentsMerging",
+                  "merges.mergedSegmentsInBytes",
+                  "merges.segmentMerges",
+                  "merges.sizeSegmentsMergingInBytes",
+                  "merges.totalSegmentMergingInMilliseconds",
+                  "node.hostname",
+                  "node.ipAddress",
+                  "openFD",
+                  "queriesTotal",
+                  "refresh.total",
+                  "refresh.totalInMilliseconds",
+                  "reportingEndpoint",
+                  "searchFetchCurrentlyRunning",
+                  "searchFetches",
+                  "sizeStoreInBytes",
+                  "threadpool.activeFetchShardStarted",
+                  "threadpool.fetchShardStartedQueue",
+                  "threadpool.fetchShardStartedRejected",
+                  "threadpool.fetchShardStartedThreads",
+                  "threadpool.fetchShardStoreActive",
+                  "threadpool.fetchShardStoreQueue",
+                  "threadpool.fetchShardStoreRejected",
+                  "threadpool.fetchShardStoreThreads",
+                  "threadpool.flushActive",
+                  "threadpool.flushQueue",
+                  "threadpool.flushRejected",
+                  "threadpool.flushThreads",
+                  "threadpool.forceMergeActive",
+                  "threadpool.forceMergeQueue",
+                  "threadpool.forceMergeRejected",
+                  "threadpool.forceMergeThreads",
+                  "threadpool.genericActive",
+                  "threadpool.genericQueue",
+                  "threadpool.genericRejected",
+                  "threadpool.genericThreads",
+                  "threadpool.getActive",
+                  "threadpool.getQueue",
+                  "threadpool.getRejected",
+                  "threadpool.getThreads",
+                  "threadpool.indexActive",
+                  "threadpool.indexQueue",
+                  "threadpool.indexRejected",
+                  "threadpool.indexThreads",
+                  "threadpool.listenerActive",
+                  "threadpool.listenerQueue",
+                  "threadpool.listenerRejected",
+                  "threadpool.listenerThreads",
+                  "threadpool.managementActive",
+                  "threadpool.managementQueue",
+                  "threadpool.managementRejected",
+                  "threadpool.managementThreads",
+                  "threadpool.refreshActive",
+                  "threadpool.refreshQueue",
+                  "threadpool.refreshRejected",
+                  "threadpool.refreshThreads",
+                  "threadpool.searchActive",
+                  "threadpool.searchQueue",
+                  "threadpool.searchRejected",
+                  "threadpool.searchThreads",
+                  "threadpool.snapshotActive",
+                  "threadpool.snapshotQueue",
+                  "threadpool.snapshotRejected",
+                  "threadpool.snapshotThreads",
+                  "transport.connectionsOpened",
+                  "transport.packetsReceived",
+                  "transport.packetsReceivedInBytes",
+                  "transport.packetsSent",
+                  "transport.packetsSentInBytes"
+                ],
+                "properties": {
+                  "activeSearches": {
+                    "type": "integer"
+                  },
+                  "activeSearchesInMilliseconds": {
+                    "type": "integer"
+                  },
+                  "breakers.estimatedSizeFieldDataCircuitBreakerInBytes": {
+                    "type": "integer"
+                  },
+                  "breakers.estimatedSizeParentCircuitBreakerInBytes": {
+                    "type": "integer"
+                  },
+                  "breakers.estimatedSizeRequestCircuitBreakerInBytes": {
+                    "type": "integer"
+                  },
+                  "breakers.fieldDataCircuitBreakerTripped": {
+                    "type": "integer"
+                  },
+                  "breakers.parentCircuitBreakerTripped": {
+                    "type": "integer"
+                  },
+                  "breakers.requestCircuitBreakerTripped": {
+                    "type": "integer"
+                  },
+                  "displayName": {
+                    "type": "string"
+                  },
+                  "entityName": {
+                    "type": "string"
+                  },
+                  "event_type": {
+                    "type": "string"
+                  },
+                  "flush.indexRefreshesTotal": {
+                    "type": "integer"
+                  },
+                  "flush.indexRefreshesTotalInMilliseconds": {
+                    "type": "integer"
+                  },
+                  "fs.bytesAvailableJVMInBytes": {
+                    "type": "integer"
+                  },
+                  "fs.totalSizeInBytes": {
+                    "type": "integer"
+                  },
+                  "fs.unallocatedBytesInBYtes": {
+                    "type": "integer"
+                  },
+                  "get.currentRequestsRunning": {
+                    "type": "integer"
+                  },
+                  "get.requestsDocumentExists": {
+                    "type": "integer"
+                  },
+                  "get.requestsDocumentExistsInMilliseconds": {
+                    "type": "integer"
+                  },
+                  "get.requestsDocumentMissing": {
+                    "type": "integer"
+                  },
+                  "get.requestsDocumentMissingInMilliseconds": {
+                    "type": "integer"
+                  },
+                  "get.timeGetRequestsInMilliseconds": {
+                    "type": "integer"
+                  },
+                  "get.totalGetRequests": {
+                    "type": "integer"
+                  },
+                  "http.currentOpenConnections": {
+                    "type": "integer"
+                  },
+                  "http.openedConnections": {
+                    "type": "integer"
+                  },
+                  "indexing.docsCurrentlyDeleted": {
+                    "type": "integer"
+                  },
+                  "indexing.documentsCurrentlyIndexing": {
+                    "type": "integer"
+                  },
+                  "indexing.documentsIndexed": {
+                    "type": "integer"
+                  },
+                  "indexing.timeDeletingDocumentsInMilliseconds": {
+                    "type": "integer"
+                  },
+                  "indexing.timeIndexingDocumentsInMilliseconds": {
+                    "type": "integer"
+                  },
+                  "indexing.totalDocumentsDeleted": {
+                    "type": "integer"
+                  },
+                  "indices.indexingOperationsFailed": {
+                    "type": "integer"
+                  },
+                  "indices.indexingWaitedThrottlingInMilliseconds": {
+                    "type": "integer"
+                  },
+                  "indices.memoryQueryCacheInBytes": {
+                    "type": "integer"
+                  },
+                  "indices.numberIndices": {
+                    "type": "integer"
+                  },
+                  "indices.queryCacheEvictions": {
+                    "type": "integer"
+                  },
+                  "indices.queryCacheHits": {
+                    "type": "integer"
+                  },
+                  "indices.queryCacheMisses": {
+                    "type": "integer"
+                  },
+                  "indices.recoveryOngoingShardSource": {
+                    "type": "integer"
+                  },
+                  "indices.recoveryOngoingShardTarget": {
+                    "type": "integer"
+                  },
+                  "indices.recoveryWaitedThrottlingInMilliseconds": {
+                    "type": "integer"
+                  },
+                  "indices.requestCacheEvictions": {
+                    "type": "integer"
+                  },
+                  "indices.requestCacheHits": {
+                    "type": "integer"
+                  },
+                  "indices.requestCacheMemoryInBytes": {
+                    "type": "integer"
+                  },
+                  "indices.requestCacheMisses": {
+                    "type": "integer"
+                  },
+                  "indices.segmentsIndexShard": {
+                    "type": "integer"
+                  },
+                  "indices.segmentsMemoryUsedDocValuesInBytes": {
+                    "type": "integer"
+                  },
+                  "indices.segmentsMemoryUsedFixedBitSetInBytes": {
+                    "type": "integer"
+                  },
+                  "indices.segmentsMemoryUsedIndexSegmentsInBytes": {
+                    "type": "integer"
+                  },
+                  "indices.segmentsMemoryUsedIndexWriterInBytes": {
+                    "type": "integer"
+                  },
+                  "indices.segmentsMemoryUsedNormsInBytes": {
+                    "type": "integer"
+                  },
+                  "indices.segmentsMemoryUsedSegmentVersionMapInBytes": {
+                    "type": "integer"
+                  },
+                  "indices.segmentsMemoryUsedStoredFieldsInBytes": {
+                    "type": "integer"
+                  },
+                  "indices.segmentsMemoryUsedTermVectorsInBytes": {
+                    "type": "integer"
+                  },
+                  "indices.segmentsMemoryUsedTermsInBytes": {
+                    "type": "integer"
+                  },
+                  "indices.translogOperations": {
+                    "type": "integer"
+                  },
+                  "indices.translogOperationsInBytes": {
+                    "type": "integer"
+                  },
+                  "jvm.ThreadsActive": {
+                    "type": "integer"
+                  },
+                  "jvm.ThreadsPeak": {
+                    "type": "integer"
+                  },
+                  "jvm.gc.majorCollectionsOldGenerationObjects": {
+                    "type": "integer"
+                  },
+                  "jvm.gc.majorCollectionsOldGenerationObjectsInMilliseconds": {
+                    "type": "integer"
+                  },
+                  "jvm.gc.minorCollectionsYoungGenerationObjects": {
+                    "type": "integer"
+                  },
+                  "jvm.gc.minorCollectionsYoungGenerationObjectsInMilliseconds": {
+                    "type": "integer"
+                  },
+                  "jvm.mem.heapCommittedInBytes": {
+                    "type": "integer"
+                  },
+                  "jvm.mem.heapMaxInBytes": {
+                    "type": "integer"
+                  },
+                  "jvm.mem.heapUsed": {
+                    "type": "integer"
+                  },
+                  "jvm.mem.heapUsedInBytes": {
+                    "type": "integer"
+                  },
+                  "jvm.mem.maxOldGenerationHeapInBytes": {
+                    "type": "integer"
+                  },
+                  "jvm.mem.maxSurvivorSpaceInBYtes": {
+                    "type": "integer"
+                  },
+                  "jvm.mem.maxYoungGenerationHeapInBytes": {
+                    "type": "integer"
+                  },
+                  "jvm.mem.nonHeapCommittedInBytes": {
+                    "type": "integer"
+                  },
+                  "jvm.mem.nonHeapUsedInBytes": {
+                    "type": "integer"
+                  },
+                  "jvm.mem.usedOldGenerationHeapInBytes": {
+                    "type": "integer"
+                  },
+                  "jvm.mem.usedSurvivorSpaceInBytes": {
+                    "type": "integer"
+                  },
+                  "jvm.mem.usedYoungGenerationHeapInBytes": {
+                    "type": "integer"
+                  },
+                  "merges.currentActive": {
+                    "type": "integer"
+                  },
+                  "merges.docsSegmentMerges": {
+                    "type": "integer"
+                  },
+                  "merges.docsSegmentsMerging": {
+                    "type": "integer"
+                  },
+                  "merges.mergedSegmentsInBytes": {
+                    "type": "integer"
+                  },
+                  "merges.segmentMerges": {
+                    "type": "integer"
+                  },
+                  "merges.sizeSegmentsMergingInBytes": {
+                    "type": "integer"
+                  },
+                  "merges.totalSegmentMergingInMilliseconds": {
+                    "type": "integer"
+                  },
+                  "node.hostname": {
+                    "type": "string"
+                  },
+                  "node.ipAddress": {
+                    "type": "string"
+                  },
+                  "openFD": {
+                    "type": "integer"
+                  },
+                  "queriesTotal": {
+                    "type": "integer"
+                  },
+                  "refresh.total": {
+                    "type": "integer"
+                  },
+                  "refresh.totalInMilliseconds": {
+                    "type": "integer"
+                  },
+                  "reportingEndpoint": {
+                    "type": "string"
+                  },
+                  "searchFetchCurrentlyRunning": {
+                    "type": "integer"
+                  },
+                  "searchFetches": {
+                    "type": "integer"
+                  },
+                  "sizeStoreInBytes": {
+                    "type": "integer"
+                  },
+                  "threadpool.activeFetchShardStarted": {
+                    "type": "integer"
+                  },
+                  "threadpool.fetchShardStartedQueue": {
+                    "type": "integer"
+                  },
+                  "threadpool.fetchShardStartedRejected": {
+                    "type": "integer"
+                  },
+                  "threadpool.fetchShardStartedThreads": {
+                    "type": "integer"
+                  },
+                  "threadpool.fetchShardStoreActive": {
+                    "type": "integer"
+                  },
+                  "threadpool.fetchShardStoreQueue": {
+                    "type": "integer"
+                  },
+                  "threadpool.fetchShardStoreRejected": {
+                    "type": "integer"
+                  },
+                  "threadpool.fetchShardStoreThreads": {
+                    "type": "integer"
+                  },
+                  "threadpool.flushActive": {
+                    "type": "integer"
+                  },
+                  "threadpool.flushQueue": {
+                    "type": "integer"
+                  },
+                  "threadpool.flushRejected": {
+                    "type": "integer"
+                  },
+                  "threadpool.flushThreads": {
+                    "type": "integer"
+                  },
+                  "threadpool.forceMergeActive": {
+                    "type": "integer"
+                  },
+                  "threadpool.forceMergeQueue": {
+                    "type": "integer"
+                  },
+                  "threadpool.forceMergeRejected": {
+                    "type": "integer"
+                  },
+                  "threadpool.forceMergeThreads": {
+                    "type": "integer"
+                  },
+                  "threadpool.genericActive": {
+                    "type": "integer"
+                  },
+                  "threadpool.genericQueue": {
+                    "type": "integer"
+                  },
+                  "threadpool.genericRejected": {
+                    "type": "integer"
+                  },
+                  "threadpool.genericThreads": {
+                    "type": "integer"
+                  },
+                  "threadpool.getActive": {
+                    "type": "integer"
+                  },
+                  "threadpool.getQueue": {
+                    "type": "integer"
+                  },
+                  "threadpool.getRejected": {
+                    "type": "integer"
+                  },
+                  "threadpool.getThreads": {
+                    "type": "integer"
+                  },
+                  "threadpool.indexActive": {
+                    "type": "integer"
+                  },
+                  "threadpool.indexQueue": {
+                    "type": "integer"
+                  },
+                  "threadpool.indexRejected": {
+                    "type": "integer"
+                  },
+                  "threadpool.indexThreads": {
+                    "type": "integer"
+                  },
+                  "threadpool.listenerActive": {
+                    "type": "integer"
+                  },
+                  "threadpool.listenerQueue": {
+                    "type": "integer"
+                  },
+                  "threadpool.listenerRejected": {
+                    "type": "integer"
+                  },
+                  "threadpool.listenerThreads": {
+                    "type": "integer"
+                  },
+                  "threadpool.managementActive": {
+                    "type": "integer"
+                  },
+                  "threadpool.managementQueue": {
+                    "type": "integer"
+                  },
+                  "threadpool.managementRejected": {
+                    "type": "integer"
+                  },
+                  "threadpool.managementThreads": {
+                    "type": "integer"
+                  },
+                  "threadpool.refreshActive": {
+                    "type": "integer"
+                  },
+                  "threadpool.refreshQueue": {
+                    "type": "integer"
+                  },
+                  "threadpool.refreshRejected": {
+                    "type": "integer"
+                  },
+                  "threadpool.refreshThreads": {
+                    "type": "integer"
+                  },
+                  "threadpool.searchActive": {
+                    "type": "integer"
+                  },
+                  "threadpool.searchQueue": {
+                    "type": "integer"
+                  },
+                  "threadpool.searchRejected": {
+                    "type": "integer"
+                  },
+                  "threadpool.searchThreads": {
+                    "type": "integer"
+                  },
+                  "threadpool.snapshotActive": {
+                    "type": "integer"
+                  },
+                  "threadpool.snapshotQueue": {
+                    "type": "integer"
+                  },
+                  "threadpool.snapshotRejected": {
+                    "type": "integer"
+                  },
+                  "threadpool.snapshotThreads": {
+                    "type": "integer"
+                  },
+                  "transport.connectionsOpened": {
+                    "type": "integer"
+                  },
+                  "transport.packetsReceived": {
+                    "type": "integer"
+                  },
+                  "transport.packetsReceivedInBytes": {
+                    "type": "integer"
+                  },
+                  "transport.packetsSent": {
+                    "type": "integer"
+                  },
+                  "transport.packetsSentInBytes": {
+                    "type": "integer"
+                  }
+                }
+              }
+            },
+            "inventory": {
+              "type": "object",
+              "required": []
+            },
+            "events": {
+              "type": "array"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "entity",
+            "metrics",
+            "inventory",
+            "events"
+          ],
+          "properties": {
+            "entity": {
+              "type": "object",
+              "required": [
+                "name",
+                "type",
+                "id_attributes"
+              ],
+              "properties": {
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "type": {
+                  "minLength": 1,
+                  "pattern": "^es-node$",
+                  "type": "string"
+                },
+                "id_attributes": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "Key",
+                        "Value"
+                      ],
+                      "properties": {
+                        "Key": {
+                          "type": "string"
+                        },
+                        "Value": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "required": [
+                        "Key",
+                        "Value"
+                      ],
+                      "properties": {
+                        "Key": {
+                          "type": "string"
+                        },
+                        "Value": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "metrics": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "activeSearches",
+                  "activeSearchesInMilliseconds",
+                  "breakers.estimatedSizeFieldDataCircuitBreakerInBytes",
+                  "breakers.estimatedSizeParentCircuitBreakerInBytes",
+                  "breakers.estimatedSizeRequestCircuitBreakerInBytes",
+                  "breakers.fieldDataCircuitBreakerTripped",
+                  "breakers.parentCircuitBreakerTripped",
+                  "breakers.requestCircuitBreakerTripped",
+                  "displayName",
+                  "entityName",
+                  "event_type",
+                  "flush.indexRefreshesTotal",
+                  "flush.indexRefreshesTotalInMilliseconds",
+                  "fs.bytesAvailableJVMInBytes",
+                  "fs.totalSizeInBytes",
+                  "fs.unallocatedBytesInBYtes",
+                  "get.currentRequestsRunning",
+                  "get.requestsDocumentExists",
+                  "get.requestsDocumentExistsInMilliseconds",
+                  "get.requestsDocumentMissing",
+                  "get.requestsDocumentMissingInMilliseconds",
+                  "get.timeGetRequestsInMilliseconds",
+                  "get.totalGetRequests",
+                  "http.currentOpenConnections",
+                  "http.openedConnections",
+                  "indexing.docsCurrentlyDeleted",
+                  "indexing.documentsCurrentlyIndexing",
+                  "indexing.documentsIndexed",
+                  "indexing.timeDeletingDocumentsInMilliseconds",
+                  "indexing.timeIndexingDocumentsInMilliseconds",
+                  "indexing.totalDocumentsDeleted",
+                  "indices.indexingOperationsFailed",
+                  "indices.indexingWaitedThrottlingInMilliseconds",
+                  "indices.memoryQueryCacheInBytes",
+                  "indices.numberIndices",
+                  "indices.queryCacheEvictions",
+                  "indices.queryCacheHits",
+                  "indices.queryCacheMisses",
+                  "indices.recoveryOngoingShardSource",
+                  "indices.recoveryOngoingShardTarget",
+                  "indices.recoveryWaitedThrottlingInMilliseconds",
+                  "indices.requestCacheEvictions",
+                  "indices.requestCacheHits",
+                  "indices.requestCacheMemoryInBytes",
+                  "indices.requestCacheMisses",
+                  "indices.segmentsIndexShard",
+                  "indices.segmentsMemoryUsedDocValuesInBytes",
+                  "indices.segmentsMemoryUsedFixedBitSetInBytes",
+                  "indices.segmentsMemoryUsedIndexSegmentsInBytes",
+                  "indices.segmentsMemoryUsedIndexWriterInBytes",
+                  "indices.segmentsMemoryUsedNormsInBytes",
+                  "indices.segmentsMemoryUsedSegmentVersionMapInBytes",
+                  "indices.segmentsMemoryUsedStoredFieldsInBytes",
+                  "indices.segmentsMemoryUsedTermVectorsInBytes",
+                  "indices.segmentsMemoryUsedTermsInBytes",
+                  "indices.translogOperations",
+                  "indices.translogOperationsInBytes",
+                  "jvm.ThreadsActive",
+                  "jvm.ThreadsPeak",
+                  "jvm.gc.majorCollectionsOldGenerationObjects",
+                  "jvm.gc.majorCollectionsOldGenerationObjectsInMilliseconds",
+                  "jvm.gc.minorCollectionsYoungGenerationObjects",
+                  "jvm.gc.minorCollectionsYoungGenerationObjectsInMilliseconds",
+                  "jvm.mem.heapCommittedInBytes",
+                  "jvm.mem.heapMaxInBytes",
+                  "jvm.mem.heapUsed",
+                  "jvm.mem.heapUsedInBytes",
+                  "jvm.mem.maxOldGenerationHeapInBytes",
+                  "jvm.mem.maxSurvivorSpaceInBYtes",
+                  "jvm.mem.maxYoungGenerationHeapInBytes",
+                  "jvm.mem.nonHeapCommittedInBytes",
+                  "jvm.mem.nonHeapUsedInBytes",
+                  "jvm.mem.usedOldGenerationHeapInBytes",
+                  "jvm.mem.usedSurvivorSpaceInBytes",
+                  "jvm.mem.usedYoungGenerationHeapInBytes",
+                  "merges.currentActive",
+                  "merges.docsSegmentMerges",
+                  "merges.docsSegmentsMerging",
+                  "merges.mergedSegmentsInBytes",
+                  "merges.segmentMerges",
+                  "merges.sizeSegmentsMergingInBytes",
+                  "merges.totalSegmentMergingInMilliseconds",
+                  "node.hostname",
+                  "node.ipAddress",
+                  "openFD",
+                  "queriesTotal",
+                  "refresh.total",
+                  "refresh.totalInMilliseconds",
+                  "reportingEndpoint",
+                  "searchFetchCurrentlyRunning",
+                  "searchFetches",
+                  "sizeStoreInBytes",
+                  "threadpool.activeFetchShardStarted",
+                  "threadpool.fetchShardStartedQueue",
+                  "threadpool.fetchShardStartedRejected",
+                  "threadpool.fetchShardStartedThreads",
+                  "threadpool.fetchShardStoreActive",
+                  "threadpool.fetchShardStoreQueue",
+                  "threadpool.fetchShardStoreRejected",
+                  "threadpool.fetchShardStoreThreads",
+                  "threadpool.flushActive",
+                  "threadpool.flushQueue",
+                  "threadpool.flushRejected",
+                  "threadpool.flushThreads",
+                  "threadpool.forceMergeActive",
+                  "threadpool.forceMergeQueue",
+                  "threadpool.forceMergeRejected",
+                  "threadpool.forceMergeThreads",
+                  "threadpool.genericActive",
+                  "threadpool.genericQueue",
+                  "threadpool.genericRejected",
+                  "threadpool.genericThreads",
+                  "threadpool.getActive",
+                  "threadpool.getQueue",
+                  "threadpool.getRejected",
+                  "threadpool.getThreads",
+                  "threadpool.indexActive",
+                  "threadpool.indexQueue",
+                  "threadpool.indexRejected",
+                  "threadpool.indexThreads",
+                  "threadpool.listenerActive",
+                  "threadpool.listenerQueue",
+                  "threadpool.listenerRejected",
+                  "threadpool.listenerThreads",
+                  "threadpool.managementActive",
+                  "threadpool.managementQueue",
+                  "threadpool.managementRejected",
+                  "threadpool.managementThreads",
+                  "threadpool.refreshActive",
+                  "threadpool.refreshQueue",
+                  "threadpool.refreshRejected",
+                  "threadpool.refreshThreads",
+                  "threadpool.searchActive",
+                  "threadpool.searchQueue",
+                  "threadpool.searchRejected",
+                  "threadpool.searchThreads",
+                  "threadpool.snapshotActive",
+                  "threadpool.snapshotQueue",
+                  "threadpool.snapshotRejected",
+                  "threadpool.snapshotThreads",
+                  "transport.connectionsOpened",
+                  "transport.packetsReceived",
+                  "transport.packetsReceivedInBytes",
+                  "transport.packetsSent",
+                  "transport.packetsSentInBytes"
+                ],
+                "properties": {
+                  "activeSearches": {
+                    "type": "integer"
+                  },
+                  "activeSearchesInMilliseconds": {
+                    "type": "integer"
+                  },
+                  "breakers.estimatedSizeFieldDataCircuitBreakerInBytes": {
+                    "type": "integer"
+                  },
+                  "breakers.estimatedSizeParentCircuitBreakerInBytes": {
+                    "type": "integer"
+                  },
+                  "breakers.estimatedSizeRequestCircuitBreakerInBytes": {
+                    "type": "integer"
+                  },
+                  "breakers.fieldDataCircuitBreakerTripped": {
+                    "type": "integer"
+                  },
+                  "breakers.parentCircuitBreakerTripped": {
+                    "type": "integer"
+                  },
+                  "breakers.requestCircuitBreakerTripped": {
+                    "type": "integer"
+                  },
+                  "displayName": {
+                    "type": "string"
+                  },
+                  "entityName": {
+                    "type": "string"
+                  },
+                  "event_type": {
+                    "type": "string"
+                  },
+                  "flush.indexRefreshesTotal": {
+                    "type": "integer"
+                  },
+                  "flush.indexRefreshesTotalInMilliseconds": {
+                    "type": "integer"
+                  },
+                  "fs.bytesAvailableJVMInBytes": {
+                    "type": "integer"
+                  },
+                  "fs.totalSizeInBytes": {
+                    "type": "integer"
+                  },
+                  "fs.unallocatedBytesInBYtes": {
+                    "type": "integer"
+                  },
+                  "get.currentRequestsRunning": {
+                    "type": "integer"
+                  },
+                  "get.requestsDocumentExists": {
+                    "type": "integer"
+                  },
+                  "get.requestsDocumentExistsInMilliseconds": {
+                    "type": "integer"
+                  },
+                  "get.requestsDocumentMissing": {
+                    "type": "integer"
+                  },
+                  "get.requestsDocumentMissingInMilliseconds": {
+                    "type": "integer"
+                  },
+                  "get.timeGetRequestsInMilliseconds": {
+                    "type": "integer"
+                  },
+                  "get.totalGetRequests": {
+                    "type": "integer"
+                  },
+                  "http.currentOpenConnections": {
+                    "type": "integer"
+                  },
+                  "http.openedConnections": {
+                    "type": "integer"
+                  },
+                  "indexing.docsCurrentlyDeleted": {
+                    "type": "integer"
+                  },
+                  "indexing.documentsCurrentlyIndexing": {
+                    "type": "integer"
+                  },
+                  "indexing.documentsIndexed": {
+                    "type": "integer"
+                  },
+                  "indexing.timeDeletingDocumentsInMilliseconds": {
+                    "type": "integer"
+                  },
+                  "indexing.timeIndexingDocumentsInMilliseconds": {
+                    "type": "integer"
+                  },
+                  "indexing.totalDocumentsDeleted": {
+                    "type": "integer"
+                  },
+                  "indices.indexingOperationsFailed": {
+                    "type": "integer"
+                  },
+                  "indices.indexingWaitedThrottlingInMilliseconds": {
+                    "type": "integer"
+                  },
+                  "indices.memoryQueryCacheInBytes": {
+                    "type": "integer"
+                  },
+                  "indices.numberIndices": {
+                    "type": "integer"
+                  },
+                  "indices.queryCacheEvictions": {
+                    "type": "integer"
+                  },
+                  "indices.queryCacheHits": {
+                    "type": "integer"
+                  },
+                  "indices.queryCacheMisses": {
+                    "type": "integer"
+                  },
+                  "indices.recoveryOngoingShardSource": {
+                    "type": "integer"
+                  },
+                  "indices.recoveryOngoingShardTarget": {
+                    "type": "integer"
+                  },
+                  "indices.recoveryWaitedThrottlingInMilliseconds": {
+                    "type": "integer"
+                  },
+                  "indices.requestCacheEvictions": {
+                    "type": "integer"
+                  },
+                  "indices.requestCacheHits": {
+                    "type": "integer"
+                  },
+                  "indices.requestCacheMemoryInBytes": {
+                    "type": "integer"
+                  },
+                  "indices.requestCacheMisses": {
+                    "type": "integer"
+                  },
+                  "indices.segmentsIndexShard": {
+                    "type": "integer"
+                  },
+                  "indices.segmentsMemoryUsedDocValuesInBytes": {
+                    "type": "integer"
+                  },
+                  "indices.segmentsMemoryUsedFixedBitSetInBytes": {
+                    "type": "integer"
+                  },
+                  "indices.segmentsMemoryUsedIndexSegmentsInBytes": {
+                    "type": "integer"
+                  },
+                  "indices.segmentsMemoryUsedIndexWriterInBytes": {
+                    "type": "integer"
+                  },
+                  "indices.segmentsMemoryUsedNormsInBytes": {
+                    "type": "integer"
+                  },
+                  "indices.segmentsMemoryUsedSegmentVersionMapInBytes": {
+                    "type": "integer"
+                  },
+                  "indices.segmentsMemoryUsedStoredFieldsInBytes": {
+                    "type": "integer"
+                  },
+                  "indices.segmentsMemoryUsedTermVectorsInBytes": {
+                    "type": "integer"
+                  },
+                  "indices.segmentsMemoryUsedTermsInBytes": {
+                    "type": "integer"
+                  },
+                  "indices.translogOperations": {
+                    "type": "integer"
+                  },
+                  "indices.translogOperationsInBytes": {
+                    "type": "integer"
+                  },
+                  "jvm.ThreadsActive": {
+                    "type": "integer"
+                  },
+                  "jvm.ThreadsPeak": {
+                    "type": "integer"
+                  },
+                  "jvm.gc.majorCollectionsOldGenerationObjects": {
+                    "type": "integer"
+                  },
+                  "jvm.gc.majorCollectionsOldGenerationObjectsInMilliseconds": {
+                    "type": "integer"
+                  },
+                  "jvm.gc.minorCollectionsYoungGenerationObjects": {
+                    "type": "integer"
+                  },
+                  "jvm.gc.minorCollectionsYoungGenerationObjectsInMilliseconds": {
+                    "type": "integer"
+                  },
+                  "jvm.mem.heapCommittedInBytes": {
+                    "type": "integer"
+                  },
+                  "jvm.mem.heapMaxInBytes": {
+                    "type": "integer"
+                  },
+                  "jvm.mem.heapUsed": {
+                    "type": "integer"
+                  },
+                  "jvm.mem.heapUsedInBytes": {
+                    "type": "integer"
+                  },
+                  "jvm.mem.maxOldGenerationHeapInBytes": {
+                    "type": "integer"
+                  },
+                  "jvm.mem.maxSurvivorSpaceInBYtes": {
+                    "type": "integer"
+                  },
+                  "jvm.mem.maxYoungGenerationHeapInBytes": {
+                    "type": "integer"
+                  },
+                  "jvm.mem.nonHeapCommittedInBytes": {
+                    "type": "integer"
+                  },
+                  "jvm.mem.nonHeapUsedInBytes": {
+                    "type": "integer"
+                  },
+                  "jvm.mem.usedOldGenerationHeapInBytes": {
+                    "type": "integer"
+                  },
+                  "jvm.mem.usedSurvivorSpaceInBytes": {
+                    "type": "integer"
+                  },
+                  "jvm.mem.usedYoungGenerationHeapInBytes": {
+                    "type": "integer"
+                  },
+                  "merges.currentActive": {
+                    "type": "integer"
+                  },
+                  "merges.docsSegmentMerges": {
+                    "type": "integer"
+                  },
+                  "merges.docsSegmentsMerging": {
+                    "type": "integer"
+                  },
+                  "merges.mergedSegmentsInBytes": {
+                    "type": "integer"
+                  },
+                  "merges.segmentMerges": {
+                    "type": "integer"
+                  },
+                  "merges.sizeSegmentsMergingInBytes": {
+                    "type": "integer"
+                  },
+                  "merges.totalSegmentMergingInMilliseconds": {
+                    "type": "integer"
+                  },
+                  "node.hostname": {
+                    "type": "string"
+                  },
+                  "node.ipAddress": {
+                    "type": "string"
+                  },
+                  "openFD": {
+                    "type": "integer"
+                  },
+                  "queriesTotal": {
+                    "type": "integer"
+                  },
+                  "refresh.total": {
+                    "type": "integer"
+                  },
+                  "refresh.totalInMilliseconds": {
+                    "type": "integer"
+                  },
+                  "reportingEndpoint": {
+                    "type": "string"
+                  },
+                  "searchFetchCurrentlyRunning": {
+                    "type": "integer"
+                  },
+                  "searchFetches": {
+                    "type": "integer"
+                  },
+                  "sizeStoreInBytes": {
+                    "type": "integer"
+                  },
+                  "threadpool.activeFetchShardStarted": {
+                    "type": "integer"
+                  },
+                  "threadpool.fetchShardStartedQueue": {
+                    "type": "integer"
+                  },
+                  "threadpool.fetchShardStartedRejected": {
+                    "type": "integer"
+                  },
+                  "threadpool.fetchShardStartedThreads": {
+                    "type": "integer"
+                  },
+                  "threadpool.fetchShardStoreActive": {
+                    "type": "integer"
+                  },
+                  "threadpool.fetchShardStoreQueue": {
+                    "type": "integer"
+                  },
+                  "threadpool.fetchShardStoreRejected": {
+                    "type": "integer"
+                  },
+                  "threadpool.fetchShardStoreThreads": {
+                    "type": "integer"
+                  },
+                  "threadpool.flushActive": {
+                    "type": "integer"
+                  },
+                  "threadpool.flushQueue": {
+                    "type": "integer"
+                  },
+                  "threadpool.flushRejected": {
+                    "type": "integer"
+                  },
+                  "threadpool.flushThreads": {
+                    "type": "integer"
+                  },
+                  "threadpool.forceMergeActive": {
+                    "type": "integer"
+                  },
+                  "threadpool.forceMergeQueue": {
+                    "type": "integer"
+                  },
+                  "threadpool.forceMergeRejected": {
+                    "type": "integer"
+                  },
+                  "threadpool.forceMergeThreads": {
+                    "type": "integer"
+                  },
+                  "threadpool.genericActive": {
+                    "type": "integer"
+                  },
+                  "threadpool.genericQueue": {
+                    "type": "integer"
+                  },
+                  "threadpool.genericRejected": {
+                    "type": "integer"
+                  },
+                  "threadpool.genericThreads": {
+                    "type": "integer"
+                  },
+                  "threadpool.getActive": {
+                    "type": "integer"
+                  },
+                  "threadpool.getQueue": {
+                    "type": "integer"
+                  },
+                  "threadpool.getRejected": {
+                    "type": "integer"
+                  },
+                  "threadpool.getThreads": {
+                    "type": "integer"
+                  },
+                  "threadpool.indexActive": {
+                    "type": "integer"
+                  },
+                  "threadpool.indexQueue": {
+                    "type": "integer"
+                  },
+                  "threadpool.indexRejected": {
+                    "type": "integer"
+                  },
+                  "threadpool.indexThreads": {
+                    "type": "integer"
+                  },
+                  "threadpool.listenerActive": {
+                    "type": "integer"
+                  },
+                  "threadpool.listenerQueue": {
+                    "type": "integer"
+                  },
+                  "threadpool.listenerRejected": {
+                    "type": "integer"
+                  },
+                  "threadpool.listenerThreads": {
+                    "type": "integer"
+                  },
+                  "threadpool.managementActive": {
+                    "type": "integer"
+                  },
+                  "threadpool.managementQueue": {
+                    "type": "integer"
+                  },
+                  "threadpool.managementRejected": {
+                    "type": "integer"
+                  },
+                  "threadpool.managementThreads": {
+                    "type": "integer"
+                  },
+                  "threadpool.refreshActive": {
+                    "type": "integer"
+                  },
+                  "threadpool.refreshQueue": {
+                    "type": "integer"
+                  },
+                  "threadpool.refreshRejected": {
+                    "type": "integer"
+                  },
+                  "threadpool.refreshThreads": {
+                    "type": "integer"
+                  },
+                  "threadpool.searchActive": {
+                    "type": "integer"
+                  },
+                  "threadpool.searchQueue": {
+                    "type": "integer"
+                  },
+                  "threadpool.searchRejected": {
+                    "type": "integer"
+                  },
+                  "threadpool.searchThreads": {
+                    "type": "integer"
+                  },
+                  "threadpool.snapshotActive": {
+                    "type": "integer"
+                  },
+                  "threadpool.snapshotQueue": {
+                    "type": "integer"
+                  },
+                  "threadpool.snapshotRejected": {
+                    "type": "integer"
+                  },
+                  "threadpool.snapshotThreads": {
+                    "type": "integer"
+                  },
+                  "transport.connectionsOpened": {
+                    "type": "integer"
+                  },
+                  "transport.packetsReceived": {
+                    "type": "integer"
+                  },
+                  "transport.packetsReceivedInBytes": {
+                    "type": "integer"
+                  },
+                  "transport.packetsSent": {
+                    "type": "integer"
+                  },
+                  "transport.packetsSentInBytes": {
+                    "type": "integer"
+                  }
+                }
+              }
+            },
+            "inventory": {
+              "type": "object",
+              "minLength": 1,
+              "properties": {}
+            },
+            "events": {
+              "type": "array"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "entity",
+            "metrics",
+            "inventory",
+            "events"
+          ],
+          "properties": {
+            "entity": {
+              "type": "object",
+              "required": [
+                "name",
+                "type",
+                "id_attributes"
+              ],
+              "properties": {
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "type": {
+                  "minLength": 1,
+                  "pattern": "^es-common$",
+                  "type": "string"
+                },
+                "id_attributes": {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "items": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "Key",
+                        "Value"
+                      ],
+                      "properties": {
+                        "Key": {
+                          "type": "string"
+                        },
+                        "Value": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "required": [
+                        "Key",
+                        "Value"
+                      ],
+                      "properties": {
+                        "Key": {
+                          "type": "string"
+                        },
+                        "Value": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "metrics": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "object",
+                "required": [
+                  "displayName",
+                  "entityName",
+                  "event_type",
+                  "reportingEndpoint"
+                ],
+                "properties": {
+                  "displayName": {
+                    "type": "string"
+                  },
+                  "entityName": {
+                    "type": "string"
+                  },
+                  "event_type": {
+                    "type": "string"
+                  },
+                  "reportingEndpoint": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "inventory": {
+              "type": "object",
+              "required": []
+            },
+            "events": {
+              "type": "array",
+              "uniqueItems": true
+            }
+          }
+        }
+      ]
+    }
+  }
+}
