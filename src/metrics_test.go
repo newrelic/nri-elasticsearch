@@ -53,6 +53,43 @@ func createGoldenFile(i *integration.Integration, sourceFile string) (string, []
 	return goldenFile, actualContents
 }
 
+func TestGetLocalNodeID(t *testing.T) {
+	fakeClient := mockClient{}
+	mockedReturnVal := filepath.Join("testdata", "good-nodes-local.json")
+	fakeClient.On("Request", localNodeInventoryEndpoint).Return(mockedReturnVal, nil).Once()
+
+	nodeID, _ := getLocalNodeID(&fakeClient)
+	assert.Equal(t, "z9ZPp87vT92qG1cRVRIcMQ", nodeID)
+}
+
+func TestGetLocalNodeID_Error(t *testing.T) {
+	fakeClient := mockClient{}
+	mockedReturnVal := filepath.Join("testdata", "bad-nodes-local.json")
+	fakeClient.On("Request", localNodeInventoryEndpoint).Return(mockedReturnVal, nil).Once()
+
+	_, err := getLocalNodeID(&fakeClient)
+	assert.Error(t, err)
+	assert.Equal(t, errLocalNodeID, err)
+}
+
+func TestGetMasterNodeID(t *testing.T) {
+	fakeClient := mockClient{}
+	mockedReturnVal := filepath.Join("testdata", "good-master.json")
+	fakeClient.On("Request", electedMasterNodeEndpoint).Return(mockedReturnVal, nil).Once()
+
+	nodeID, _ := getMasterNodeID(&fakeClient)
+	assert.Equal(t, "z9ZPp87vT92qG1cRVRIcMQ", nodeID)
+}
+
+func TestGetMasterNodeID_Error(t *testing.T) {
+	fakeClient := mockClient{}
+	fakeClient.On("Request", electedMasterNodeEndpoint).Return("", nil).Once()
+
+	_, err := getMasterNodeID(&fakeClient)
+	assert.Error(t, err)
+	assert.Equal(t, errMasterNodeID, err)
+}
+
 func TestPopulateNodesMetrics(t *testing.T) {
 	i := getTestingIntegration(t)
 	client := createNewTestClient()

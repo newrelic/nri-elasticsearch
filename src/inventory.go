@@ -7,10 +7,9 @@ import (
 	"reflect"
 	"strings"
 
-	"gopkg.in/yaml.v2"
-
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
+	yaml "gopkg.in/yaml.v2"
 )
 
 func populateInventory(i *integration.Integration, client Client) {
@@ -29,11 +28,6 @@ func populateInventory(i *integration.Integration, client Client) {
 
 	// This should retrive the entity of the node if was already generated during the metrics processing.
 	localNodeEntity, err := getEntity(i, localNodeName, "es-node", *clusterResponse.Name)
-	if err != nil {
-		log.Error("Could not get local node entity: %v", err)
-		return
-	}
-
 	if err != nil {
 		log.Error("Could not get local node entity: %v", err)
 		return

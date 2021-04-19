@@ -1,13 +1,8 @@
 package main
 
-// LocalNodeIdResponse struct (/_nodes/_local endpoint)
-type LocalNodeIdResponse struct {
-	Nodes map[string]*map `json:"nodes"`
-}
-
 // MasterNodeIdResponse struct (/_cat/master?h=id endpoint)
 type MasterNodeIdResponse struct {
-	ID string
+	ID string `json:"id"`
 }
 
 // CommonMetrics struct

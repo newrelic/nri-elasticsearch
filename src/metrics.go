@@ -11,6 +11,11 @@ import (
 	"github.com/newrelic/infra-integrations-sdk/log"
 )
 
+var (
+	errLocalNodeID  = errors.New("could not identify local node ID")
+	errMasterNodeID = errors.New("could not get master node ID")
+)
+
 // populateMetrics wrapper to call each of the individual populate functions
 func populateMetrics(i *integration.Integration, client Client, env string) {
 	if args.MasterOnly {
@@ -25,10 +30,10 @@ func populateMetrics(i *integration.Integration, client Client, env string) {
 			return
 		}
 		if nodeId != masterId {
-			log.Info("The host is not the elected master, so skipping collecting cluster metrics")
+			log.Info("The host is not the elected master, cluster metrics will be skipped")
 			return
 		}
-		log.Info("The host is the elected master, so collecting cluster metrics")
+		log.Info("The host is the elected master, cluster metrics will be collected")
 	}
 
 	clusterName, err := populateClusterMetrics(i, client, env)
@@ -56,24 +61,34 @@ func populateMetrics(i *integration.Integration, client Client, env string) {
 }
 
 func getLocalNodeID(client Client) (nodeId string, err error) {
-	nodeIdResponseObject := new(LocalNodeIdResponse)
-	err = client.Request(localNodeInventoryEndpoint, &nodeIdResponseObject)
+	var nodeResponseObject LocalNodeResponse
+	err = client.Request(localNodeInventoryEndpoint, &nodeResponseObject)
 	if err != nil {
 		return "", err
 	}
-	for k := range nodeIdResponseObject.Nodes {
-		return k, nil
+	return parseLocalNodeID(nodeResponseObject)
+}
+
+func parseLocalNodeID(nodeStats LocalNodeResponse) (string, error) {
+	nodes := nodeStats.Nodes
+	if len(nodes) == 1 {
+		for k := range nodes {
+			return k, nil
+		}
 	}
-	return "", errors.New("could not identify local node ID")
+	return "", errLocalNodeID
 }
 
 func getMasterNodeID(client Client) (masterId string, err error) {
-	masterIdResponseObject := new(MasterNodeIdResponse)
+	var masterIdResponseObject []MasterNodeIdResponse
 	err = client.Request(electedMasterNodeEndpoint, &masterIdResponseObject)
 	if err != nil {
 		return "", err
 	}
-	return masterIdResponseObject.ID, err
+	if len(masterIdResponseObject) < 1 {
+		return "", errMasterNodeID
+	}
+	return masterIdResponseObject[0].ID, nil
 }
 
 func populateNodesMetrics(i *integration.Integration, client Client, clusterName string) error {
