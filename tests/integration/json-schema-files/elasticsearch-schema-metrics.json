@@ -150,7 +150,8 @@
             },
             "inventory": {
               "type": "object",
-              "required": []
+              "maxProperties": 0,
+              "properties": {}
             },
             "events": {
               "type": "array"
@@ -812,7 +813,8 @@
             },
             "inventory": {
               "type": "object",
-              "required": []
+              "maxProperties": 0,
+              "properties": {}
             },
             "events": {
               "type": "array"
@@ -1474,7 +1476,7 @@
             },
             "inventory": {
               "type": "object",
-              "minLength": 1,
+              "maxProperties": 0,
               "properties": {}
             },
             "events": {
@@ -1575,7 +1577,8 @@
             },
             "inventory": {
               "type": "object",
-              "required": []
+              "maxProperties": 0,
+              "properties": {}
             },
             "events": {
               "type": "array",

@@ -70,6 +70,26 @@ func TestElasticsearchIntegration(t *testing.T) {
 	assert.NoError(t, err, "The output of Elasticsearch integration doesn't have expected format.")
 }
 
+func TestElasticsearchIntegrationOnlyMetrics(t *testing.T) {
+	stdout, stderr, err := runIntegration(t, "METRICS=true", "HOSTNAME=elasticsearch", "LOCAL_HOSTNAME=elasticsearch")
+	assert.NotNil(t, stderr, "unexpected stderr")
+	assert.NoError(t, err, "Unexpected error")
+
+	schemaPath := filepath.Join("json-schema-files", "elasticsearch-schema-metrics.json")
+	err = jsonschema.Validate(schemaPath, stdout)
+	assert.NoError(t, err, "The output of Elasticsearch integration doesn't have expected format.")
+}
+
+func TestElasticsearchIntegrationOnlyInventory(t *testing.T) {
+	stdout, stderr, err := runIntegration(t, "INVENTORY=true", "HOSTNAME=elasticsearch", "LOCAL_HOSTNAME=elasticsearch")
+	assert.NotNil(t, stderr, "unexpected stderr")
+	assert.NoError(t, err, "Unexpected error")
+
+	schemaPath := filepath.Join("json-schema-files", "elasticsearch-schema-inventory.json")
+	err = jsonschema.Validate(schemaPath, stdout)
+	assert.NoError(t, err, "The output of Elasticsearch integration doesn't have expected format.")
+}
+
 func ensureElasticsearchClusterReady() {
 	fmt.Print("...")
 	responseMaster, _ := http.Get("http://localhost:9200/_cat/master?h=id")
