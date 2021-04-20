@@ -48,7 +48,7 @@ func createGoldenFile(i *integration.Integration, sourceFile string) (string, []
 	actualContents, _ := i.Entities[0].Metrics[0].MarshalJSON()
 
 	if *update {
-		ioutil.WriteFile(goldenFile, actualContents, 0644)
+		_ = ioutil.WriteFile(goldenFile, actualContents, 0644)
 	}
 	return goldenFile, actualContents
 }
