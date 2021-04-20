@@ -12,7 +12,7 @@ import (
 // input is not valid the error is returned. The first argument is the file name
 // of the JSON schema. It is used to build file URI required to load the JSON schema.
 // The second argument is the input string that is validated.
-func Validate(fileName string, input string) error {
+func Validate(fileName string, input string, expectError bool) error {
 	pwd, err := os.Getwd()
 	if err != nil {
 		return err
@@ -30,11 +30,13 @@ func Validate(fileName string, input string) error {
 	if result.Valid() {
 		return nil
 	}
-	fmt.Printf("Errors for JSON schema: '%s'\n", schemaURI)
-	for _, desc := range result.Errors() {
-		fmt.Printf("\t- %s\n", desc)
+	if !expectError {
+		fmt.Printf("Errors for JSON schema: '%s'\n", schemaURI)
+		for _, desc := range result.Errors() {
+			fmt.Printf("\t- %s\n", desc)
+		}
+		fmt.Printf("\n")
 	}
-	fmt.Printf("\n")
 	return fmt.Errorf("The output of the integration doesn't have expected JSON format")
 }
 

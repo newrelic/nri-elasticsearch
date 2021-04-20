@@ -19,17 +19,17 @@ var (
 // populateMetrics wrapper to call each of the individual populate functions
 func populateMetrics(i *integration.Integration, client Client, env string) {
 	if args.MasterOnly {
-		nodeId, err := getLocalNodeID(client)
+		nodeID, err := getLocalNodeID(client)
 		if err != nil {
 			log.Error("There was an error gathering the host node ID: %v", err)
 			return
 		}
-		masterId, err := getMasterNodeID(client)
+		masterID, err := getMasterNodeID(client)
 		if err != nil {
 			log.Error("There was an error gathering the elected master node ID: %v", err)
 			return
 		}
-		if nodeId != masterId {
+		if nodeID != masterID {
 			log.Info("The host is not the elected master, cluster metrics will be skipped")
 			return
 		}

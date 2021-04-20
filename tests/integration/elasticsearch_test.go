@@ -60,13 +60,14 @@ func TestMain(m *testing.M) {
 	os.Exit(result)
 }
 
-func TestElasticsearchIntegration(t *testing.T) {
+func TestElasticsearchIntegrationAll(t *testing.T) {
 	stdout, stderr, err := runIntegration(t, "HOSTNAME=elasticsearch", "LOCAL_HOSTNAME=elasticsearch")
 	assert.NotNil(t, stderr, "unexpected stderr")
 	assert.NoError(t, err, "Unexpected error")
 
+	errorExpected := false
 	schemaPath := filepath.Join("json-schema-files", "elasticsearch-schema.json")
-	err = jsonschema.Validate(schemaPath, stdout)
+	err = jsonschema.Validate(schemaPath, stdout, errorExpected)
 	assert.NoError(t, err, "The output of Elasticsearch integration doesn't have expected format.")
 }
 
@@ -75,8 +76,9 @@ func TestElasticsearchIntegrationOnlyMetrics(t *testing.T) {
 	assert.NotNil(t, stderr, "unexpected stderr")
 	assert.NoError(t, err, "Unexpected error")
 
+	errorExpected := false
 	schemaPath := filepath.Join("json-schema-files", "elasticsearch-schema-metrics.json")
-	err = jsonschema.Validate(schemaPath, stdout)
+	err = jsonschema.Validate(schemaPath, stdout, errorExpected)
 	assert.NoError(t, err, "The output of Elasticsearch integration doesn't have expected format.")
 }
 
@@ -85,15 +87,38 @@ func TestElasticsearchIntegrationOnlyInventory(t *testing.T) {
 	assert.NotNil(t, stderr, "unexpected stderr")
 	assert.NoError(t, err, "Unexpected error")
 
+	errorExpected := false
 	schemaPath := filepath.Join("json-schema-files", "elasticsearch-schema-inventory.json")
-	err = jsonschema.Validate(schemaPath, stdout)
+	err = jsonschema.Validate(schemaPath, stdout, errorExpected)
 	assert.NoError(t, err, "The output of Elasticsearch integration doesn't have expected format.")
+}
+
+func TestElasticsearchIntegrationAllOnSlave_OnlyMasterFlagTrue(t *testing.T) {
+	stdout, stderr, err := runIntegration(t, "MASTER_ONLY=true", "PORT=9200", "HOSTNAME=elasticsearch2", "LOCAL_HOSTNAME=elasticsearch2")
+	assert.NotNil(t, stderr, "unexpected stderr")
+	assert.NoError(t, err, "Unexpected error")
+
+	errorExpected := false
+	schemaPath := filepath.Join("json-schema-files", "elasticsearch-schema-inventory.json")
+	err = jsonschema.Validate(schemaPath, stdout, errorExpected)
+	assert.NoError(t, err, "The output of Elasticsearch integration doesn't have expected format.")
+}
+
+func TestElasticsearchIntegrationAllOnSlave_OnlyMasterFlagFalse(t *testing.T) {
+	stdout, stderr, err := runIntegration(t, "MASTER_ONLY=false", "PORT=9200", "HOSTNAME=elasticsearch2", "LOCAL_HOSTNAME=elasticsearch2")
+	assert.NotNil(t, stderr, "unexpected stderr")
+	assert.NoError(t, err, "Unexpected error")
+
+	errorExpected := true
+	schemaPath := filepath.Join("json-schema-files", "elasticsearch-schema-inventory.json")
+	err = jsonschema.Validate(schemaPath, stdout, errorExpected)
+	assert.Error(t, err)
 }
 
 func ensureElasticsearchClusterReady() {
 	fmt.Print("...")
-	responseMaster, _ := http.Get("http://localhost:9200/_cat/master?h=id")
-	responseSlave, _ := http.Get("http://localhost:9202/_cat/master?h=id")
+	responseMaster, _ := http.Get("http://localhost:9200/_nodes/stats")
+	responseSlave, _ := http.Get("http://localhost:9202/_nodes/stats")
 	if (responseMaster == nil || responseSlave == nil) && secondsWaited < elasticsearchMaxTimeoutWait {
 		secondsWaited++
 		time.Sleep(1 * time.Second)
