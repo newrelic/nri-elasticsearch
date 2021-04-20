@@ -1,61 +1,49 @@
 golang:
-  github.com/newrelic/nri-elasticsearch/vendor/github.com/davecgh/go-spew/spew:
-    license: ISC
-    license_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/davecgh/go-spew/LICENSE
-    project_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/davecgh/go-spew/spew
   github.com/newrelic/nri-elasticsearch/vendor/github.com/newrelic/infra-integrations-sdk/args:
-    license: Unknown
+    license: Apache-2.0
     license_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/newrelic/infra-integrations-sdk/LICENSE
     project_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/newrelic/infra-integrations-sdk/args
+  github.com/newrelic/nri-elasticsearch/vendor/github.com/newrelic/infra-integrations-sdk/data/attribute:
+    license: Apache-2.0
+    license_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/newrelic/infra-integrations-sdk/LICENSE
+    project_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/newrelic/infra-integrations-sdk/data/attribute
   github.com/newrelic/nri-elasticsearch/vendor/github.com/newrelic/infra-integrations-sdk/data/event:
-    license: Unknown
+    license: Apache-2.0
     license_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/newrelic/infra-integrations-sdk/LICENSE
     project_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/newrelic/infra-integrations-sdk/data/event
   github.com/newrelic/nri-elasticsearch/vendor/github.com/newrelic/infra-integrations-sdk/data/inventory:
-    license: Unknown
+    license: Apache-2.0
     license_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/newrelic/infra-integrations-sdk/LICENSE
     project_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/newrelic/infra-integrations-sdk/data/inventory
   github.com/newrelic/nri-elasticsearch/vendor/github.com/newrelic/infra-integrations-sdk/data/metric:
-    license: Unknown
+    license: Apache-2.0
     license_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/newrelic/infra-integrations-sdk/LICENSE
     project_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/newrelic/infra-integrations-sdk/data/metric
-  github.com/newrelic/nri-elasticsearch/vendor/github.com/newrelic/infra-integrations-sdk/http:
-    license: Unknown
-    license_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/newrelic/infra-integrations-sdk/LICENSE
-    project_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/newrelic/infra-integrations-sdk/http
   github.com/newrelic/nri-elasticsearch/vendor/github.com/newrelic/infra-integrations-sdk/integration:
-    license: Unknown
+    license: Apache-2.0
     license_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/newrelic/infra-integrations-sdk/LICENSE
     project_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/newrelic/infra-integrations-sdk/integration
   github.com/newrelic/nri-elasticsearch/vendor/github.com/newrelic/infra-integrations-sdk/log:
-    license: Unknown
+    license: Apache-2.0
     license_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/newrelic/infra-integrations-sdk/LICENSE
     project_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/newrelic/infra-integrations-sdk/log
   github.com/newrelic/nri-elasticsearch/vendor/github.com/newrelic/infra-integrations-sdk/persist:
-    license: Unknown
+    license: Apache-2.0
     license_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/newrelic/infra-integrations-sdk/LICENSE
     project_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/newrelic/infra-integrations-sdk/persist
   github.com/newrelic/nri-elasticsearch/vendor/github.com/pkg/errors:
     license: BSD-2-Clause
     license_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/pkg/errors/LICENSE
     project_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/pkg/errors
-  github.com/newrelic/nri-elasticsearch/vendor/github.com/pmezard/go-difflib/difflib:
-    license: BSD-3-Clause
-    license_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/pmezard/go-difflib/LICENSE
-    project_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/pmezard/go-difflib/difflib
-  github.com/newrelic/nri-elasticsearch/vendor/github.com/stretchr/objx:
-    license: MIT
-    license_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/stretchr/objx/LICENSE
-    project_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/stretchr/objx
-  github.com/newrelic/nri-elasticsearch/vendor/github.com/stretchr/testify/assert:
-    license: MIT
-    license_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/stretchr/testify/LICENSE
-    project_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/stretchr/testify/assert
-  github.com/newrelic/nri-elasticsearch/vendor/github.com/stretchr/testify/mock:
-    license: MIT
-    license_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/stretchr/testify/LICENSE
-    project_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/stretchr/testify/mock
-  github.com/newrelic/nri-elasticsearch/vendor/gopkg.in/yaml.v2:
+  github.com/newrelic/nri-elasticsearch/vendor/github.com/xeipuuv/gojsonpointer:
     license: Apache-2.0
-    license_url: github.com/newrelic/nri-elasticsearch/vendor/gopkg.in/yaml.v2/LICENSE
-    project_url: github.com/newrelic/nri-elasticsearch/vendor/gopkg.in/yaml.v2
+    license_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/xeipuuv/gojsonpointer/LICENSE-APACHE-2.0.txt
+    project_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/xeipuuv/gojsonpointer
+  github.com/newrelic/nri-elasticsearch/vendor/github.com/xeipuuv/gojsonreference:
+    license: Apache-2.0
+    license_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/xeipuuv/gojsonreference/LICENSE-APACHE-2.0.txt
+    project_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/xeipuuv/gojsonreference
+  github.com/newrelic/nri-elasticsearch/vendor/github.com/xeipuuv/gojsonschema:
+    license: Apache-2.0
+    license_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/xeipuuv/gojsonschema/LICENSE-APACHE-2.0.txt
+    project_url: github.com/newrelic/nri-elasticsearch/vendor/github.com/xeipuuv/gojsonschema
