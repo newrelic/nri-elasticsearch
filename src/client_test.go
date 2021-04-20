@@ -60,7 +60,7 @@ func TestAuthRequest(t *testing.T) {
 		assert.True(t, ok)
 		assert.Equal(t, username, "testUser")
 		assert.Equal(t, password, "testPass")
-		res.Write([]byte("{\"ok\":true}"))
+		_, _ = res.Write([]byte("{\"ok\":true}"))
 	}))
 	defer func() { testServer.Close() }()
 
@@ -84,7 +84,7 @@ func TestAuthRequest(t *testing.T) {
 func TestBadStatusCode(t *testing.T) {
 	testServer := httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 		res.WriteHeader(401)
-		res.Write([]byte("{\"error\":{\"type\":\"exception\",\"reason\":\"this is an error\"}}"))
+		_, _ = res.Write([]byte("{\"error\":{\"type\":\"exception\",\"reason\":\"this is an error\"}}"))
 	}))
 	defer func() { testServer.Close() }()
 

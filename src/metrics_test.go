@@ -95,7 +95,7 @@ func TestPopulateNodesMetrics(t *testing.T) {
 	client := createNewTestClient()
 	client.init("nodeStatsMetricsResult.json", nodeStatsEndpoint, t)
 
-	populateNodesMetrics(i, client, testClusterName)
+	_ = populateNodesMetrics(i, client, testClusterName)
 
 	sourceFile := filepath.Join("testdata", "nodeStatsMetricsResult.json")
 	goldenFile, actualContents := createGoldenFile(i, sourceFile)
@@ -124,7 +124,7 @@ func TestPopulateClusterMetrics(t *testing.T) {
 	client := createNewTestClient()
 	client.init("clusterStatsMetricsResult.json", clusterEndpoint, t)
 
-	populateClusterMetrics(i, client, "")
+	_, _ = populateClusterMetrics(i, client, "")
 
 	sourceFile := filepath.Join("testdata", "clusterStatsMetricsResult.json")
 
@@ -158,7 +158,7 @@ func TestPopulateCommonMetrics(t *testing.T) {
 	args.CollectPrimaries = true
 	client.init("commonMetricsResult.json", commonStatsEndpoint, t)
 
-	populateCommonMetrics(i, client, testClusterName)
+	_, _ = populateCommonMetrics(i, client, testClusterName)
 
 	sourceFile := filepath.Join("testdata", "commonMetricsResult.json")
 	goldenFile, actualContents := createGoldenFile(i, sourceFile)
@@ -191,9 +191,9 @@ func TestPopulateIndicesMetrics(t *testing.T) {
 
 	commonStruct := new(CommonMetrics)
 	commonData, _ := ioutil.ReadFile(filepath.Join("testdata", "indicesMetricsResult_Common.json"))
-	json.Unmarshal(commonData, commonStruct)
+	_ = json.Unmarshal(commonData, commonStruct)
 
-	populateIndicesMetrics(i, client, commonStruct, testClusterName)
+	_ = populateIndicesMetrics(i, client, commonStruct, testClusterName)
 
 	sourceFile := filepath.Join("testdata", "indicesMetricsResult.json")
 	goldenFile, actualContents := createGoldenFile(i, sourceFile)
@@ -243,9 +243,9 @@ func TestIndicesRegex(t *testing.T) {
 
 	commonStruct := new(CommonMetrics)
 	commonData, _ := ioutil.ReadFile(filepath.Join("testdata", "indicesMetricsResult_Common.json"))
-	json.Unmarshal(commonData, commonStruct)
+	_ = json.Unmarshal(commonData, commonStruct)
 
-	populateIndicesMetrics(i, client, commonStruct, testClusterName)
+	_ = populateIndicesMetrics(i, client, commonStruct, testClusterName)
 
 	actualLength := len(i.Entities)
 	expectedLength := 1

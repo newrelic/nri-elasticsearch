@@ -93,7 +93,7 @@ func TestPopulateConfigInventory(t *testing.T) {
 
 	args.ConfigPath = dataPath
 
-	populateConfigInventory(e)
+	_ = populateConfigInventory(e)
 
 	actual, err := i.MarshalJSON()
 	if err != nil {
