@@ -11,8 +11,31 @@ import (
 	"github.com/newrelic/infra-integrations-sdk/log"
 )
 
+var (
+	errLocalNodeID  = errors.New("could not identify local node ID")
+	errMasterNodeID = errors.New("could not get master node ID")
+)
+
 // populateMetrics wrapper to call each of the individual populate functions
 func populateMetrics(i *integration.Integration, client Client, env string) {
+	if args.MasterOnly {
+		nodeID, err := getLocalNodeID(client)
+		if err != nil {
+			log.Error("There was an error gathering the host node ID: %v", err)
+			return
+		}
+		masterID, err := getMasterNodeID(client)
+		if err != nil {
+			log.Error("There was an error gathering the elected master node ID: %v", err)
+			return
+		}
+		if nodeID != masterID {
+			log.Info("The host is not the elected master, cluster metrics will be skipped")
+			return
+		}
+		log.Info("The host is the elected master, cluster metrics will be collected")
+	}
+
 	clusterName, err := populateClusterMetrics(i, client, env)
 	if err != nil {
 		log.Error("There was an error populating metrics for clusters: %v", err)
@@ -35,6 +58,37 @@ func populateMetrics(i *integration.Integration, client Client, env string) {
 			log.Error("There was an error populating metrics for indices: %v", err)
 		}
 	}
+}
+
+func getLocalNodeID(client Client) (nodeId string, err error) {
+	var nodeResponseObject LocalNodeResponse
+	err = client.Request(localNodeInventoryEndpoint, &nodeResponseObject)
+	if err != nil {
+		return "", err
+	}
+	return parseLocalNodeID(nodeResponseObject)
+}
+
+func parseLocalNodeID(nodeStats LocalNodeResponse) (string, error) {
+	nodes := nodeStats.Nodes
+	if len(nodes) == 1 {
+		for k := range nodes {
+			return k, nil
+		}
+	}
+	return "", errLocalNodeID
+}
+
+func getMasterNodeID(client Client) (masterId string, err error) {
+	var masterIdResponseObject []MasterNodeIdResponse
+	err = client.Request(electedMasterNodeEndpoint, &masterIdResponseObject)
+	if err != nil {
+		return "", err
+	}
+	if len(masterIdResponseObject) < 1 {
+		return "", errMasterNodeID
+	}
+	return masterIdResponseObject[0].ID, nil
 }
 
 func populateNodesMetrics(i *integration.Integration, client Client, clusterName string) error {

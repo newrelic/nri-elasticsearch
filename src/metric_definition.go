@@ -1,5 +1,10 @@
 package main
 
+// MasterNodeIdResponse struct (/_cat/master?h=id endpoint)
+type MasterNodeIdResponse struct {
+	ID string `json:"id"`
+}
+
 // CommonMetrics struct
 type CommonMetrics struct {
 	All     *All `json:"_all"`

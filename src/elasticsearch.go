@@ -30,6 +30,7 @@ type argumentList struct {
 	CollectPrimaries       bool   `default:"true" help:"Signals whether to collect primaries metrics or not"`
 	IndicesRegex           string `default:"" help:"A regex pattern that matches the index names to collect. Collects all if unspecified"`
 	ShowVersion            bool   `default:"false" help:"Print build information and exit"`
+	MasterOnly             bool   `default:"false" help:"Collect cluster metrics on the elected master only"`
 }
 
 const (

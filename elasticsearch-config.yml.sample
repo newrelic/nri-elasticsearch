@@ -18,5 +18,6 @@ instances:
       indices_regex: <(Optional) Can be used to filter which indicies are collected. If left blank it will be ignored>
       collect_indices: <(Optional) true or false to collect indices metrics. If true collect indices, else do not. (default true)>
       collect_primaries: <(Optional) true or false to collect primaries metrics. If true collect primaries, else do not. (default true)>
+      master_only: <(Optional) If true metrics will only be collected if the node is an elected master (default false)>
     labels:
       role: elasticsearch
