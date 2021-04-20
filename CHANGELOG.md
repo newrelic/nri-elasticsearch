@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## 4.3.5 (2021-04-20)
 ### Added
 - option `master_only` affection `command: all` only: Collect cluster metrics on the elected master only
+- Upgraded github.com/newrelic/infra-integrations-sdk to v3.6.7
+- Switched to go modules
+- Upgraded pipeline to go 1.16
+- Replaced gometalinter with golangci-lint
 
 ## 4.3.4 (2021-03-23)
 ### Changed
