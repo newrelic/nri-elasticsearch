@@ -30,4 +30,4 @@
           COLLECT_INDICES: <(Optional) true or false to collect indices metrics. If true collect indices, else do not. (default true)>
           COLLECT_PRIMARIES: <(Optional) true or false to collect primaries metrics. If true collect primaries, else do not. (default true)>
           METRICS: 1
-          MASTER_ONLY: <(Optional) Collect cluster metrics on the elected master only (default false)>
+          MASTER_ONLY: <(Optional) If true metrics will only be collected if the node is an elected master (default false)>
