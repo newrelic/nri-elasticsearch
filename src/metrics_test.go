@@ -58,7 +58,8 @@ func TestGetLocalNodeID(t *testing.T) {
 	mockedReturnVal := filepath.Join("testdata", "good-nodes-local.json")
 	fakeClient.On("Request", localNodeInventoryEndpoint).Return(mockedReturnVal, nil).Once()
 
-	nodeID, _ := getLocalNodeID(&fakeClient)
+	nodeID, err := getLocalNodeID(&fakeClient)
+	assert.NoError(t, err)
 	assert.Equal(t, "z9ZPp87vT92qG1cRVRIcMQ", nodeID)
 }
 
@@ -77,7 +78,8 @@ func TestGetMasterNodeID(t *testing.T) {
 	mockedReturnVal := filepath.Join("testdata", "good-master.json")
 	fakeClient.On("Request", electedMasterNodeEndpoint).Return(mockedReturnVal, nil).Once()
 
-	nodeID, _ := getMasterNodeID(&fakeClient)
+	nodeID, err := getMasterNodeID(&fakeClient)
+	assert.NoError(t, err)
 	assert.Equal(t, "z9ZPp87vT92qG1cRVRIcMQ", nodeID)
 }
 
@@ -95,7 +97,8 @@ func TestPopulateNodesMetrics(t *testing.T) {
 	client := createNewTestClient()
 	client.init("nodeStatsMetricsResult.json", nodeStatsEndpoint, t)
 
-	_ = populateNodesMetrics(i, client, testClusterName)
+	err := populateNodesMetrics(i, client, testClusterName)
+	assert.NoError(t, err)
 
 	sourceFile := filepath.Join("testdata", "nodeStatsMetricsResult.json")
 	goldenFile, actualContents := createGoldenFile(i, sourceFile)
@@ -124,7 +127,9 @@ func TestPopulateClusterMetrics(t *testing.T) {
 	client := createNewTestClient()
 	client.init("clusterStatsMetricsResult.json", clusterEndpoint, t)
 
-	_, _ = populateClusterMetrics(i, client, "")
+	name, err := populateClusterMetrics(i, client, "")
+	assert.NotEmpty(t, name)
+	assert.NoError(t, err)
 
 	sourceFile := filepath.Join("testdata", "clusterStatsMetricsResult.json")
 
@@ -158,7 +163,9 @@ func TestPopulateCommonMetrics(t *testing.T) {
 	args.CollectPrimaries = true
 	client.init("commonMetricsResult.json", commonStatsEndpoint, t)
 
-	_, _ = populateCommonMetrics(i, client, testClusterName)
+	name, err := populateCommonMetrics(i, client, testClusterName)
+	assert.NotEmpty(t, name)
+	assert.NoError(t, err)
 
 	sourceFile := filepath.Join("testdata", "commonMetricsResult.json")
 	goldenFile, actualContents := createGoldenFile(i, sourceFile)
@@ -191,9 +198,11 @@ func TestPopulateIndicesMetrics(t *testing.T) {
 
 	commonStruct := new(CommonMetrics)
 	commonData, _ := ioutil.ReadFile(filepath.Join("testdata", "indicesMetricsResult_Common.json"))
-	_ = json.Unmarshal(commonData, commonStruct)
+	err := json.Unmarshal(commonData, commonStruct)
+	assert.NoError(t, err)
 
-	_ = populateIndicesMetrics(i, client, commonStruct, testClusterName)
+	err = populateIndicesMetrics(i, client, commonStruct, testClusterName)
+	assert.NoError(t, err)
 
 	sourceFile := filepath.Join("testdata", "indicesMetricsResult.json")
 	goldenFile, actualContents := createGoldenFile(i, sourceFile)
@@ -243,9 +252,11 @@ func TestIndicesRegex(t *testing.T) {
 
 	commonStruct := new(CommonMetrics)
 	commonData, _ := ioutil.ReadFile(filepath.Join("testdata", "indicesMetricsResult_Common.json"))
-	_ = json.Unmarshal(commonData, commonStruct)
+	err := json.Unmarshal(commonData, commonStruct)
+	assert.NoError(t, err)
 
-	_ = populateIndicesMetrics(i, client, commonStruct, testClusterName)
+	err = populateIndicesMetrics(i, client, commonStruct, testClusterName)
+	assert.NoError(t, err)
 
 	actualLength := len(i.Entities)
 	expectedLength := 1
