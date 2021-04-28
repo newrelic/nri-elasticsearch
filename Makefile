@@ -31,6 +31,11 @@ test:
 	@echo "=== $(INTEGRATION) === [ test ]: Running unit tests..."
 	@gocov test -race $(GO_PKGS) | gocov-xml > coverage.xml
 
+semgrep:
+	@echo "=== $(INTEGRATION) === [ validate ]: semgrep..."
+	@echo ${PWD}
+	@docker run --rm -v "${PWD}:/src" returntocorp/semgrep -c "semgrep.yaml"
+
 integration-test:
 	@echo "=== $(INTEGRATION) === [ test ]: running integration tests..."
 	@docker-compose -f tests/integration/docker-compose.yml up -d --build
