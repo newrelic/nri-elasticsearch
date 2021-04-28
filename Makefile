@@ -6,9 +6,10 @@ INTEGRATION  := elasticsearch
 BINARY_NAME   = nri-$(INTEGRATION)
 GO_PKGS      := $(shell go list ./... | grep -v "/vendor/")
 GO_FILES     := $(shell find src -type f -name "*.go")
-GOTOOLS       = github.com/axw/gocov/gocov \
-		github.com/AlekSi/gocov-xml \
-		github.com/stretchr/testify/assert \
+GOFLAGS			 = -mod=readonly
+GOLANGCI_LINT	 = github.com/golangci/golangci-lint/cmd/golangci-lint
+GOCOV            = github.com/axw/gocov/gocov
+GOCOV_XML		 = github.com/AlekSi/gocov-xml
 
 all: build
 
@@ -18,35 +19,15 @@ clean:
 	@echo "=== $(INTEGRATION) === [ clean ]: Removing binaries and coverage file..."
 	@rm -rfv bin coverage.xml
 
-tools: check-version
-	@echo "=== $(INTEGRATION) === [ tools ]: Installing tools required by the project..."
-	@go get $(GOTOOLS)
-	@curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.33.0
-
-tools-update: check-version
-	@echo "=== $(INTEGRATION) === [ tools-update ]: Updating tools required by the project..."
-	@go get -u $(GOTOOLS)
-	@curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.33.0
-
-deps: tools
-
-validate: deps
+validate:
 	@echo "=== $(INTEGRATION) === [ validate ]: Validating source code running golangci-lint..."
-	@./bin/golangci-lint run
+	@go run $(GOFLAGS) $(GOLANGCI_LINT) run --verbose
 
-validate-all: deps
-	@echo "=== $(INTEGRATION) === [ validate ]: Validating source code running golangci-lint..."
-	@./bin/golangci-lint run
-
-compile: deps
+compile:
 	@echo "=== $(INTEGRATION) === [ compile ]: Building $(BINARY_NAME)..."
 	@go build -o bin/$(BINARY_NAME) ./src
 
-compile-only:
-	@echo "=== $(INTEGRATION) === [ compile ]: Building $(BINARY_NAME)..."
-	@go build -o bin/$(BINARY_NAME) ./src
-
-test: deps
+test:
 	@echo "=== $(INTEGRATION) === [ test ]: Running unit tests..."
 	@gocov test -race $(GO_PKGS) | gocov-xml > coverage.xml
 
@@ -62,13 +43,13 @@ include $(CURDIR)/build/release.mk
 check-version:
 ifdef GOOS
 ifneq "$(GOOS)" "$(NATIVEOS)"
-	$(error GOOS is not $(NATIVEOS). Cross-compiling is only allowed for 'clean', 'deps-only' and 'compile-only' targets)
+	$(error GOOS is not $(NATIVEOS). Cross-compiling is only allowed for 'clean' target)
 endif
 endif
 ifdef GOARCH
 ifneq "$(GOARCH)" "$(NATIVEARCH)"
-	$(error GOARCH variable is not $(NATIVEARCH). Cross-compiling is only allowed for 'clean', 'deps-only' and 'compile-only' targets)
+	$(error GOARCH variable is not $(NATIVEARCH). Cross-compiling is only allowed for 'clean' target)
 endif
 endif
 
-.PHONY: all build clean tools tools-update deps validate compile test integration-test check-version
+.PHONY: all build clean validate compile test integration-test check-version
