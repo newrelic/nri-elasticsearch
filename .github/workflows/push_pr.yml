@@ -22,7 +22,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: alvarocabanas/static-analysis-configs-action@v1
         with:
-          integration: nri-${{ env.INTEGRATION }}
+          repository: nri-${{ env.INTEGRATION }}
       - name: Semgrep
         id: semgrep
         uses: returntocorp/semgrep-action@v1
