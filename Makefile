@@ -21,6 +21,10 @@ clean:
 	@rm -rfv bin coverage.xml
 
 validate:
+	@echo "=== $(INTEGRATION) === [ validate ]: Validating source code running semgrep..."
+	@curl -sSfL $(LINTERS_CFG_URL)/semgrep/nri-$(INTEGRATION).yml > .semgrep.yml
+	@docker run --rm -v "${PWD}:/src" returntocorp/semgrep -c ".semgrep.yml"
+	@echo "\n"
 	@echo "=== $(INTEGRATION) === [ validate ]: Validating source code running golangci-lint..."
 	@curl -sSfL $(LINTERS_CFG_URL)/golangci-lint/nri-$(INTEGRATION).yml > .golangci.yml
 	@go run $(GOFLAGS) $(GOLANGCI_LINT) run --verbose
@@ -32,11 +36,6 @@ compile:
 test:
 	@echo "=== $(INTEGRATION) === [ test ]: Running unit tests..."
 	@gocov test -race $(GO_PKGS) | gocov-xml > coverage.xml
-
-semgrep:
-	@echo "=== $(INTEGRATION) === [ validate ]: semgrep..."
-	@curl -sSfL $(LINTERS_CFG_URL)/semgrep/nri-$(INTEGRATION).yml > .semgrep.yml
-	@docker run --rm -v "${PWD}:/src" returntocorp/semgrep -c ".semgrep.yml"
 
 integration-test:
 	@echo "=== $(INTEGRATION) === [ test ]: running integration tests..."
