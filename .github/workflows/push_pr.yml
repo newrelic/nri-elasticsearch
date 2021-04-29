@@ -23,11 +23,11 @@ jobs:
       - uses: alvarocabanas/static-analysis-configs-action@v1
         with:
           integration: nri-${{ env.INTEGRATION }}
-      - name: golangci-lint
-        uses: golangci/golangci-lint-action@v2
       - name: Semgrep
         id: semgrep
         uses: returntocorp/semgrep-action@v1
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v2
 
   snyk:
     name: Run security checks via snyk
