@@ -5,7 +5,6 @@ package integration
 import (
 	"flag"
 	"fmt"
-	"math/rand"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -114,12 +113,6 @@ func TestElasticsearchIntegrationAllOnSlave_OnlyMasterFlagFalse(t *testing.T) {
 	schemaPath := filepath.Join("json-schema-files", "elasticsearch-schema-inventory.json")
 	err = jsonschema.Validate(schemaPath, stdout, errorExpected)
 	assert.Error(t, err)
-}
-
-func TestDummySemGrep(t *testing.T) {
-	// ruleid: math-random-used
-	bad, _ := rand.Read([]byte{3})
-	assert.NotEmpty(t, bad)
 }
 
 func ensureElasticsearchClusterReady() {
