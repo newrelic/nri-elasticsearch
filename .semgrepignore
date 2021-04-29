@@ -19,4 +19,4 @@ venv/
 # tests/
 
 # Semgrep rules folder
-.semgrep
+#.semgrep
