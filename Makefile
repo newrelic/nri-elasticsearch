@@ -34,7 +34,7 @@ test:
 semgrep:
 	@echo "=== $(INTEGRATION) === [ validate ]: semgrep..."
 	@echo ${PWD}
-	@docker run --rm -v "${PWD}:/src" returntocorp/semgrep -c "semgrep.yaml"
+	@docker run --rm -v "${PWD}:/src" returntocorp/semgrep -c ".semgrep.yml"
 
 integration-test:
 	@echo "=== $(INTEGRATION) === [ test ]: running integration tests..."
