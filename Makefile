@@ -10,6 +10,7 @@ GOFLAGS			 = -mod=readonly
 GOLANGCI_LINT	 = github.com/golangci/golangci-lint/cmd/golangci-lint
 GOCOV            = github.com/axw/gocov/gocov
 GOCOV_XML		 = github.com/AlekSi/gocov-xml
+LINTERS_CFG_URL  = https://raw.githubusercontent.com/alvarocabanas/static-analysis-configs-action/main
 
 all: build
 
@@ -21,6 +22,7 @@ clean:
 
 validate:
 	@echo "=== $(INTEGRATION) === [ validate ]: Validating source code running golangci-lint..."
+	@curl -sSfL $(LINTERS_CFG_URL)/golangci-lint/nri-$(INTEGRATION).yml > .golangci.yml
 	@go run $(GOFLAGS) $(GOLANGCI_LINT) run --verbose
 
 compile:
@@ -33,7 +35,7 @@ test:
 
 semgrep:
 	@echo "=== $(INTEGRATION) === [ validate ]: semgrep..."
-	@echo ${PWD}
+	@curl -sSfL $(LINTERS_CFG_URL)/semgrep/nri-$(INTEGRATION).yml > .semgrep.yml
 	@docker run --rm -v "${PWD}:/src" returntocorp/semgrep -c ".semgrep.yml"
 
 integration-test:
