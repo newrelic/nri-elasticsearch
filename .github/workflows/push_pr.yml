@@ -22,8 +22,6 @@ jobs:
       - name: Semgrep
         id: semgrep
         uses: returntocorp/semgrep-action@v1
-        with:
-          config: semgrep.yaml
 
   golangci-lint:
     name: Validate code via golangci
