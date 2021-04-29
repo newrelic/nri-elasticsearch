@@ -3,7 +3,6 @@ package main
 import (
 	"errors"
 	"fmt"
-	"math/rand"
 	"regexp"
 	"strings"
 
@@ -302,9 +301,4 @@ func getEntity(i *integration.Integration, name, namespace, clusterName string) 
 
 func getSampleName(entityType string) string {
 	return fmt.Sprintf("Elasticsearch%sSample", strings.Title(strings.TrimPrefix(entityType, "es-")))
-}
-
-func dummySemGrep() {
-	// ruleid: math-random-used
-	_, _ = rand.Read([]byte{3})
 }
