@@ -23,6 +23,8 @@ jobs:
       - uses: alvarocabanas/static-analysis-configs-action@v1
         with:
           repository: nri-${{ env.INTEGRATION }}
+          semgrep: true
+          golangci-lint: true
       - name: Semgrep
         id: semgrep
         uses: returntocorp/semgrep-action@v1
