@@ -16,7 +16,7 @@ venv/
 
 # Common test directories
 # test/
-tests/
+# tests/
 
 # Semgrep rules folder
 #.semgrep
