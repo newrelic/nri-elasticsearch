@@ -23,7 +23,7 @@ clean:
 validate:
 	@echo "=== $(INTEGRATION) === [ validate ]: Validating source code running semgrep..."
 	@curl -sSfL $(LINTERS_CFG_URL)/semgrep/nri-$(INTEGRATION).yml > .semgrep.yml
-	@docker run --rm -v "${PWD}:/src" returntocorp/semgrep -c ".semgrep.yml"
+	@docker run --rm -v "${PWD}:/src:ro" returntocorp/semgrep -c ".semgrep.yml"
 	@echo "\n"
 	@echo "=== $(INTEGRATION) === [ validate ]: Validating source code running golangci-lint..."
 	@curl -sSfL $(LINTERS_CFG_URL)/golangci-lint/nri-$(INTEGRATION).yml > .golangci.yml
