@@ -57,10 +57,3 @@ dist/
 # build files
 src/versioninfo.json
 src/resource.syso
-
-#semgrep
-.semgrep.yml
-.semgrepignore
-
-#golangci-lint
-.golangci.yml

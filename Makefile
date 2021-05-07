@@ -21,22 +21,17 @@ clean:
 	@rm -rfv bin coverage.xml
 
 validate:
-	@echo "=== $(INTEGRATION) === [ validate ]: Validating source code running semgrep..."
-	@if curl --output /dev/null --silent --head --fail $(LINTERS_CFG_URL)/semgrep/nri-$(INTEGRATION).yml; then \
-	    curl -sSL $(LINTERS_CFG_URL)/semgrep/nri-$(INTEGRATION).yml > .semgrep.yml ;\
-	else \
-	    curl -sSL $(LINTERS_CFG_URL)/semgrep/default.yml > .semgrep.yml ;\
-	fi
-	@docker run --rm -v "${PWD}:/src:ro" returntocorp/semgrep -c ".semgrep.yml"
-	@echo "\n"
-
-	@echo "=== $(INTEGRATION) === [ validate ]: Validating source code running golangci-lint..."
-	@if curl --output /dev/null --silent --head --fail $(LINTERS_CFG_URL)/golangci-lint/nri-$(INTEGRATION)a.yml; then \
-	    curl -sSL $(LINTERS_CFG_URL)/golangci-lint/nri-$(INTEGRATION).yml > .golangci.yml ;\
-	else \
-	    curl -sSL $(LINTERS_CFG_URL)/golangci-lint/default.yml > .golangci.yml ;\
-	fi
-	@go run $(GOFLAGS) $(GOLANGCI_LINT) run --verbose
+ifeq ($(strip $(GO_FILES)),)
+	@echo "=== $(INTEGRATION) === [ validate ]: no Go files found. Skipping validation."
+else
+	@printf "=== $(INTEGRATION) === [ validate ]: running golangci-lint & semgrep... "
+	@go run  $(GOFLAGS) github.com/golangci/golangci-lint/cmd/golangci-lint run --verbose
+	@if [ -f .semgrep.yml ]; then \
+        docker run --rm -v "${PWD}:/src:ro" --workdir /src returntocorp/semgrep -c .semgrep.yml ; \
+    else \
+    	docker run --rm -v "${PWD}:/src:ro" --workdir /src returntocorp/semgrep -c p/golang ; \
+    fi
+endif
 
 compile:
 	@echo "=== $(INTEGRATION) === [ compile ]: Building $(BINARY_NAME)..."
@@ -44,7 +39,7 @@ compile:
 
 test:
 	@echo "=== $(INTEGRATION) === [ test ]: Running unit tests..."
-	@gocov test -race $(GO_PKGS) | gocov-xml > coverage.xml
+	@go run $(GOFLAGS) $(GOCOV) test -race ./... | go run $(GOFLAGS) $(GOCOV_XML) > coverage.xml
 
 integration-test:
 	@echo "=== $(INTEGRATION) === [ test ]: running integration tests..."
