@@ -20,7 +20,11 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - uses: newrelic/newrelic-infra-checkers@v1
+      - uses: alvarocabanas/static-analysis-configs-action@v1
+        with:
+          repository: nri-${{ env.INTEGRATION }}
+          semgrep: true
+          golangci-lint: true
       - name: Semgrep
         uses: returntocorp/semgrep-action@v1
       - name: golangci-lint
