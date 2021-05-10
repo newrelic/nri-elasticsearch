@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.3.6 (2021-05-10)
+### Added
+- Add semgrep and infra-checkers Github Actions
+
 ## 4.3.5 (2021-04-20)
 ### Added
 - option `master_only` affection `command: all` only: Collect cluster metrics on the elected master only
