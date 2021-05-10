@@ -10,7 +10,6 @@ GOFLAGS			 = -mod=readonly
 GOLANGCI_LINT	 = github.com/golangci/golangci-lint/cmd/golangci-lint
 GOCOV            = github.com/axw/gocov/gocov
 GOCOV_XML		 = github.com/AlekSi/gocov-xml
-LINTERS_CFG_URL  = https://raw.githubusercontent.com/alvarocabanas/static-analysis-configs-action/main
 
 all: build
 
