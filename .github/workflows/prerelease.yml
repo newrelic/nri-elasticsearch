@@ -16,19 +16,6 @@ env:
   TAG: ${{ github.event.release.tag_name }}
 
 jobs:
-  static-analysis:
-    name: Run all static analysis checks
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v2
-      - uses: newrelic/newrelic-infra-checkers@v1
-      - name: Semgrep
-        uses: returntocorp/semgrep-action@v1
-      - name: golangci-lint
-        uses: golangci/golangci-lint-action@v2
-        with:
-          only-new-issues: true
-
   snyk:
     name: Run security checks via snyk
     runs-on: ubuntu-20.04
@@ -104,7 +91,7 @@ jobs:
   prerelease:
     name: Build binary for *Nix/Win, create archives for *Nix/Win, create packages for *Nix, upload all artifacts into GH Release assets
     runs-on: ubuntu-20.04
-    needs: [static-analysis, snyk, test-nix, test-windows]
+    needs: [snyk, test-nix, test-windows]
     steps:
       - uses: actions/checkout@v2
       - name: Login to DockerHub
