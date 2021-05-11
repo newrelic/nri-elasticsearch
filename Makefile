@@ -1,7 +1,5 @@
 WORKDIR      := $(shell pwd)
 
-NATIVEOS	 := $(shell go version | awk -F '[ /]' '{print $$4}')
-NATIVEARCH	 := $(shell go version | awk -F '[ /]' '{print $$5}')
 INTEGRATION  := elasticsearch
 BINARY_NAME   = nri-$(INTEGRATION)
 GO_PKGS      := $(shell go list ./... | grep -v "/vendor/")
@@ -13,7 +11,7 @@ GOCOV_XML		 = github.com/AlekSi/gocov-xml
 
 all: build
 
-build: check-version clean validate test compile
+build: clean validate test compile
 
 clean:
 	@echo "=== $(INTEGRATION) === [ clean ]: Removing binaries and coverage file..."
@@ -49,16 +47,4 @@ integration-test:
 include $(CURDIR)/build/ci.mk
 include $(CURDIR)/build/release.mk
 
-check-version:
-ifdef GOOS
-ifneq "$(GOOS)" "$(NATIVEOS)"
-	$(error GOOS is not $(NATIVEOS). Cross-compiling is only allowed for 'clean' target)
-endif
-endif
-ifdef GOARCH
-ifneq "$(GOARCH)" "$(NATIVEARCH)"
-	$(error GOARCH variable is not $(NATIVEARCH). Cross-compiling is only allowed for 'clean' target)
-endif
-endif
-
-.PHONY: all build clean validate compile test integration-test check-version
+.PHONY: all build clean validate compile test integration-test
