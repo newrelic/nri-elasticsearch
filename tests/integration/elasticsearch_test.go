@@ -40,6 +40,8 @@ func runIntegration(t *testing.T, envVars ...string) (string, string, error) {
 	command := make([]string, 0)
 	command = append(command, *binPath)
 	command = append(command, "--cluster_environment", *clusterEnvironment)
+	command = append(command, "--use_ssl")
+	command = append(command, "--tls_insecure_skip_verify=true")
 
 	stdout, stderr, err := helpers.ExecInContainer(*container, command, envVars...)
 
@@ -117,8 +119,8 @@ func TestElasticsearchIntegrationAllOnSlave_OnlyMasterFlagFalse(t *testing.T) {
 
 func ensureElasticsearchClusterReady() {
 	fmt.Print("...")
-	responseMaster, _ := http.Get("http://localhost:9200/_nodes/stats")
-	responseSlave, _ := http.Get("http://localhost:9202/_nodes/stats")
+	responseMaster, _ := http.Get("https://localhost:9200/_nodes/stats")
+	responseSlave, _ := http.Get("https://localhost:9202/_nodes/stats")
 	if (responseMaster == nil || responseSlave == nil) && secondsWaited < elasticsearchMaxTimeoutWait {
 		secondsWaited++
 		time.Sleep(1 * time.Second)

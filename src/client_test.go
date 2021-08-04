@@ -1,12 +1,20 @@
 package main
 
 import (
+	"bytes"
+	"context"
+	"encoding/pem"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
+	"os"
+	"path/filepath"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestNewClient(t *testing.T) {
@@ -98,4 +106,85 @@ func TestBadStatusCode(t *testing.T) {
 
 	err := client.Request("/endpoint", nil)
 	assert.Error(t, err)
+}
+
+func TestClient_TLSUnsecureSkipVerify(t *testing.T) {
+	setupTestArgs()
+
+	srv := httptest.NewTLSServer(
+		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			_, err := fmt.Fprintln(w, "Test server")
+			assert.NoError(t, err)
+		}))
+	defer srv.Close()
+
+	// Given test server is working
+	req, err := http.NewRequestWithContext(context.Background(), "GET", srv.URL, nil)
+	require.NoError(t, err)
+	resp, err := srv.Client().Do(req)
+	require.NoError(t, err)
+	defer resp.Body.Close()
+
+	// Then create temp dir
+	tmpDir, err := ioutil.TempDir("", "test")
+	require.NoError(t, err)
+	defer func() {
+		err = os.RemoveAll(tmpDir)
+		require.NoError(t, err)
+	}()
+
+	file := writeCApem(t, srv, tmpDir, "ca.pem")
+	defer file.Close()
+
+	args.UseSSL = true
+	args.Timeout = 90
+
+	client, err := NewClient(srv.URL)
+	assert.NoError(t, err)
+	assert.Equal(t, 90*time.Second, client.client.Timeout)
+
+	// And http get should not work
+	req, err = http.NewRequestWithContext(context.Background(), "GET", srv.URL, nil)
+	require.NoError(t, err)
+	resp, err = client.client.Do(req)
+	require.Error(t, err)
+	defer func() {
+		if resp != nil {
+			_ = resp.Body.Close()
+		}
+	}()
+
+	// Do not validate cert
+	args.TLSInsecureSkipVerify = true
+
+	clientB, err := NewClient(srv.URL)
+	assert.NoError(t, err)
+	assert.Equal(t, 90*time.Second, clientB.client.Timeout)
+
+	// And http get should work
+	req, err = http.NewRequestWithContext(context.Background(), "GET", srv.URL, nil)
+	require.NoError(t, err)
+	resp, err = clientB.client.Do(req)
+	require.NoError(t, err)
+	defer resp.Body.Close()
+
+	_, err = ioutil.ReadAll(resp.Body)
+	assert.NoError(t, err)
+}
+
+// Extract ca.pem from TLS server
+func writeCApem(t *testing.T, srv *httptest.Server, tmpDir string, certName string) *os.File {
+	caPEM := new(bytes.Buffer)
+	err := pem.Encode(caPEM, &pem.Block{
+		Type:  "CERTIFICATE",
+		Bytes: srv.Certificate().Raw,
+	})
+	require.NoError(t, err)
+
+	// Then write the ca.pem to disk
+	caPem, err := os.Create(filepath.Join(tmpDir, certName))
+	require.NoError(t, err)
+	_, err = caPem.Write(caPEM.Bytes())
+	require.NoError(t, err)
+	return caPem
 }

@@ -46,14 +46,8 @@ type errorBody struct {
 // The hostname parameter specifies the hostname that the client should connect to.
 // Passing in an empty string causes the client to use the hostname specified in the command-line args. (default behavior)
 func NewClient(hostname string) (*HTTPClient, error) {
-	var httpClient *http.Client
-	var err error
-	if args.SSLAlternativeHostname == "" {
-		httpClient, err = nrHttp.New(args.CABundleFile, args.CABundleDir, time.Duration(args.Timeout)*time.Second)
-	} else {
-		httpClient, err = nrHttp.NewAcceptInvalidHostname(args.CABundleFile, args.CABundleDir, time.Duration(args.Timeout)*time.Second, args.SSLAlternativeHostname)
-	}
-
+	clientOptions := getClientOptionsFromArgs()
+	httpClient, err := nrHttp.New(clientOptions...)
 	if err != nil {
 		return nil, err
 	}
@@ -71,6 +65,24 @@ func NewClient(hostname string) (*HTTPClient, error) {
 			return fmt.Sprintf("%s://%s:%d", protocol, hostname, args.Port)
 		}(),
 	}, nil
+}
+
+func getClientOptionsFromArgs() []nrHttp.ClientOption {
+	var clientOptions []nrHttp.ClientOption
+	if args.CABundleDir != "" {
+		clientOptions = append(clientOptions, nrHttp.WithCABundleDir(args.CABundleDir))
+	}
+	if args.CABundleFile != "" {
+		clientOptions = append(clientOptions, nrHttp.WithCABundleFile(args.CABundleFile))
+	}
+	if args.SSLAlternativeHostname != "" {
+		clientOptions = append(clientOptions, nrHttp.WithAcceptInvalidHostname(args.SSLAlternativeHostname))
+	}
+	if args.TLSInsecureSkipVerify {
+		clientOptions = append(clientOptions, nrHttp.WithTLSInsecureSkipVerify())
+	}
+	clientOptions = append(clientOptions, nrHttp.WithTimeout(time.Duration(args.Timeout)*time.Second))
+	return clientOptions
 }
 
 // Request takes an endpoint, makes a GET request to that endpoint,
