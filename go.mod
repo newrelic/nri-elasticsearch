@@ -5,7 +5,7 @@ go 1.16
 require (
 	github.com/AlekSi/gocov-xml v0.0.0-20190121064608-3a14fb1c4737
 	github.com/axw/gocov v1.0.0
-	github.com/golangci/golangci-lint v1.40.0
+	github.com/golangci/golangci-lint v1.41.1
 	github.com/newrelic/infra-integrations-sdk v3.7.0+incompatible
 	github.com/stretchr/testify v1.7.0
 	github.com/xeipuuv/gojsonschema v1.2.0
