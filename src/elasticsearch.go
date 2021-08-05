@@ -31,6 +31,7 @@ type argumentList struct {
 	IndicesRegex           string `default:"" help:"A regex pattern that matches the index names to collect. Collects all if unspecified"`
 	ShowVersion            bool   `default:"false" help:"Print build information and exit"`
 	MasterOnly             bool   `default:"false" help:"Collect cluster metrics on the elected master only"`
+	TLSInsecureSkipVerify  bool   `default:"false" help:"Enabled TLS insecure skip verify"`
 }
 
 const (
