@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.4.0 (2021-08-05)
+### Changed
+- Updated the SDK
+### Added
+- Adde new flag tls_unsecure_skip_verify
+
 ## 4.3.6 (2021-06-09)
 ### Changed
 - Support for ARM
