@@ -1,5 +1,5 @@
 name: com.newrelic.elasticsearch
-description: Reports status and metrics for elasticsearch service. Legacy file kept for compatibility.
+description: Reports status and metrics for elasticsearch service
 protocol_version: 2
 os: windows
 
