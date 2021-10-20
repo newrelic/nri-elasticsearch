@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.5.1 (2021-10-20)
+### Added
+Added support for more distributions:
+- Debian 11
+- Ubuntu 20.10
+- Ubuntu 21.04
+- SUSE 12.15
+- SUSE 15.1
+- SUSE 15.2
+- SUSE 15.3
+- Oracle Linux 7
+- Oracle Linux 8
+
 ## 4.5.0 (2021-08-27)
 ### Added
 Moved default config.sample to [V4](https://docs.newrelic.com/docs/create-integrations/infrastructure-integrations-sdk/specifications/host-integrations-newer-configuration-format/), added a dependency for infra-agent version 1.20.0
