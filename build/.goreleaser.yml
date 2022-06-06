@@ -49,8 +49,8 @@ nfpms:
     contents:
       - src: "elasticsearch-config.yml.sample"
         dst: "/etc/newrelic-infra/integrations.d/elasticsearch-config.yml.sample"
-      - src: "elasticsearch-log.yml.example"
-        dst: "/etc/newrelic-infra/logging.d/elasticsearch-log.yml.example"
+      - src: "elasticsearch-log.yml"
+        dst: "/etc/newrelic-infra/logging.d/elasticsearch-log.yml"
       - src: "CHANGELOG.md"
         dst: "/usr/share/doc/nri-elasticsearch/CHANGELOG.md"
       - src: "README.md"
