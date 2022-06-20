@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.5.3 (2022-06-21)
+### Changed
+- Bump dependencies
+### Added
+Added support for more distributions:
+- RHEL(EL) 9
+- Ubuntu 22.04
+- Amazon Linux 2022
+
+
+## 4.5.2 (2022-05-02)
+### Changed
+- Bump dependencies
+### Added
+* Added elasticsearch logging file example by @marcelschlapfer in https://github.com/newrelic/nri-elasticsearch/pull/109
+
+
 ## 4.5.1 (2021-10-20)
 ### Added
 Added support for more distributions:
