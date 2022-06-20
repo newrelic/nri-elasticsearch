@@ -6,8 +6,6 @@ GO_PKGS      := $(shell go list ./... | grep -v "/vendor/")
 GO_FILES     := $(shell find src -type f -name "*.go")
 GOFLAGS			 = -mod=readonly
 GOLANGCI_LINT	 = github.com/golangci/golangci-lint/cmd/golangci-lint
-GOCOV            = github.com/axw/gocov/gocov
-GOCOV_XML		 = github.com/AlekSi/gocov-xml
 
 all: build
 
@@ -36,7 +34,7 @@ compile:
 
 test:
 	@echo "=== $(INTEGRATION) === [ test ]: Running unit tests..."
-	@go run $(GOFLAGS) $(GOCOV) test -race ./... | go run $(GOFLAGS) $(GOCOV_XML) > coverage.xml
+	@go test -race ./... -count=1
 
 integration-test:
 	@echo "=== $(INTEGRATION) === [ test ]: running integration tests..."

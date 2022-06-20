@@ -2,11 +2,7 @@ module github.com/newrelic/nri-elasticsearch/tools
 
 go 1.18
 
-require (
-	github.com/AlekSi/gocov-xml v1.0.0
-	github.com/axw/gocov v1.1.0
-	github.com/golangci/golangci-lint v1.46.2
-)
+require github.com/golangci/golangci-lint v1.46.2
 
 require (
 	4d63.com/gochecknoglobals v0.1.0 // indirect
