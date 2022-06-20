@@ -1,11 +1,8 @@
 WORKDIR      := $(shell pwd)
-
 INTEGRATION  := elasticsearch
 BINARY_NAME   = nri-$(INTEGRATION)
 GO_PKGS      := $(shell go list ./... | grep -v "/vendor/")
 GO_FILES     := $(shell find src -type f -name "*.go")
-GOFLAGS			 = -mod=readonly
-GOLANGCI_LINT	 = github.com/golangci/golangci-lint/cmd/golangci-lint
 
 all: build
 
@@ -19,8 +16,7 @@ validate:
 ifeq ($(strip $(GO_FILES)),)
 	@echo "=== $(INTEGRATION) === [ validate ]: no Go files found. Skipping validation."
 else
-	@printf "=== $(INTEGRATION) === [ validate ]: running golangci-lint & semgrep... "
-	@go run  $(GOFLAGS) $(GOLANGCI_LINT) run --verbose
+	@printf "=== $(INTEGRATION) === [ validate ]: running semgrep... "
 	@if [ -f .semgrep.yml ]; then \
         docker run --rm -v "${PWD}:/src:ro" --workdir /src returntocorp/semgrep -c .semgrep.yml ; \
     else \
