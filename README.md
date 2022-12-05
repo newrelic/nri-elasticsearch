@@ -47,6 +47,31 @@ To run the tests execute:
 $ make test
 ```
 
+## Spin-up a local testing environment
+
+Running a local testing environment is pretty easy. You just need a k8s cluster environment running (or access to a remote one).
+Then, run:
+```shell
+helm repo add elastic https://helm.elastic.co 
+helm install elasticsearch elastic/elasticsearch --values ./values.yaml
+```
+
+For example, having as values:
+```shell
+replicas: 1
+minimumMasterNodes: 1
+
+secret:
+  enabled: true
+  password: "testPass" 
+```
+
+Then, connect to the integration port-forwarding the 9200 service port:
+```shell
+kubectl port-forward service/elasticsearch-master 9200:9200
+go run ./src/... -metrics=true -hostname=localhost -username=elastic -password='testPass' -use_ssl=true --tls_insecure_skip_verify=true
+```
+
 ## Support
 
 Should you need assistance with New Relic products, you are in good hands with several support diagnostic tools and support channels.
