@@ -21,7 +21,7 @@ import (
 
 var (
 	secondsWaited               = 0
-	elasticsearchMaxTimeoutWait = 30
+	elasticsearchMaxTimeoutWait = 60
 	iName                       = "elasticsearch"
 
 	defaultContainer          = "integration_nri-elasticsearch_1"
