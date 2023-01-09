@@ -12,8 +12,7 @@ For installation and usage instructions, see our [documentation web site](https:
 
 ## Compatibility
 
-* Supported OS: No limitations
-* elasticsearch versions: 5.0+
+For compatibility and requirements, see our [documentation web site](https://docs.newrelic.com/docs/infrastructure/host-integrations/host-integrations-list/elasticsearch/elasticsearch-integration/#req).
 
 ## Building
 
