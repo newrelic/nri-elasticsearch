@@ -105,7 +105,7 @@ func TestElasticsearchIntegrationOnlyInventory(t *testing.T) {
 }
 
 func TestElasticsearchIntegrationAllOnSlave_OnlyMasterFlagTrue(t *testing.T) {
-	stdout, stderr, err := runIntegration(t, "MASTER_ONLY=true", "PORT=9200", "HOSTNAME=elasticsearch2", "LOCAL_HOSTNAME=elasticsearch2")
+	stdout, stderr, err := runIntegration(t, "MASTER_ONLY=true", "PORT=9200", "HOSTNAME=elasticsearch-replica", "LOCAL_HOSTNAME=elasticsearch-replica")
 	assert.NotNil(t, stderr, "unexpected stderr")
 	assert.NoError(t, err, "Unexpected error")
 
@@ -116,7 +116,7 @@ func TestElasticsearchIntegrationAllOnSlave_OnlyMasterFlagTrue(t *testing.T) {
 }
 
 func TestElasticsearchIntegrationAllOnSlave_OnlyMasterFlagFalse(t *testing.T) {
-	stdout, stderr, err := runIntegration(t, "MASTER_ONLY=false", "PORT=9200", "HOSTNAME=elasticsearch2", "LOCAL_HOSTNAME=elasticsearch2")
+	stdout, stderr, err := runIntegration(t, "MASTER_ONLY=false", "PORT=9200", "HOSTNAME=elasticsearch-replica", "LOCAL_HOSTNAME=elasticsearch-replica")
 	assert.NotNil(t, stderr, "unexpected stderr")
 	assert.NoError(t, err, "Unexpected error")
 

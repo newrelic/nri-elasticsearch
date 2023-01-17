@@ -7,7 +7,7 @@ services:
       - cluster.name=docker-cluster
       - node.name=elasticsearch
       - cluster.initial_master_nodes=elasticsearch
-      - discovery.seed_hosts=elasticsearch2
+      - discovery.seed_hosts=elasticsearch-replica
       - bootstrap.memory_lock=true
       - ELASTIC_PASSWORD=elastic
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
@@ -29,12 +29,12 @@ services:
     networks:
       - elastic
 
-  elasticsearch2:
+  elasticsearch-replica:
     image: elasticsearch:8.5.3
-    container_name: elasticsearch2
+    container_name: elasticsearch-replica
     environment:
       - cluster.name=docker-cluster
-      - node.name=elasticsearch2
+      - node.name=elasticsearch-replica
       - cluster.initial_master_nodes=elasticsearch
       - discovery.seed_hosts=elasticsearch
       - bootstrap.memory_lock=true
