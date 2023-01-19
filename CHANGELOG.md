@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## 5.0.0 (2023-01-19)
 ### Removed
 - Dropped support for Elastic v5 and v6 (both EOL)
-- Removed metrics:
+- Removed metrics since these were deprecated in v7 and v8:
   - "threadpool.indexActive"
   - "threadpool.indexQueue"
   - "threadpool.indexRejected"
