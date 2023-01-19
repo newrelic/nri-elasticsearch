@@ -1,12 +1,15 @@
 version: '3.3'
 services:
   elasticsearch:
-    image: elasticsearch:6.4.1
+    image: elasticsearch:8.5.3
     container_name: elasticsearch
     environment:
       - cluster.name=docker-cluster
+      - node.name=elasticsearch
+      - cluster.initial_master_nodes=elasticsearch
+      - discovery.seed_hosts=elasticsearch-replica
       - bootstrap.memory_lock=true
-      - node.master=true
+      - ELASTIC_PASSWORD=elastic
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - xpack.security.http.ssl.enabled=true
       - xpack.security.http.ssl.keystore.path=/usr/share/elasticsearch/config/elastic-certificates.p12
@@ -26,15 +29,17 @@ services:
     networks:
       - elastic
 
-  elasticsearch2:
-    image: elasticsearch:6.4.1
-    container_name: elasticsearch2
+  elasticsearch-replica:
+    image: elasticsearch:8.5.3
+    container_name: elasticsearch-replica
     environment:
       - cluster.name=docker-cluster
+      - node.name=elasticsearch-replica
+      - cluster.initial_master_nodes=elasticsearch
+      - discovery.seed_hosts=elasticsearch
       - bootstrap.memory_lock=true
-      - node.master=false
+      - ELASTIC_PASSWORD=elastic
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - "discovery.zen.ping.unicast.hosts=elasticsearch"
       - xpack.security.http.ssl.enabled=true
       - xpack.security.http.ssl.keystore.path=/usr/share/elasticsearch/config/elastic-certificates.p12
       - xpack.security.http.ssl.truststore.path=/usr/share/elasticsearch/config/elastic-certificates.p12

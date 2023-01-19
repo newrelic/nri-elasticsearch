@@ -466,7 +466,6 @@ type NodeThreadPool struct {
 	ForceMerge        *ThreadPoolForceMerge        `json:"force_merge"`
 	Generic           *ThreadPoolGeneric           `json:"generic"`
 	Get               *ThreadPoolGet               `json:"get"`
-	Index             *ThreadPoolIndex             `json:"index"`
 	Listener          *ThreadPoolListener          `json:"listener"`
 	Management        *ThreadPoolManagement        `json:"management"`
 	Merge             *ThreadPoolMerge             `json:"merge"`
@@ -530,14 +529,6 @@ type ThreadPoolGet struct {
 	Queue    *int `json:"queue" metric_name:"threadpool.getQueue" source_type:"gauge"`
 	Threads  *int `json:"threads" metric_name:"threadpool.getThreads" source_type:"gauge"`
 	Rejected *int `json:"rejected" metric_name:"threadpool.getRejected" source_type:"gauge"`
-}
-
-// ThreadPoolIndex struct
-type ThreadPoolIndex struct {
-	Active   *int `json:"active" metric_name:"threadpool.indexActive" source_type:"gauge"`
-	Queue    *int `json:"queue" metric_name:"threadpool.indexQueue" source_type:"gauge"`
-	Threads  *int `json:"threads" metric_name:"threadpool.indexThreads" source_type:"gauge"`
-	Rejected *int `json:"rejected" metric_name:"threadpool.indexRejected" source_type:"gauge"`
 }
 
 // ThreadPoolListener struct

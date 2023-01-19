@@ -342,14 +342,6 @@
                   "threadpool.getQueue",
                   "threadpool.getRejected",
                   "threadpool.getThreads",
-                  "threadpool.indexActive",
-                  "threadpool.indexQueue",
-                  "threadpool.indexRejected",
-                  "threadpool.indexThreads",
-                  "threadpool.listenerActive",
-                  "threadpool.listenerQueue",
-                  "threadpool.listenerRejected",
-                  "threadpool.listenerThreads",
                   "threadpool.managementActive",
                   "threadpool.managementQueue",
                   "threadpool.managementRejected",
@@ -719,30 +711,6 @@
                     "type": "integer"
                   },
                   "threadpool.getThreads": {
-                    "type": "integer"
-                  },
-                  "threadpool.indexActive": {
-                    "type": "integer"
-                  },
-                  "threadpool.indexQueue": {
-                    "type": "integer"
-                  },
-                  "threadpool.indexRejected": {
-                    "type": "integer"
-                  },
-                  "threadpool.indexThreads": {
-                    "type": "integer"
-                  },
-                  "threadpool.listenerActive": {
-                    "type": "integer"
-                  },
-                  "threadpool.listenerQueue": {
-                    "type": "integer"
-                  },
-                  "threadpool.listenerRejected": {
-                    "type": "integer"
-                  },
-                  "threadpool.listenerThreads": {
                     "type": "integer"
                   },
                   "threadpool.managementActive": {
@@ -1005,14 +973,6 @@
                   "threadpool.getQueue",
                   "threadpool.getRejected",
                   "threadpool.getThreads",
-                  "threadpool.indexActive",
-                  "threadpool.indexQueue",
-                  "threadpool.indexRejected",
-                  "threadpool.indexThreads",
-                  "threadpool.listenerActive",
-                  "threadpool.listenerQueue",
-                  "threadpool.listenerRejected",
-                  "threadpool.listenerThreads",
                   "threadpool.managementActive",
                   "threadpool.managementQueue",
                   "threadpool.managementRejected",
@@ -1382,30 +1342,6 @@
                     "type": "integer"
                   },
                   "threadpool.getThreads": {
-                    "type": "integer"
-                  },
-                  "threadpool.indexActive": {
-                    "type": "integer"
-                  },
-                  "threadpool.indexQueue": {
-                    "type": "integer"
-                  },
-                  "threadpool.indexRejected": {
-                    "type": "integer"
-                  },
-                  "threadpool.indexThreads": {
-                    "type": "integer"
-                  },
-                  "threadpool.listenerActive": {
-                    "type": "integer"
-                  },
-                  "threadpool.listenerQueue": {
-                    "type": "integer"
-                  },
-                  "threadpool.listenerRejected": {
-                    "type": "integer"
-                  },
-                  "threadpool.listenerThreads": {
                     "type": "integer"
                   },
                   "threadpool.managementActive": {

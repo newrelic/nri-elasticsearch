@@ -1,8 +1,9 @@
-// +build integration
+//go:build integration
 
 package integration
 
 import (
+	"crypto/tls"
 	"flag"
 	"fmt"
 	"net/http"
@@ -19,12 +20,14 @@ import (
 
 var (
 	secondsWaited               = 0
-	elasticsearchMaxTimeoutWait = 30
+	elasticsearchMaxTimeoutWait = 60
 	iName                       = "elasticsearch"
 
 	defaultContainer          = "integration_nri-elasticsearch_1"
 	defaultBinPath            = "/nri-elasticsearch"
 	defaultClusterEnvironment = "staging"
+	defaultUsername           = "elastic"
+	defaultPassword           = "elastic"
 
 	// cli flags
 	container = flag.String("container", defaultContainer, "container where the integration is installed")
@@ -42,6 +45,8 @@ func runIntegration(t *testing.T, envVars ...string) (string, string, error) {
 	command = append(command, "--cluster_environment", *clusterEnvironment)
 	command = append(command, "--use_ssl")
 	command = append(command, "--tls_insecure_skip_verify=true")
+	command = append(command, "--username", defaultUsername)
+	command = append(command, "--password", defaultPassword)
 
 	stdout, stderr, err := helpers.ExecInContainer(*container, command, envVars...)
 
@@ -54,8 +59,12 @@ func runIntegration(t *testing.T, envVars ...string) (string, string, error) {
 
 func TestMain(m *testing.M) {
 	flag.Parse()
+	transCfg := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	client := &http.Client{Transport: transCfg}
 	log.Info("Waiting for elasticsearch cluster to be ready")
-	ensureElasticsearchClusterReady()
+	ensureElasticsearchClusterReady(client)
 	log.Info("Elasticsearch cluster ready")
 
 	result := m.Run()
@@ -96,7 +105,7 @@ func TestElasticsearchIntegrationOnlyInventory(t *testing.T) {
 }
 
 func TestElasticsearchIntegrationAllOnSlave_OnlyMasterFlagTrue(t *testing.T) {
-	stdout, stderr, err := runIntegration(t, "MASTER_ONLY=true", "PORT=9200", "HOSTNAME=elasticsearch2", "LOCAL_HOSTNAME=elasticsearch2")
+	stdout, stderr, err := runIntegration(t, "MASTER_ONLY=true", "PORT=9200", "HOSTNAME=elasticsearch-replica", "LOCAL_HOSTNAME=elasticsearch-replica")
 	assert.NotNil(t, stderr, "unexpected stderr")
 	assert.NoError(t, err, "Unexpected error")
 
@@ -107,7 +116,7 @@ func TestElasticsearchIntegrationAllOnSlave_OnlyMasterFlagTrue(t *testing.T) {
 }
 
 func TestElasticsearchIntegrationAllOnSlave_OnlyMasterFlagFalse(t *testing.T) {
-	stdout, stderr, err := runIntegration(t, "MASTER_ONLY=false", "PORT=9200", "HOSTNAME=elasticsearch2", "LOCAL_HOSTNAME=elasticsearch2")
+	stdout, stderr, err := runIntegration(t, "MASTER_ONLY=false", "PORT=9200", "HOSTNAME=elasticsearch-replica", "LOCAL_HOSTNAME=elasticsearch-replica")
 	assert.NotNil(t, stderr, "unexpected stderr")
 	assert.NoError(t, err, "Unexpected error")
 
@@ -117,13 +126,17 @@ func TestElasticsearchIntegrationAllOnSlave_OnlyMasterFlagFalse(t *testing.T) {
 	assert.Error(t, err)
 }
 
-func ensureElasticsearchClusterReady() {
-	fmt.Print("...")
-	responseMaster, _ := http.Get("https://localhost:9200/_nodes/stats")
-	responseSlave, _ := http.Get("https://localhost:9202/_nodes/stats")
+func ensureElasticsearchClusterReady(client *http.Client) {
+	fmt.Print(".")
+	requestMaster, _ := http.NewRequest("GET", "https://localhost:9200/_nodes/stats", nil)
+	requestMaster.SetBasicAuth(defaultUsername, defaultPassword)
+	requestSlave, _ := http.NewRequest("GET", "https://localhost:9202/_nodes/stats", nil)
+	requestSlave.SetBasicAuth(defaultUsername, defaultPassword)
+	responseMaster, _ := client.Do(requestMaster)
+	responseSlave, _ := client.Do(requestSlave)
 	if (responseMaster == nil || responseSlave == nil) && secondsWaited < elasticsearchMaxTimeoutWait {
 		secondsWaited++
 		time.Sleep(1 * time.Second)
-		ensureElasticsearchClusterReady()
+		ensureElasticsearchClusterReady(client)
 	}
 }

@@ -183,14 +183,6 @@ elasticsearch,threadpool.getActive,gauge,true,The number of active threads in th
 elasticsearch,threadpool.getQueue,gauge,true,The number of queued threads in the get pool
 elasticsearch,threadpool.getThreads,gauge,true,The number of threads in the get pool
 elasticsearch,threadpool.getRejected,gauge,true,The number of rejected threads in the get pool
-elasticsearch,threadpool.indexActive,gauge,true,The number of active threads in the index pool
-elasticsearch,threadpool.indexQueue,gauge,true,The number of queued threads in the index pool
-elasticsearch,threadpool.indexThreads,gauge,true,The number of threads in the index pool
-elasticsearch,threadpool.indexRejected,gauge,true,The number of rejected threads in the index pool
-elasticsearch,threadpool.listenerActive,gauge,true,The number of active threads in the listener pool
-elasticsearch,threadpool.listenerQueue,gauge,true,The number of queued threads in the listener pool
-elasticsearch,threadpool.listenerThreads,gauge,true,The number of threads in the listener pool
-elasticsearch,threadpool.listenerRejected,gauge,true,The number of rejected threads in the listener pool
 elasticsearch,threadpool.managementActive,gauge,true,The number of active threads in the management pool
 elasticsearch,threadpool.managementQueue,gauge,true,The number of queued threads in the management pool
 elasticsearch,threadpool.managementThreads,gauge,true,The number of threads in the management pool
