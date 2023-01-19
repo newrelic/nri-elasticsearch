@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 5.0.0 (2023-01-19)
+### Removed
+- Dropped support for Elastic v5 and v6 (both EOL)
+- Removed metrics:
+  - "threadpool.indexActive"
+  - "threadpool.indexQueue"
+  - "threadpool.indexRejected"
+  - "threadpool.indexThreads" 
+### Added
+Added support for:
+- Elasticsearch v7
+- Elasticsearch v8
+
 ## 4.5.3 (2022-06-21)
 ### Changed
 - Bump dependencies
