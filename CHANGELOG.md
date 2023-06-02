@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 5.1.0 (2023-06-06)
+# Changed
+- Upgrade Go version to 1.20
+
 ## 5.0.0 (2023-01-19)
 ### Removed
 - Dropped support for Elastic v5 and v6 (both EOL)
