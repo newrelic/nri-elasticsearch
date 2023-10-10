@@ -1,6 +1,6 @@
 module github.com/newrelic/nri-elasticsearch
 
-go 1.20
+go 1.21
 
 require (
 	github.com/newrelic/infra-integrations-sdk v3.7.3+incompatible
