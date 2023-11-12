@@ -2,7 +2,8 @@ package main
 
 // LocalNodeResponse struct (/_nodes/_local endpoint)
 type LocalNodeResponse struct {
-	Nodes map[string]*LocalNode `json:"nodes"`
+	ClusterName string                `json:"cluster_name"`
+	Nodes       map[string]*LocalNode `json:"nodes"`
 }
 
 // LocalNode is the node API object

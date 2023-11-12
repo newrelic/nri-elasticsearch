@@ -18,32 +18,47 @@ var (
 
 // populateMetrics wrapper to call each of the individual populate functions
 func populateMetrics(i *integration.Integration, client Client, env string) {
-	if args.MasterOnly {
-		nodeID, err := getLocalNodeID(client)
-		if err != nil {
-			log.Error("There was an error gathering the host node ID: %v", err)
-			return
-		}
-		masterID, err := getMasterNodeID(client)
+	nodeID, clusterName, err := getLocalNodeID(client)
+	if err != nil {
+		log.Error("There was an error gathering the host node ID: %v", err)
+		return
+	}
+
+	var getCluster bool
+	if args.MasterOnly || args.LocalOnly {
+		var masterID string
+		masterID, err = getMasterNodeID(client)
 		if err != nil {
 			log.Error("There was an error gathering the elected master node ID: %v", err)
 			return
 		}
-		if nodeID != masterID {
+		getCluster = nodeID == masterID
+	}
+
+	if args.MasterOnly {
+		if !getCluster {
+			log.Info("The host is not the elected master, node/cluster metrics will be skipped")
+			return
+		}
+		log.Info("The host is the elected master, node/cluster metrics will be collected")
+	}
+
+	err = populateNodesMetrics(i, client, clusterName, args.LocalOnly)
+	if err != nil {
+		log.Error("There was an error populating metrics for nodes: %v", err)
+	}
+
+	if args.LocalOnly {
+		if !getCluster {
 			log.Info("The host is not the elected master, cluster metrics will be skipped")
 			return
 		}
 		log.Info("The host is the elected master, cluster metrics will be collected")
 	}
 
-	clusterName, err := populateClusterMetrics(i, client, env)
+	_, err = populateClusterMetrics(i, client, env)
 	if err != nil {
 		log.Error("There was an error populating metrics for clusters: %v", err)
-	}
-
-	err = populateNodesMetrics(i, client, clusterName)
-	if err != nil {
-		log.Error("There was an error populating metrics for nodes: %v", err)
 	}
 
 	// we want to use the response from common to populate some index-specific stats.
@@ -60,23 +75,23 @@ func populateMetrics(i *integration.Integration, client Client, env string) {
 	}
 }
 
-func getLocalNodeID(client Client) (nodeId string, err error) {
+func getLocalNodeID(client Client) (nodeId, clusterName string, err error) {
 	var nodeResponseObject LocalNodeResponse
-	err = client.Request(localNodeInventoryEndpoint, &nodeResponseObject)
+	err = client.Request(localNodeIdEndpoint, &nodeResponseObject)
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 	return parseLocalNodeID(nodeResponseObject)
 }
 
-func parseLocalNodeID(nodeStats LocalNodeResponse) (string, error) {
+func parseLocalNodeID(nodeStats LocalNodeResponse) (nodeId, clusterName string, err error) {
 	nodes := nodeStats.Nodes
 	if len(nodes) == 1 {
 		for k := range nodes {
-			return k, nil
+			return k, nodeStats.ClusterName, nil
 		}
 	}
-	return "", errLocalNodeID
+	return "", "", errLocalNodeID
 }
 
 func getMasterNodeID(client Client) (masterId string, err error) {
@@ -91,10 +106,14 @@ func getMasterNodeID(client Client) (masterId string, err error) {
 	return masterIdResponseObject[0].ID, nil
 }
 
-func populateNodesMetrics(i *integration.Integration, client Client, clusterName string) error {
+func populateNodesMetrics(i *integration.Integration, client Client, clusterName string, localOnly bool) error {
+	endpoint := nodeStatsEndpoint
+	if localOnly {
+		endpoint = localNodeStatsEndpoint
+	}
 	log.Info("Collecting node metrics")
 	nodeResponse := new(NodeResponse)
-	err := client.Request(nodeStatsEndpoint, &nodeResponse)
+	err := client.Request(endpoint, &nodeResponse)
 	if err != nil {
 		return err
 	}

@@ -12,7 +12,9 @@ import (
 
 const (
 	nodeStatsEndpoint          = "/_nodes/stats"
+	localNodeStatsEndpoint     = "/_nodes/_local/stats"
 	localNodeInventoryEndpoint = "/_nodes/_local"
+	localNodeIdEndpoint        = "/_nodes/_local/id"
 	commonStatsEndpoint        = "/_stats"
 	clusterEndpoint            = "/_cluster/health"
 	indicesStatsEndpoint       = "/_cat/indices?format=json"
