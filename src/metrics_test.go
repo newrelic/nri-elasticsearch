@@ -97,7 +97,7 @@ func TestPopulateNodesMetrics(t *testing.T) {
 	client := createNewTestClient()
 	client.init("nodeStatsMetricsResult.json", nodeStatsEndpoint, t)
 
-	err := populateNodesMetrics(i, client, testClusterName, false)
+	err := populateNodesMetrics(i, client, testClusterName, nodeStatsEndpoint)
 	assert.NoError(t, err)
 
 	sourceFile := filepath.Join("testdata", "nodeStatsMetricsResult.json")
@@ -118,7 +118,7 @@ func TestPopulateNodesMetrics_Error(t *testing.T) {
 	mockClient.ReturnRequestError = true
 
 	i := getTestingIntegration(t)
-	err := populateNodesMetrics(i, mockClient, testClusterName, false)
+	err := populateNodesMetrics(i, mockClient, testClusterName, nodeStatsEndpoint)
 	assert.Error(t, err, "should be an error")
 }
 
