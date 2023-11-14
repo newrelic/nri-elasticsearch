@@ -55,8 +55,8 @@ func createGoldenFile(i *integration.Integration, sourceFile string) (string, []
 
 func TestGetLocalNodeID(t *testing.T) {
 	fakeClient := mockClient{}
-	mockedReturnVal := filepath.Join("testdata", "good-nodes-local.json")
-	fakeClient.On("Request", localNodeInventoryEndpoint).Return(mockedReturnVal, nil).Once()
+	mockedReturnVal := filepath.Join("testdata", "good-nodes-local-id.json")
+	fakeClient.On("Request", localNodeIdEndpoint).Return(mockedReturnVal, nil).Once()
 
 	nodeID, _, err := getLocalNodeID(&fakeClient)
 	assert.NoError(t, err)
@@ -65,8 +65,8 @@ func TestGetLocalNodeID(t *testing.T) {
 
 func TestGetLocalNodeID_Error(t *testing.T) {
 	fakeClient := mockClient{}
-	mockedReturnVal := filepath.Join("testdata", "bad-nodes-local.json")
-	fakeClient.On("Request", localNodeInventoryEndpoint).Return(mockedReturnVal, nil).Once()
+	mockedReturnVal := filepath.Join("testdata", "bad-nodes-local-id.json")
+	fakeClient.On("Request", localNodeIdEndpoint).Return(mockedReturnVal, nil).Once()
 
 	_, _, err := getLocalNodeID(&fakeClient)
 	assert.Error(t, err)
