@@ -29,14 +29,14 @@ func populateMetrics(i *integration.Integration, client Client, env string) {
 		if err != nil {
 			log.Error("There was an error populating metrics for local node: %v", err)
 		}
-		if !getClusterNeeded(client, nodeID) {
+		if !isMasterNode(client, nodeID) {
 			log.Info("The host is not the elected master, cluster metrics will be skipped")
 			return
 		}
 		log.Info("The host is the elected master, cluster metrics will be collected")
 	} else {
 		if args.MasterOnly {
-			if !getClusterNeeded(client, nodeID) {
+			if !isMasterNode(client, nodeID) {
 				log.Info("The host is not the elected master, node/cluster metrics will be skipped")
 				return
 			}
@@ -67,19 +67,14 @@ func populateMetrics(i *integration.Integration, client Client, env string) {
 	}
 }
 
-// getClusterNeeded determines if cluster and common metrics should be scraped
-func getClusterNeeded(client Client, nodeID string) (needed bool) {
-	if args.MasterOnly || args.LocalOnly {
-		masterID, err := getMasterNodeID(client)
-		if err != nil {
-			log.Error("There was an error gathering the elected master node ID: %v", err)
-			return
-		}
-		needed = nodeID == masterID
-	} else {
-		needed = true
+// isMasterNode used to determine if cluster and common metrics should be scraped
+func isMasterNode(client Client, nodeID string) bool {
+	masterID, err := getMasterNodeID(client)
+	if err != nil {
+		log.Error("There was an error gathering the elected master node ID: %v", err)
+		return false
 	}
-	return
+	return nodeID == masterID
 }
 
 func getLocalNodeID(client Client) (nodeId, clusterName string, err error) {
