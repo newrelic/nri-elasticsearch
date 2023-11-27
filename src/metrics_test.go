@@ -55,20 +55,20 @@ func createGoldenFile(i *integration.Integration, sourceFile string) (string, []
 
 func TestGetLocalNodeID(t *testing.T) {
 	fakeClient := mockClient{}
-	mockedReturnVal := filepath.Join("testdata", "good-nodes-local.json")
-	fakeClient.On("Request", localNodeInventoryEndpoint).Return(mockedReturnVal, nil).Once()
+	mockedReturnVal := filepath.Join("testdata", "good-nodes-local-id.json")
+	fakeClient.On("Request", localNodeIdEndpoint).Return(mockedReturnVal, nil).Once()
 
-	nodeID, err := getLocalNodeID(&fakeClient)
+	nodeID, _, err := getLocalNodeID(&fakeClient)
 	assert.NoError(t, err)
 	assert.Equal(t, "z9ZPp87vT92qG1cRVRIcMQ", nodeID)
 }
 
 func TestGetLocalNodeID_Error(t *testing.T) {
 	fakeClient := mockClient{}
-	mockedReturnVal := filepath.Join("testdata", "bad-nodes-local.json")
-	fakeClient.On("Request", localNodeInventoryEndpoint).Return(mockedReturnVal, nil).Once()
+	mockedReturnVal := filepath.Join("testdata", "bad-nodes-local-id.json")
+	fakeClient.On("Request", localNodeIdEndpoint).Return(mockedReturnVal, nil).Once()
 
-	_, err := getLocalNodeID(&fakeClient)
+	_, _, err := getLocalNodeID(&fakeClient)
 	assert.Error(t, err)
 	assert.Equal(t, errLocalNodeID, err)
 }
@@ -97,7 +97,7 @@ func TestPopulateNodesMetrics(t *testing.T) {
 	client := createNewTestClient()
 	client.init("nodeStatsMetricsResult.json", nodeStatsEndpoint, t)
 
-	err := populateNodesMetrics(i, client, testClusterName)
+	err := populateNodesMetrics(i, client, testClusterName, nodeStatsEndpoint)
 	assert.NoError(t, err)
 
 	sourceFile := filepath.Join("testdata", "nodeStatsMetricsResult.json")
@@ -118,7 +118,7 @@ func TestPopulateNodesMetrics_Error(t *testing.T) {
 	mockClient.ReturnRequestError = true
 
 	i := getTestingIntegration(t)
-	err := populateNodesMetrics(i, mockClient, testClusterName)
+	err := populateNodesMetrics(i, mockClient, testClusterName, nodeStatsEndpoint)
 	assert.Error(t, err, "should be an error")
 }
 

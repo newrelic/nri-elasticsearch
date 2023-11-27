@@ -31,6 +31,7 @@ type argumentList struct {
 	IndicesRegex           string `default:"" help:"A regex pattern that matches the index names to collect. Collects all if unspecified"`
 	ShowVersion            bool   `default:"false" help:"Print build information and exit"`
 	MasterOnly             bool   `default:"false" help:"Collect cluster metrics on the elected master only"`
+	LocalOnly              bool   `default:"false" help:"Collect node metrics on the local node only"`
 	TLSInsecureSkipVerify  bool   `default:"false" help:"Enabled TLS insecure skip verify"`
 }
 
@@ -60,6 +61,9 @@ func main() {
 			gitCommit,
 			buildDate)
 		os.Exit(0)
+	}
+	if args.MasterOnly && args.LocalOnly {
+		logErrorAndExit(fmt.Errorf("Select argument -master_only or -local_only, not both"))
 	}
 
 	// Create a client for metrics

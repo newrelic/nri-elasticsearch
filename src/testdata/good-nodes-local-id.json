@@ -1,0 +1,27 @@
+{
+	"_nodes": {
+		"total": 1,
+		"successful": 1,
+		"failed": 0
+	},
+	"cluster_name": "es6-dev-cluster",
+	"nodes": {
+		"z9ZPp87vT92qG1cRVRIcMQ": {
+			"name": "es6c-dev-m1.bluemedora.localnet",
+			"transport_address": "10.77.10.83:9300",
+			"host": "10.77.10.83",
+			"ip": "10.77.10.83",
+			"version": "6.3.2",
+			"build_flavor": "default",
+			"build_type": "rpm",
+			"build_hash": "053779d",
+			"total_indexing_buffer": 105630924,
+			"roles": [
+				"master"
+			],
+			"attributes": {
+				"xpack.installed": "true"
+			}
+		}
+	}
+}
