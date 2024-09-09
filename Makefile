@@ -22,8 +22,8 @@ test:
 
 integration-test:
 	@echo "=== $(INTEGRATION) === [ test ]: running integration tests..."
-	@docker-compose -f tests/integration/docker-compose.yml up -d --build
-	@go test -v -tags=integration ./tests/integration/. -count=1 ; (ret=$$?; docker-compose -f tests/integration/docker-compose.yml down && exit $$ret)
+	@docker compose -f tests/integration/docker-compose.yml up -d --build
+	@go test -v -tags=integration ./tests/integration/. -count=1 ; (ret=$$?; docker compose -f tests/integration/docker-compose.yml down && exit $$ret)
 
 # rt-update-changelog runs the release-toolkit run.sh script by piping it into bash to update the CHANGELOG.md.
 # It also passes down to the script all the flags added to the make target. To check all the accepted flags,
