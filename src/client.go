@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	nrHttp "github.com/newrelic/infra-integrations-sdk/http"
+	nrHttp "github.com/newrelic/infra-integrations-sdk/v3/http"
 )
 
 const (
