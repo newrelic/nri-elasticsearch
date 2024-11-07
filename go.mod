@@ -1,8 +1,6 @@
 module github.com/newrelic/nri-elasticsearch
 
-go 1.23
-
-toolchain go1.23.1
+go 1.23.3
 
 require (
 	github.com/newrelic/infra-integrations-sdk/v3 v3.9.1
