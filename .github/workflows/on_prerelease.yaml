@@ -20,4 +20,5 @@ jobs:
     with:
       tag: ${{ github.event.release.tag_name }}
       integration: "elasticsearch"
+      upload_fips_packages: true
     secrets: inherit
