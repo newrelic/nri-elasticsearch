@@ -3,6 +3,8 @@ INTEGRATION  := elasticsearch
 BINARY_NAME   = nri-$(INTEGRATION)
 GO_PKGS      := $(shell go list ./... | grep -v "/vendor/")
 GO_FILES     := $(shell find src -type f -name "*.go")
+GO_VERSION 	  ?= $(shell grep '^go ' go.mod | awk '{print $$2}')
+BUILDER_IMAGE ?= "ghcr.io/newrelic/coreint-automation:latest-go$(GO_VERSION)-ubuntu16.04"
 
 all: build
 
