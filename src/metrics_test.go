@@ -244,6 +244,50 @@ func TestPopulateIndicesMetrics_NilStats(t *testing.T) {
 	assert.Error(t, err, "should be an error")
 }
 
+func TestSetIndicesStatsMetricsResponse_NilNestedFields(t *testing.T) {
+	i := getTestingIntegration(t)
+	clusterName := "testCluster"
+	indexName := "test-index"
+
+	tests := []struct {
+		desc  string
+		index *Index
+	}{
+		{
+			desc: "Primaries and Totals are nil",
+			index: &Index{
+				Primaries: nil,
+				Totals:    nil,
+			},
+		},
+		{
+			desc: "Primaries.Store and Totals.Store are nil",
+			index: &Index{
+				Primaries: &IndexPrimaryStats{Store: nil},
+				Totals:    &IndexTotalStats{Store: nil},
+			},
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.desc, func(t *testing.T) {
+			indexStats := &IndexStats{
+				Name: &indexName,
+			}
+			commonStats := &CommonMetrics{
+				Indices: map[string]*Index{
+					indexName: tc.index,
+				},
+			}
+			assert.NotPanics(t, func() {
+				setIndicesStatsMetricsResponse(i, []*IndexStats{indexStats}, commonStats, clusterName, nil)
+			})
+			assert.Nil(t, indexStats.PrimaryStoreSize)
+			assert.Nil(t, indexStats.StoreSize)
+		})
+	}
+}
+
 func TestIndicesRegex(t *testing.T) {
 	args.IndicesRegex = "twitter"
 	i := getTestingIntegration(t)
