@@ -249,9 +249,14 @@ func TestSetIndicesStatsMetricsResponse_NilNestedFields(t *testing.T) {
 	clusterName := "testCluster"
 	indexName := "test-index"
 
+	primarySize := 123
+	totalSize := 456
+
 	tests := []struct {
-		desc  string
-		index *Index
+		desc                 string
+		index                *Index
+		expectedPrimaryStore *int
+		expectedTotalStore   *int
 	}{
 		{
 			desc: "Primaries and Totals are nil",
@@ -259,6 +264,8 @@ func TestSetIndicesStatsMetricsResponse_NilNestedFields(t *testing.T) {
 				Primaries: nil,
 				Totals:    nil,
 			},
+			expectedPrimaryStore: nil,
+			expectedTotalStore:   nil,
 		},
 		{
 			desc: "Primaries.Store and Totals.Store are nil",
@@ -266,6 +273,26 @@ func TestSetIndicesStatsMetricsResponse_NilNestedFields(t *testing.T) {
 				Primaries: &IndexPrimaryStats{Store: nil},
 				Totals:    &IndexTotalStats{Store: nil},
 			},
+			expectedPrimaryStore: nil,
+			expectedTotalStore:   nil,
+		},
+		{
+			desc: "Primaries.Store.Size and Totals.Store.Size are nil",
+			index: &Index{
+				Primaries: &IndexPrimaryStats{Store: &IndexPrimaryStore{Size: nil}},
+				Totals:    &IndexTotalStats{Store: &IndexTotalStore{Size: nil}},
+			},
+			expectedPrimaryStore: nil,
+			expectedTotalStore:   nil,
+		},
+		{
+			desc: "Primaries.Store.Size and Totals.Store.Size have values",
+			index: &Index{
+				Primaries: &IndexPrimaryStats{Store: &IndexPrimaryStore{Size: &primarySize}},
+				Totals:    &IndexTotalStats{Store: &IndexTotalStore{Size: &totalSize}},
+			},
+			expectedPrimaryStore: &primarySize,
+			expectedTotalStore:   &totalSize,
 		},
 	}
 
@@ -282,8 +309,8 @@ func TestSetIndicesStatsMetricsResponse_NilNestedFields(t *testing.T) {
 			assert.NotPanics(t, func() {
 				setIndicesStatsMetricsResponse(i, []*IndexStats{indexStats}, commonStats, clusterName, nil)
 			})
-			assert.Nil(t, indexStats.PrimaryStoreSize)
-			assert.Nil(t, indexStats.StoreSize)
+			assert.Equal(t, tc.expectedPrimaryStore, indexStats.PrimaryStoreSize)
+			assert.Equal(t, tc.expectedTotalStore, indexStats.StoreSize)
 		})
 	}
 }
