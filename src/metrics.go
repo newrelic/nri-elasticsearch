@@ -239,8 +239,12 @@ func setIndicesStatsMetricsResponse(integration *integration.Integration, indexR
 		}
 
 		// populate fields from stats
-		object.PrimaryStoreSize = index.Primaries.Store.Size
-		object.StoreSize = index.Totals.Store.Size
+		if index.Primaries != nil && index.Primaries.Store != nil {
+			object.PrimaryStoreSize = index.Primaries.Store.Size
+		}
+		if index.Totals != nil && index.Totals.Store != nil {
+			object.StoreSize = index.Totals.Store.Size
+		}
 
 		indicesToCollect = append(indicesToCollect, indexStatsObject{
 			*object.Name,
