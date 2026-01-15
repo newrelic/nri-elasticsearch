@@ -9,7 +9,7 @@ Unreleased section should follow [Release Toolkit](https://github.com/newrelic/r
 
 ## Unreleased
 
-### 🐞 Bug fixes
+### Bugfix
 - Resolved metric name inconsistency to align with Elasticsearch naming conventions
 
 ## v5.4.6 - 2025-12-13
