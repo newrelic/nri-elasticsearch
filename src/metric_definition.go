@@ -356,7 +356,7 @@ type NodeTransport struct {
 type FsTotal struct {
 	AvailableInBytes  *int `json:"available_in_bytes" metric_name:"fs.bytesAvailableJVMInBytes" source_type:"gauge"`
 	TotalInBytes      *int `json:"total_in_bytes" metric_name:"fs.totalSizeInBytes" source_type:"gauge"`
-	FreeInBytes       *int `json:"free_in_bytes" metric_name:"fs.unallocatedBytesInBYtes" source_type:"gauge"`
+	FreeInBytes       *int `json:"free_in_bytes" metric_name:"fs.unallocatedBytesInBytes" source_type:"gauge"`
 	DiskIoSizeInBytes *int `json:"disk_io_size_in_bytes" metric_name:"fs.bytesUserIoOperationsInBytes" source_type:"gauge"`
 }
 
