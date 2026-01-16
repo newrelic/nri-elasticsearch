@@ -240,7 +240,7 @@
                   "flush.indexRefreshesTotalInMilliseconds",
                   "fs.bytesAvailableJVMInBytes",
                   "fs.totalSizeInBytes",
-                  "fs.unallocatedBytesInBYtes",
+                  "fs.unallocatedBytesInBytes",
                   "get.currentRequestsRunning",
                   "get.requestsDocumentExists",
                   "get.requestsDocumentExistsInMilliseconds",
@@ -409,7 +409,7 @@
                   "fs.totalSizeInBytes": {
                     "type": "integer"
                   },
-                  "fs.unallocatedBytesInBYtes": {
+                  "fs.unallocatedBytesInBytes": {
                     "type": "integer"
                   },
                   "get.currentRequestsRunning": {
@@ -870,7 +870,7 @@
                   "flush.indexRefreshesTotalInMilliseconds",
                   "fs.bytesAvailableJVMInBytes",
                   "fs.totalSizeInBytes",
-                  "fs.unallocatedBytesInBYtes",
+                  "fs.unallocatedBytesInBytes",
                   "get.currentRequestsRunning",
                   "get.requestsDocumentExists",
                   "get.requestsDocumentExistsInMilliseconds",
@@ -1039,7 +1039,7 @@
                   "fs.totalSizeInBytes": {
                     "type": "integer"
                   },
-                  "fs.unallocatedBytesInBYtes": {
+                  "fs.unallocatedBytesInBytes": {
                     "type": "integer"
                   },
                   "get.currentRequestsRunning": {
