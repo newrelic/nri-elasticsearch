@@ -9,7 +9,9 @@ Unreleased section should follow [Release Toolkit](https://github.com/newrelic/r
 
 ## Unreleased
 
-### breaking
+## v6.0.0 - 2026-01-20
+
+### ⚠️️ Breaking changes ⚠️
 - Fixed metric name typo: `fs.unallocatedBytesInBYtes` is now `fs.unallocatedBytesInBytes`
 
 ## v5.4.6 - 2025-12-13
