@@ -1,7 +1,7 @@
 version: '3.3'
 services:
   elasticsearch:
-    image: elasticsearch:9.3.0
+    image: elasticsearch:9.3.1
     container_name: elasticsearch
     environment:
       - cluster.name=docker-cluster
@@ -30,7 +30,7 @@ services:
       - elastic
 
   elasticsearch-replica:
-    image: elasticsearch:9.3.0
+    image: elasticsearch:9.3.1
     container_name: elasticsearch-replica
     environment:
       - cluster.name=docker-cluster
