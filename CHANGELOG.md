@@ -9,7 +9,9 @@ Unreleased section should follow [Release Toolkit](https://github.com/newrelic/r
 
 ## Unreleased
 
-### security
+## v6.4.0 - 2026-09-01
+
+### 🛡️ Security notices
 - Updated go module directive to v1.26.6 to address CVEs in net/http, crypto/tls, encoding/asn1, encoding/xml, and golang.org/x/mod (#249)
 
 ## v6.3.2 - 2026-07-14
