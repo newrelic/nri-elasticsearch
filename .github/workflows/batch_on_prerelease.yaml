@@ -1,0 +1,28 @@
+name: Batch prerelease pipeline
+
+on:
+  release:
+    types:
+      - prereleased
+    tags:
+      - 'v*'
+
+
+permissions:
+  contents: write
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  INTEGRATION: "elasticsearch"
+  ORIGINAL_REPO_NAME: ${{ github.event.repository.full_name }}
+  REPO_FULL_NAME: ${{ github.event.repository.full_name }}
+  TAG: ${{ github.event.release.tag_name }}
+
+jobs:
+  pre-release:
+    uses: newrelic/coreint-automation/.github/workflows/reusable_pre_release_build.yaml@v4
+    with:
+      tag: ${{ github.event.release.tag_name }}
+      integration: "elasticsearch"
+      upload_fips_packages: true
+    secrets: inherit
